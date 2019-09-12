@@ -12,14 +12,20 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.telemedicine.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_appointments"
+        android:name="com.example.telemedicine.ui.appointments.AppointmentsFragment"
+        android:label="@layout/fragment_appointments"
+        tools:layout="@layout/fragment_appointments" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.telemedicine.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_reports"
+        android:name="com.example.telemedicine.ui.reports.ReportsFragment"
+        android:label="@layout/fragment_reports"
+        tools:layout="@layout/fragment_reports" />
+
+    <fragment
+        android:id="@+id/navigation_chats"
+        android:name="com.example.telemedicine.ui.reports.ReportsFragment"
+        android:label="@layout/fragment_chats"
+        tools:layout="@layout/fragment_chats" />
 </navigation>
