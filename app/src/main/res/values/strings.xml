@@ -4,4 +4,7 @@
     <string name="title_appointments">Appointments</string>
     <string name="title_reports">Reports</string>
     <string name="title_chats">Chats</string>
+    <string name="home_welcome">Welcome</string>
+    <string name="list_item">Item</string>
+    <string name="show_more">Show More Items...</string>
 </resources>
