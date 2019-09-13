@@ -41,8 +41,8 @@ public class HomeFragment extends Fragment {
         });
 
         recyclerView = (RecyclerView)root.findViewById(R.id.recycler);
-        layoutManager = new LinearLayoutManager();
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        layoutManager = new LinearLayoutManager(this.getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         mAdapter = new RecyclerItem(myDataset);
         recyclerView.setAdapter(mAdapter);
 
