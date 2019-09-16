@@ -2,17 +2,14 @@ package com.example.telemedicine.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.User;
-import com.example.telemedicine.ui.home.HomeViewModel;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,17 +18,21 @@ public class Login extends AppCompatActivity {
 
     // Global Variables
     User user; // Mock-Up
-    EditText emailET, passwordET, lastFourSSN;
+    EditText emailET, passwordET, lastFourSSNET;
+    TextView forgotPassTV;
     Button loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        emailET = (EditText)findViewById(R.id.usernameET);
-        passwordET = (EditText)findViewById(R.id.passwordET);
-        lastFourSSN = (EditText)findViewById(R.id.lastFourOfSSN);
-        loginBtn = (Button)findViewById(R.id.submitBtn);
+
+        // Get references from the View
+        emailET = (EditText) findViewById(R.id.usernameET);
+        passwordET = (EditText) findViewById(R.id.passwordET);
+        lastFourSSNET = (EditText) findViewById(R.id.lastFourOfSSN);
+        loginBtn = (Button) findViewById(R.id.submitBtn);
+        forgotPassTV = (TextView) findViewById(R.id.forgotPassTV);
     }
 
     // Check for valid email/password
@@ -71,28 +72,19 @@ public class Login extends AppCompatActivity {
         return ""; // Invalid
     }
 
-    // On Login Submit click
+    // Handle all clicks within login
     public void onClick(View view) {
+
         switch (view.getId()) {
-            // If submit button is selected
+
             case R.id.submitBtn:
-                // Get data from the edit text fields on click
-                String email = emailET.toString();
-                String password = md5(passwordET.toString()); // Hashed password
-                int lastFour = Integer.parseInt(lastFourSSN.getText().toString()); // Should get int
-                // Check if valid user
-                if (checkLogin(email, password, lastFour)) {
-                    Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(this, HomeViewModel.class);
-                    startActivity(intent); // opens new activity
-                } else {
-                    Toast.makeText(this, "Login not successful", Toast.LENGTH_SHORT).show();
-                    // Open Login Denied
-                }
+                System.out.println("Submitting something");
                 break;
-                // If the forgot button is selected
             case R.id.forgotPassTV:
                 System.out.println("Forgot password");
+                break;
+            default:
+                System.out.println("Something went wrong");
                 break;
         }
     }

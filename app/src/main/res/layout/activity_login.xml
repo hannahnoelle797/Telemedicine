@@ -11,19 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="216dp"
-        android:hint="Enter your username"
         android:backgroundTint="@color/colorReceiveChat"
+        android:hint="@string/username_placehold"
         android:textColor="@color/colorText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/passwordET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your password"
+        android:hint="@string/password_placehold"
         android:textColor="@color/colorText"
         app:layout_constraintBottom_toTopOf="@+id/submitBtn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,32 +33,34 @@
 
     <EditText
         android:id="@+id/lastFourOfSSN"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Last Four SSN"
-        android:textColor="@color/colorText"
+        android:hint="@string/lastFour_placehold"
         android:inputType="number"
+        android:textColor="@color/colorText"
         app:layout_constraintBottom_toTopOf="@+id/submitBtn"
-        app:layout_constraintTop_toBottomOf="@+id/passwordET"
-        tools:layout_editor_absoluteX="-16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordET" />
 
     <Button
         android:id="@+id/submitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="216dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="416dp"
         android:onClick="onClick"
-        android:text="Login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="@string/button_login"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/forgotPassTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         android:onClick="onClick"
         android:text="@string/forgot_pass"
         android:textColor="@color/colorText"

@@ -13,4 +13,8 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="forgot_pass">Forgot your password</string>
+    <string name="username_placehold">Enter your username</string>
+    <string name="password_placehold">Enter your password</string>
+    <string name="lastFour_placehold">Last four digits of your SSN</string>
+    <string name="button_login">Login</string>
 </resources>
