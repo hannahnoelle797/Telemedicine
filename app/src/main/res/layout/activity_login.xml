@@ -6,39 +6,78 @@
     android:layout_height="match_parent"
     tools:context=".ui.login.Login">
 
-    <EditText
-        android:id="@+id/usernameET"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/TitleTV"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
-        android:backgroundTint="@color/colorReceiveChat"
-        android:hint="@string/username_placehold"
+        android:layout_marginTop="168dp"
+        android:layout_marginBottom="100dp"
+        android:text="@string/welcome_tv"
+        android:textAlignment="center"
         android:textColor="@color/colorText"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/passwordET"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/signinTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/signin_tv"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/usernameET"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/usernameET"
+        android:layout_width="400dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/textinputborder"
+        android:hint="@string/username_placehold"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/passwordET"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/passwordET"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="346dp"
+        android:background="@drawable/textinputborder"
         android:hint="@string/password_placehold"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/submitBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameET"
-        app:layout_constraintVertical_bias="0.26" />
+        app:layout_constraintTop_toBottomOf="@+id/TitleTV" />
 
     <EditText
         android:id="@+id/lastFourOfSSN"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/textinputborder"
         android:hint="@string/lastFour_placehold"
         android:inputType="number"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/submitBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordET" />
@@ -47,28 +86,28 @@
         android:id="@+id/submitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginLeft="160dp"
-        android:layout_marginTop="416dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/colorText"
         android:onClick="onClick"
         android:text="@string/button_login"
+        android:textColor="@color/colorBackground"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/lastFourOfSSN" />
 
     <TextView
         android:id="@+id/forgotPassTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:clickable="true"
         android:focusable="true"
         android:onClick="onClick"
         android:text="@string/forgot_pass"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitBtn"
-        app:layout_constraintVertical_bias="0.157" />
+        app:layout_constraintTop_toBottomOf="@+id/submitBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
