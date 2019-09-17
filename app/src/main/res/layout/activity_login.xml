@@ -10,66 +10,84 @@
         android:id="@+id/TitleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/welcome_tv"
         android:textAlignment="center"
         android:textColor="@color/colorText"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordET"
+        app:layout_constraintBottom_toTopOf="@+id/signinTV"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/signinTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="48dp"
         android:text="@string/signin_tv"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/usernameET"
+        app:layout_constraintBottom_toTopOf="@+id/passwordLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/usernameET"
         android:layout_width="400dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="16dp"
         android:background="@drawable/textinputborder"
         android:hint="@string/username_placehold"
+        android:inputType="text"
         android:paddingStart="10dp"
         android:paddingLeft="10dp"
         android:paddingEnd="0dp"
         android:paddingRight="0dp"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/passwordET"
+        android:textColorHint="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/passwordLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/passwordET"
-        android:layout_width="400dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="346dp"
-        android:background="@drawable/textinputborder"
-        android:hint="@string/password_placehold"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp"
-        android:paddingEnd="0dp"
-        android:paddingRight="0dp"
-        android:textColor="@color/colorText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TitleTV" />
+        app:layout_constraintTop_toBottomOf="@+id/signinTV"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/lastFourOfSSN"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/colorText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/password_placehold"
+            android:inputType="textPassword"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <EditText
         android:id="@+id/lastFourOfSSN"
         android:layout_width="400dp"
         android:layout_height="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/textinputborder"
         android:hint="@string/lastFour_placehold"
         android:inputType="number"
@@ -78,36 +96,53 @@
         android:paddingEnd="0dp"
         android:paddingRight="0dp"
         android:textColor="@color/colorText"
+        android:textColorHint="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/submitBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordET" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/submitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/colorText"
         android:onClick="onClick"
         android:text="@string/button_login"
         android:textColor="@color/colorBackground"
+        app:layout_constraintBottom_toTopOf="@+id/forgotPassTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastFourOfSSN" />
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/forgotPassTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
         android:onClick="onClick"
         android:text="@string/forgot_pass"
         android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/signup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitBtn" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="140dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onClick"
+        android:text="@string/signup"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

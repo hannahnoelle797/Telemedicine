@@ -5,8 +5,10 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_login">Sign in</string>
     <string name="forgot_pass">Forgot your password</string>
+    <string name="signup">Sign up</string>
     <string name="username_placehold">Enter your username</string>
     <string name="password_placehold">Enter your password</string>
+    <string name="show">Show</string>
     <string name="lastFour_placehold">Last four digits of your SSN</string>
     <string name="button_login">Login</string>
     <string name="welcome_tv">Welcome to Hoganson Medical</string>
@@ -16,7 +18,7 @@
     <string name="lastNameHint">Last Name</string>
     <string name="emailHint">Email</string>
     <string name="emailConfirmHint">Confirm Email</string>
-    <string name="socialNumHint">Last 4 SSN</string>
+    <string name="socialNumHint">Social Security Number</string>
     <string name="socialNumConfirmHint">Confirm SSN</string>
     <string name="passwordHint">Password</string>
     <string name="passwordConfirmHint">Confirm Password</string>

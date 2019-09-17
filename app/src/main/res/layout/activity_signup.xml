@@ -117,6 +117,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailConfirmET" />
 
+
     <EditText
         android:id="@+id/ssnConfirmET"
         android:layout_width="400dp"
@@ -190,6 +191,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/alreadyHave_tv"
         android:textColor="@color/colorText"
+        android:onClick="onClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

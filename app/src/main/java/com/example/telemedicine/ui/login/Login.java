@@ -2,14 +2,22 @@ package com.example.telemedicine.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.User;
+import com.example.telemedicine.ui.signup.Signup;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,6 +29,7 @@ public class Login extends AppCompatActivity {
     EditText emailET, passwordET, lastFourSSNET;
     TextView forgotPassTV;
     Button loginBtn;
+    String TAG = "Login.java";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +44,12 @@ public class Login extends AppCompatActivity {
         forgotPassTV = (TextView) findViewById(R.id.forgotPassTV);
     }
 
-    // Check for valid email/password
+    // Check for valid email/password TODO
     protected boolean correctFormat(String email, String password) {
         return true;
     }
 
-    // Check with database for correct login
+    // Check with database for correct login TODO
     protected boolean checkLogin(String email, String password, int lastFourSSN) {
         if (correctFormat(user.getEmail(), user.getPassword())) {
             String hashedPassword = md5(user.getPassword());
@@ -52,7 +61,7 @@ public class Login extends AppCompatActivity {
         return false;
     }
 
-    // Hash a given string
+    // Hash a given string TODO
     protected String md5(String pass) {
         try {
             // Create MD5 Hash
@@ -72,7 +81,7 @@ public class Login extends AppCompatActivity {
         return ""; // Invalid
     }
 
-    // Handle all clicks within login
+    // Handle all clicks within login TODO
     public void onClick(View view) {
 
         switch (view.getId()) {
@@ -81,11 +90,63 @@ public class Login extends AppCompatActivity {
                 System.out.println("Submitting something");
                 break;
             case R.id.forgotPassTV:
-                System.out.println("Forgot password");
+                sendEmail();
+                break;
+            case R.id.signup:
+                Intent intent = new Intent(Login.this, Signup.class);
+                startActivity(intent);
                 break;
             default:
                 System.out.println("Something went wrong");
                 break;
         }
+    }
+
+    // Forgot Password TODO
+    protected void sendEmail() {
+        // Log that email has started
+        Log.i("Login.java: ", "Sending Email");
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Retrieve Password");
+        alert.setMessage("Message");
+
+        // Get input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                String TO = input.toString();
+                String CC = "david.howard1100@gmail.com";
+
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setDataAndType(Uri.parse("mailto:"), "text/plain");
+
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+                emailIntent.putExtra(Intent.EXTRA_CC, CC);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Reset Password");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body Message");
+
+                try {
+                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                    finish();
+                    Log.i(TAG, "Finished sending email...");
+
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(Login.this, "There is no email client installed", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(Login.this, "Canceled Forgot Password", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alert.show();
     }
 }
