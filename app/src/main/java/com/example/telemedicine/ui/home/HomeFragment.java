@@ -66,11 +66,35 @@ public class HomeFragment extends Fragment {
         mAdapter_chat = new RecyclerItem(chatData);
         recyclerView_chat.setAdapter(mAdapter_chat);
 
+        recyclerView_chat.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), recyclerView_chat ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+
         recyclerView_report = (RecyclerView)root.findViewById(R.id.recycler_reports);
         layoutManager_report = new LinearLayoutManager(this.getActivity());
         recyclerView_report.setLayoutManager(layoutManager_report);
         mAdapter_report = new RecyclerItem(reportData);
         recyclerView_report.setAdapter(mAdapter_report);
+
+        recyclerView_report.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), recyclerView_report ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
 
         return root;
     }
