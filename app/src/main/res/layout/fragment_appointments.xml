@@ -6,29 +6,61 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/text_upcoming_appointments"
-        android:layout_width="match_parent"
+        android:id="@+id/appointment_head"
+        android:layout_width="365dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:text="Upcoming"
-        android:textSize="20sp"
+        android:text="Appointments"
+        android:textSize="20pt"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@id/text_upcoming_appointments"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_previous_appointments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginLeft="10dp"
-        android:text="Previous"
-        android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/text_upcoming_appointments" />
+        android:id="@+id/text_upcoming_appointments"
+        android:layout_width="365dp"
+        android:layout_height="55dp"
+        android:ems="10"
+        android:text="Upcoming"
+        android:textSize="14pt"
+        app:layout_constraintBottom_toTopOf="@id/recycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appointment_head" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="360dp"
+        android:layout_height="125dp"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintVertical_bias="0.226"
+        app:layout_constraintBottom_toTopOf="@id/text_previous_appointments"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_upcoming_appointments" />
+
+    <TextView
+        android:id="@+id/text_previous_appointments"
+        android:layout_width="365dp"
+        android:layout_height="55dp"
+        android:ems="10"
+        android:text="Previous"
+        android:textSize="14pt"
+        app:layout_constraintBottom_toTopOf="@id/recycler2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recycler" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler2"
+        android:layout_width="360dp"
+        android:layout_height="125dp"
+        app:layout_constraintHorizontal_bias="0.424"
+        app:layout_constraintVertical_bias="0.226"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_previous_appointments" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
