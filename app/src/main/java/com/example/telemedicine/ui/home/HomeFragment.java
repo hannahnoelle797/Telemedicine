@@ -1,5 +1,6 @@
 package com.example.telemedicine.ui.home;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telemedicine.R;
+import com.example.telemedicine.ui.utilities.RecyclerItem;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private String[] myDataset = {"Item 1", "Item 2", "Item 3"};
+    //Activity activity = (Activity)getContext();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -30,6 +39,13 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        recyclerView = (RecyclerView)root.findViewById(R.id.recycler);
+        layoutManager = new LinearLayoutManager();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new RecyclerItem(myDataset);
+        recyclerView.setAdapter(mAdapter);
+
         return root;
     }
 }
