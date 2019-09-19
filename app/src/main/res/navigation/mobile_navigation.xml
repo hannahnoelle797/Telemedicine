@@ -8,24 +8,24 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.telemedicine.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/header_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_appointments"
         android:name="com.example.telemedicine.ui.appointments.AppointmentsFragment"
-        android:label="@layout/fragment_appointments"
+        android:label="@string/header_appt"
         tools:layout="@layout/fragment_appointments" />
 
     <fragment
         android:id="@+id/navigation_reports"
         android:name="com.example.telemedicine.ui.reports.ReportsFragment"
-        android:label="@layout/fragment_reports"
+        android:label="@string/header_reports"
         tools:layout="@layout/fragment_reports" />
 
     <fragment
         android:id="@+id/navigation_chats"
         android:name="com.example.telemedicine.ui.reports.ReportsFragment"
-        android:label="@layout/fragment_chats"
+        android:label="@string/header_chats"
         tools:layout="@layout/fragment_chats" />
 </navigation>
