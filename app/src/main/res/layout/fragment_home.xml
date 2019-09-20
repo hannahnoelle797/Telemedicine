@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <TextView
         android:id="@+id/editText"
         android:layout_width="365dp"
         android:layout_height="wrap_content"
@@ -16,13 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/text_appts"
         android:layout_width="365dp"
         android:layout_height="55dp"
         android:ems="10"
         android:text="@string/title_appointments"
         android:textSize="14pt"
+        android:textColor="@color/colorText"
         app:layout_constraintBottom_toTopOf="@+id/recycler_appts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,13 +40,14 @@
         app:layout_constraintTop_toBottomOf="@+id/text_appts"
         app:layout_constraintVertical_bias="0.226" />
 
-    <EditText
+    <TextView
         android:id="@+id/text_chats"
         android:layout_width="365dp"
         android:layout_height="55dp"
         android:ems="10"
         android:text="@string/title_chats"
         android:textSize="14pt"
+        android:textColor="@color/colorText"
         app:layout_constraintBottom_toTopOf="@+id/recycler_chats"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,13 +64,14 @@
         app:layout_constraintTop_toBottomOf="@+id/text_chats"
         app:layout_constraintVertical_bias="0.226" />
 
-    <EditText
+    <TextView
         android:id="@+id/text_reports"
         android:layout_width="365dp"
         android:layout_height="55dp"
         android:ems="10"
         android:text="@string/title_reports"
         android:textSize="14pt"
+        android:textColor="@color/colorText"
         app:layout_constraintBottom_toTopOf="@+id/recycler_reports"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
