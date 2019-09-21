@@ -13,15 +13,15 @@
 
     <fragment
         android:id="@+id/navigation_appointments"
-        android:name="com.example.telemedicine.ui.appointments.AppointmentsFragment"
+        android:name="com.example.telemedicine.ui.sample_pages.sample_appt"
         android:label="@string/header_appt"
-        tools:layout="@layout/fragment_appointments" />
+        tools:layout="@layout/sample_appt" />
 
     <fragment
         android:id="@+id/navigation_reports"
-        android:name="com.example.telemedicine.ui.reports.ReportsFragment"
+        android:name="com.example.telemedicine.ui.sample_pages.sample_report"
         android:label="@string/header_reports"
-        tools:layout="@layout/fragment_reports" />
+        tools:layout="@layout/sample_report" />
 
     <fragment
         android:id="@+id/navigation_chats"
