@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/navigation_chats"
-        android:name="com.example.telemedicine.ui.reports.ReportsFragment"
+        android:name="com.example.telemedicine.ui.sample_pages.sample_chat"
         android:label="@string/header_chats"
-        tools:layout="@layout/fragment_chats" />
+        tools:layout="@layout/sample_chat" />
 </navigation>
