@@ -17,7 +17,9 @@ public class Signup extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
     }
 
+    // Button Click for activity_signup.xml
     public void onClick(View view) {
+        // Switch statement used to handle different clicks TODO
         switch (view.getId()) {
             case R.id.alreadyTV:
                 Intent intent = new Intent(Signup.this, Login.class);

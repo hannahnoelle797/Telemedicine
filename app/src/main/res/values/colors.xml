@@ -5,4 +5,5 @@
     <color name="colorReceiveChat">#9099A2</color>
     <color name="colorSendChat">#96858F </color>
     <color name="colorUrgent">#BF1717</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

@@ -10,34 +10,21 @@
         android:id="@+id/TitleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="120dp"
         android:text="@string/welcome_tv"
         android:textAlignment="center"
         android:textColor="@color/colorText"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/signinTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/signinTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:text="@string/signin_tv"
-        android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/passwordLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/usernameET"
         android:layout_width="400dp"
         android:layout_height="40dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/textinputborder"
         android:hint="@string/username_placehold"
         android:inputType="text"
@@ -47,23 +34,19 @@
         android:paddingRight="0dp"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/passwordLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signinTV"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/TitleTV" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
         app:hintEnabled="false"
-        app:layout_constraintBottom_toTopOf="@+id/lastFourOfSSN"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameET"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/colorText">
 
@@ -87,62 +70,47 @@
         android:id="@+id/lastFourOfSSN"
         android:layout_width="400dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/textinputborder"
         android:hint="@string/lastFour_placehold"
         android:inputType="number"
+        android:maxLength="4"
         android:paddingStart="10dp"
         android:paddingLeft="10dp"
         android:paddingEnd="0dp"
         android:paddingRight="0dp"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/submitBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
 
     <Button
         android:id="@+id/submitBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorText"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/buttonborder"
         android:onClick="onClick"
         android:text="@string/button_login"
         android:textColor="@color/colorBackground"
-        app:layout_constraintBottom_toTopOf="@+id/forgotPassTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lastFourOfSSN" />
 
-    <TextView
-        android:id="@+id/forgotPassTV"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/signupBtn"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/buttonborder_alt"
         android:onClick="onClick"
-        android:text="@string/forgot_pass"
-        android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/signup"
+        android:text="@string/button_signup"
+        android:textColor="@color/colorBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="140dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="onClick"
-        android:text="@string/signup"
-        android:textColor="@color/colorText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

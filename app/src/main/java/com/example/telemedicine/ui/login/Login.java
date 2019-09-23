@@ -25,10 +25,9 @@ import java.security.NoSuchAlgorithmException;
 public class Login extends AppCompatActivity {
 
     // Global Variables
-    User user; // Mock-Up
+    User user;
     EditText emailET, passwordET, lastFourSSNET;
-    TextView forgotPassTV;
-    Button loginBtn;
+    Button loginBtn, signupBtn;
     String TAG = "Login.java";
 
     @Override
@@ -41,7 +40,7 @@ public class Login extends AppCompatActivity {
         passwordET = (EditText) findViewById(R.id.passwordET);
         lastFourSSNET = (EditText) findViewById(R.id.lastFourOfSSN);
         loginBtn = (Button) findViewById(R.id.submitBtn);
-        forgotPassTV = (TextView) findViewById(R.id.forgotPassTV);
+        signupBtn = (Button)findViewById(R.id.signupBTN);
     }
 
     // Check for valid email/password TODO
@@ -89,10 +88,7 @@ public class Login extends AppCompatActivity {
             case R.id.submitBtn:
                 System.out.println("Submitting something");
                 break;
-            case R.id.forgotPassTV:
-                sendEmail();
-                break;
-            case R.id.signup:
+            case R.id.signupBtn:
                 Intent intent = new Intent(Login.this, Signup.class);
                 startActivity(intent);
                 break;
@@ -102,6 +98,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    /*
     // Forgot Password TODO
     protected void sendEmail() {
         // Log that email has started
@@ -148,5 +145,5 @@ public class Login extends AppCompatActivity {
         });
 
         alert.show();
-    }
+    } */
 }
