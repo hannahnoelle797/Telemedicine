@@ -7,4 +7,9 @@
     <string name="home_welcome">Welcome</string>
     <string name="list_item">Item</string>
     <string name="show_more">Show More Items...</string>
+    <string name="header_home">Home</string>
+    <string name="header_appt">Appointments</string>
+    <string name="header_reports">Reports</string>
+    <string name="header_chats">Chats</string>
+    <string name="type">Type message here</string>
 </resources>
