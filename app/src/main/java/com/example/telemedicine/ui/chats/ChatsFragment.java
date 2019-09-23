@@ -1,4 +1,4 @@
-package com.example.telemedicine.ui.notifications;
+package com.example.telemedicine.ui.chats;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.telemedicine.R;
 
-public class NotificationsFragment extends Fragment {
+public class ChatsFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private ChatsViewModel chatsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(this, new Observer<String>() {
+        chatsViewModel =
+                ViewModelProviders.of(this).get(ChatsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_reports, container, false);
+        final TextView textView = root.findViewById(R.id.text_reports);
+        chatsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

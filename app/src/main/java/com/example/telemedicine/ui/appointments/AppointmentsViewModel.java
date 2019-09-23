@@ -1,15 +1,16 @@
-package com.example.telemedicine.ui.home;
+package com.example.telemedicine.ui.appointments;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class AppointmentsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public AppointmentsViewModel() {
         mText = new MutableLiveData<>();
+        mText.setValue("This is appointments fragment");
     }
 
     public LiveData<String> getText() {
