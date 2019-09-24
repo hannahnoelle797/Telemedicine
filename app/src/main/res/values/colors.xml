@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorBackground">#D5D5D5</color>
     <color name="colorText">#2D3953</color>
+    <color name="colorButtons">#9099A2</color>
     <color name="colorChatA">#9099A2</color>
     <color name="colorChatB">#96858F</color>
     <color name="colorImportant">#BF1717</color>
