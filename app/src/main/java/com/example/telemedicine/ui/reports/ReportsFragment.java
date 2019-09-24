@@ -1,5 +1,6 @@
 package com.example.telemedicine.ui.reports;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telemedicine.R;
+import com.example.telemedicine.ui.sample_pages.sample_report;
 import com.example.telemedicine.ui.utilities.RecyclerItem;
 
 
@@ -52,6 +54,7 @@ public class ReportsFragment extends Fragment implements RecyclerItem.OnReportCl
 
     @Override
     public void OnReportClickListener(int position) {
-        Toast.makeText(getContext(), myDataset[position], Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), sample_report.class);
+        startActivity(intent);
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -15,9 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telemedicine.R;
+import com.example.telemedicine.ui.utilities.RecyclerItem;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 
-public class AppointmentsFragment extends Fragment {
+public class AppointmentsFragment extends Fragment implements RecyclerItem.OnReportClickListener {
     private AppointmentsViewModel appointmentsViewModel;
     private RecyclerView recyclerView;
     private RecyclerView recyclerView2;
@@ -47,10 +49,15 @@ public class AppointmentsFragment extends Fragment {
         layoutManager2 = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView2.setLayoutManager(layoutManager2);
-        mAdapter = new RecyclerItemOld(apptData);
-        mAdapter2 = new RecyclerItemOld(apptData2);
+        mAdapter = new RecyclerItem(apptData, this);
+        mAdapter2 = new RecyclerItem(apptData2, this);
         recyclerView.setAdapter(mAdapter);
         recyclerView2.setAdapter(mAdapter2);
         return root;
+    }
+
+    @Override
+    public void OnReportClickListener(int position) {
+        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
     }
 }

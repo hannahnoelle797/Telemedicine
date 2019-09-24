@@ -13,9 +13,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.Users;
-import com.example.telemedicine.ui.signup.signup;
+import com.example.telemedicine.ui.signup.Signup;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -80,14 +81,14 @@ public class Login extends AppCompatActivity {
 
     // Handle all clicks within login TODO
     public void onClick(View view) {
-
+        Intent intent;
         switch (view.getId()) {
-
             case R.id.submitBtn:
-                System.out.println("Submitting something");
+                intent = new Intent(Login.this, MainActivity.class);
+                startActivity(intent);
                 break;
             case R.id.signupBtn:
-                Intent intent = new Intent(Login.this, signup.class);
+                intent = new Intent(Login.this, Signup.class);
                 startActivity(intent);
                 break;
             default:
