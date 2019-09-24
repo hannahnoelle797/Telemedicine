@@ -4,17 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="MainActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp"
+        android:text="Chat with Your Doctor(s)"
+        android:textSize="35dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.448"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:ignore="MissingConstraints" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:orientation="vertical"
-        app:layout_height="wrap_content"
-        app:layout_width="match_parent"
-        tools:layout_editor_absoluteX="6dp"
-        tools:layout_editor_absoluteY="287dp"
+        app:layout_constraintEnd_toEndOf="@+id/nav_host_fragment"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/nav_host_fragment"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:ignore="MissingConstraints">
 
         <Button
@@ -23,7 +39,6 @@
             android:layout_height="53dp"
             android:text="Dr Hayden Lee" />
 
-
         <Button
             android:id="@+id/join_chat"
             android:layout_width="408dp"
@@ -31,11 +46,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
-
             android:layout_marginBottom="8dp"
-            android:text="Dr Jane Smith"
-
-            />
+            android:text="Dr Jane Smith" />
 
         <Button
             android:id="@+id/button4"
@@ -48,21 +60,11 @@
             android:layout_width="408dp"
             android:layout_height="53dp"
             android:text="Dr Michael Dean" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="Chat with Your Doctor(s)"
-        android:textSize="35dp"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="14dp"
-        tools:layout_editor_absoluteY="170dp"
-
-        tools:ignore="MissingConstraints" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
+
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -92,7 +94,8 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
         android:visibility="visible"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-56dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
