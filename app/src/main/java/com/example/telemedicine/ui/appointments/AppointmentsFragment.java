@@ -23,9 +23,11 @@ public class AppointmentsFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView recyclerView2;
     private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter mAdapter2;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.LayoutManager layoutManager2;
-    private String[] myDataset = {"Item 1", "Item 2", "Item 3"};
+    private String[] apptData = {"Physical - 9/29 @ 10:00am", "Vaccination - 10/4 @ 1:30pm", "Check-Up - 10/19 @ 9:00am"};
+    private String[] apptData2 = {"Wellness Check - 5/19 @ 10:30am", "Eye Exam - 3/22 @ 11:00am", "Check-Up - 2/19 @ 9:00am"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -46,9 +48,10 @@ public class AppointmentsFragment extends Fragment {
         layoutManager2 = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView2.setLayoutManager(layoutManager2);
-        mAdapter = new RecyclerItem(myDataset);
+        mAdapter = new RecyclerItem(apptData);
+        mAdapter2 = new RecyclerItem(apptData2);
         recyclerView.setAdapter(mAdapter);
-        recyclerView2.setAdapter(mAdapter);
+        recyclerView2.setAdapter(mAdapter2);
         return root;
     }
 }
