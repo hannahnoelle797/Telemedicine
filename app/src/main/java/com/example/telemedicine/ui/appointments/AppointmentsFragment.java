@@ -1,5 +1,6 @@
 package com.example.telemedicine.ui.appointments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telemedicine.R;
+import com.example.telemedicine.ui.sample_pages.sample_appt;
 import com.example.telemedicine.ui.utilities.RecyclerItem;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 
@@ -58,6 +60,7 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
 
     @Override
     public void OnReportClickListener(int position) {
-        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), sample_appt.class);
+        startActivity(intent);
     }
 }
