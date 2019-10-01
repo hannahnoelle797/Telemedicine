@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.signup.Signup">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/TitleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="@string/welcome_tv"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/signupTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/signup_tv"
+            android:textColor="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TitleTV" />
+
+        <EditText
+            android:id="@+id/firstNameET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/firstNameHint"
+            android:inputType="textPersonName|textCapWords"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signupTV" />
+
+        <EditText
+            android:id="@+id/lastNameET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/lastNameHint"
+            android:inputType="textPersonName|textCapWords"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/firstNameET" />
+
+        <EditText
+            android:id="@+id/emailET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/emailHint"
+            android:inputType="textEmailAddress"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lastNameET" />
+
+        <EditText
+            android:id="@+id/emailConfirmET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/emailConfirmHint"
+            android:inputType="textEmailAddress"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailET" />
+
+        <EditText
+            android:id="@+id/ssnET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/socialNumHint"
+            android:inputType="number"
+            android:maxLength="9"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailConfirmET" />
+
+
+        <EditText
+            android:id="@+id/ssnConfirmET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/socialNumConfirmHint"
+            android:inputType="number"
+            android:maxLength="9"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.545"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ssnET" />
+
+        <EditText
+            android:id="@+id/passwordET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/passwordHint"
+            android:inputType="textPassword"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.545"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ssnConfirmET" />
+
+        <EditText
+            android:id="@+id/passwordConfirmET"
+            android:layout_width="400dp"
+            android:layout_height="40sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textinputborder"
+            android:hint="@string/passwordConfirmHint"
+            android:inputType="textPassword"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordET" />
+
+        <Button
+            android:id="@+id/signupBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@color/colorText"
+            android:text="@string/signup_btn"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:textColor="@color/colorBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordConfirmET" />
+
+        <TextView
+            android:id="@+id/alreadyTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:onClick="onClick"
+            android:text="@string/alreadyHave_tv"
+            android:textColor="@color/colorText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signupBTN"
+            app:layout_constraintVertical_bias="0.187" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

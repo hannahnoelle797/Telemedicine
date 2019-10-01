@@ -10,7 +10,6 @@ public class ChatsViewModel extends ViewModel {
 
     public ChatsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is chats fragment");
     }
 
     public LiveData<String> getText() {
