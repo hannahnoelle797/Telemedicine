@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telemedicine.R;
-import com.example.telemedicine.ui.utilities.RecyclerItem;
+import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 import com.example.telemedicine.ui.utilities.RecyclerItemClickListener;
 
 public class HomeFragment extends Fragment {
@@ -46,7 +45,7 @@ public class HomeFragment extends Fragment {
         recyclerView_appt = (RecyclerView)root.findViewById(R.id.recycler_appts);
         layoutManager_appt = new LinearLayoutManager(this.getActivity());
         recyclerView_appt.setLayoutManager(layoutManager_appt);
-        mAdapter_appt = new RecyclerItem(apptData);
+        mAdapter_appt = new RecyclerItemOld(apptData);
         recyclerView_appt.setAdapter(mAdapter_appt);
 
         recyclerView_appt.addOnItemTouchListener(
@@ -64,7 +63,7 @@ public class HomeFragment extends Fragment {
         recyclerView_chat = (RecyclerView)root.findViewById(R.id.recycler_chats);
         layoutManager_chat = new LinearLayoutManager(this.getActivity());
         recyclerView_chat.setLayoutManager(layoutManager_chat);
-        mAdapter_chat = new RecyclerItem(chatData);
+        mAdapter_chat = new RecyclerItemOld(chatData);
         recyclerView_chat.setAdapter(mAdapter_chat);
 
         recyclerView_chat.addOnItemTouchListener(
@@ -82,7 +81,7 @@ public class HomeFragment extends Fragment {
         recyclerView_report = (RecyclerView)root.findViewById(R.id.recycler_reports);
         layoutManager_report = new LinearLayoutManager(this.getActivity());
         recyclerView_report.setLayoutManager(layoutManager_report);
-        mAdapter_report = new RecyclerItem(reportData);
+        mAdapter_report = new RecyclerItemOld(reportData);
         recyclerView_report.setAdapter(mAdapter_report);
 
         recyclerView_report.addOnItemTouchListener(

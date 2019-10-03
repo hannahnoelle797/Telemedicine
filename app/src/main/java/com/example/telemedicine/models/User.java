@@ -15,6 +15,11 @@ public class User {
         this.lastFourSSN = lastFourSSN;
     }
 
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     // Accessor Methods
     public String getFirstName() {
         return this.firstName;

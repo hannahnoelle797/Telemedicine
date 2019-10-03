@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "795361680050",
+    "firebase_url": "https://telemedicine-capstone.firebaseio.com",
+    "project_id": "telemedicine-capstone",
+    "storage_bucket": "telemedicine-capstone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795361680050:android:72703b315348d0d3c847ab",
+        "android_client_info": {
+          "package_name": "com.example.telemedicine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795361680050-gsrb6h19q0lq5kvj0415tcpcimrlfeie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGIHpSgKnqLJz-4DSJoA-t-hJpbb5vU-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795361680050-gsrb6h19q0lq5kvj0415tcpcimrlfeie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

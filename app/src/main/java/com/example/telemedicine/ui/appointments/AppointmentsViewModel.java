@@ -10,7 +10,6 @@ public class AppointmentsViewModel extends ViewModel {
 
     public AppointmentsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is appointments fragment");
     }
 
     public LiveData<String> getText() {

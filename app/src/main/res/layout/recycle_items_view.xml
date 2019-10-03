@@ -5,18 +5,22 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
         android:hint="@string/list_item" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
         android:hint="@string/list_item" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
         android:hint="@string/list_item" />
     <Button
         android:layout_width="360dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
         android:layout_gravity="center"
         android:text="@string/show_more" />
 </LinearLayout>
