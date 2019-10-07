@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
@@ -31,7 +32,7 @@ public class Login extends AppCompatActivity {
     String TAG = "Login.java";
     // Firebase
     FirebaseAuth mAuth;
-    FirebaseDatabase mDatabase;
+    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class Login extends AppCompatActivity {
         signupBtn = (Button)findViewById(R.id.signupBTN);
         // Initialize Firebase instance
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
     }
 
     // Handle all clicks within login TODO
@@ -80,6 +82,9 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
                             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            System.out.println("User: " + user);
+                            // final String userID = user.getUid();
+                            // User cur_user = new User(userID, user.getDisplayName(), user.getEmail());
                             // TODO can pass user^ in an intent to MainActivity for context
                             Intent intent = new Intent(Login.this, MainActivity.class);
                             startActivity(intent);
