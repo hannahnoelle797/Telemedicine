@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    tools:context=".ui.appointments.AppointmentsFragment">
 
     <TextView
         android:id="@+id/appointment_head"
@@ -22,6 +24,7 @@
         android:id="@+id/appt_upcoming_header"
         android:layout_width="365dp"
         android:layout_height="55dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:text="@string/appt_upcoming"
         android:textColor="@color/colorText"
@@ -46,6 +49,7 @@
         android:id="@+id/appt_prev_header"
         android:layout_width="365dp"
         android:layout_height="55dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:text="@string/appt_prev"
         android:textSize="14pt"
@@ -64,6 +68,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appt_prev_header" />
+
+    <Button
+        android:id="@+id/button_new_appt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@color/colorImportant"
+        android:textColor="@color/colorBackground"
+        android:clickable="true"
+        android:text="@string/button_new_appt"
+        app:layout_constraintTop_toBottomOf="@id/recycler_appt_prev"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    </Button>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

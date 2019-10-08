@@ -9,6 +9,15 @@
     <string name="show_more">Show More Items...</string>
     <string name="header_home">Home</string>
     <string name="header_appt">Appointments</string>
+    <string name="header_appt_sched">Schedule Appointment</string>
+    <string name="label_appt_date">Appointment Date:</string>
+    <string name="label_appt_type">Appointment Type:</string>
+    <string name="label_appt_time">Appointment Time:</string>
+    <string name="label_doctor">Preferred Doctor:</string>
+    <string name="button_appt_date">Select Date</string>
+    <string name="button_appt_time">Select Time</string>
+    <string name="button_new_appt">Schedule A New Appointment</string>
+    <string name="button_submit_appt">Schedule Appointment</string>
     <string name="header_reports">Reports</string>
     <string name="header_chats">Chats</string>
     <string name="type">Type message here</string>
