@@ -21,12 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Arrays;
-
 public class Signup extends AppCompatActivity {
 
     // Global Variables
@@ -36,8 +30,6 @@ public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth;
     // log tag
     private final String TAG = "Signup.java";
-    // Global firebase user
-    FirebaseUser fUser;
     DatabaseReference mDatabase;
 
     @Override
@@ -57,48 +49,34 @@ public class Signup extends AppCompatActivity {
 
         // Get firebase instance
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     // Button Click for activity_signup.xml
     public void onClick(View view) {
+        // Create intent to switch between views
         Intent intent;
+        // Handle all button clicks
         switch (view.getId()) {
+            // If account already exists
             case R.id.alreadyTV:
                 intent = new Intent(Signup.this, Login.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.signupBTN:
-
+                // Check if the fields are empty
                 if (emailET.getText().toString().isEmpty() || passwordET.getText().toString().isEmpty()) return;
                 // Check if confirms match
-                if (!this.checkEntries(emailET.getText().toString(), confirmEmailET.getText().toString())) {
+                if (!checkEntries(emailET.getText().toString(), confirmEmailET.getText().toString())) {
                     Toast.makeText(Signup.this, "Your emails must match before continuing..", Toast.LENGTH_SHORT).show();
                 }
-                if (!this.checkEntries(passwordET.getText().toString(), confirmPasswordET.getText().toString())) {
+                // Check if confirms match
+                if (!checkEntries(passwordET.getText().toString(), confirmPasswordET.getText().toString())) {
                     Toast.makeText(Signup.this, "Your passwords must match before continuing..", Toast.LENGTH_SHORT).show();
                 }
-
-                // Create database uID
-                final String userID = mDatabase.push().getKey();
-                // Create our user object - Should be able to reference user based on the userID
-                User user = new User(userID, firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                        passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
-                mDatabase.child(userID).setValue(user);
-
-                this.createUser(user.getEmail(), user.getPassword());
-
-                if (user == null || userID == null) {
-                    Log.i(TAG, "Account not created.");
-                    return;
-                }
-
-                Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
-                intent = new Intent(Signup.this, Login.class);
-                startActivity(intent);
-                break;
-            default:
-                System.out.println("Default");
+                // Create Firebase User - using createUserWithEmailandPassword
+                createUser(emailET.getText().toString().trim(), passwordET.getText().toString().trim());
                 break;
         }
     }
@@ -112,7 +90,7 @@ public class Signup extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign up Successful
                             Log.d(TAG, "createUserWithEmail:success");
-                            fUser = mAuth.getCurrentUser();
+                            onAuthSuccess(task.getResult().getUser());
                             // UPDATE UI
                         } else {
                             // If signup fails
@@ -124,10 +102,26 @@ public class Signup extends AppCompatActivity {
                 });
     }
 
+    protected void onAuthSuccess(FirebaseUser user) {
+        // Write data to user object
+        //TODO Test
+        System.out.println("UserID: " + user.getUid());
+        addUserLocally(user.getUid(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
+        // Display text to user to let them know that the account was created successfully
+        Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
+        // Start new Intent
+        startActivity(new Intent(Signup.this, Login.class));
+        finish();
+    }
+
+    protected void addUserLocally(String userID, String firstName, String lastName, String email, String password, int last4SSN) {
+        // TODO last 4
+        User user = new User(userID, firstName, lastName, email, password, last4SSN);
+        mDatabase.child("Users").child(userID).setValue(user);
+    }
+
     protected boolean checkEntries (String s1, String s2) {
         return (s1 == s2);
     }
-
-    // TODO Check if confirm and original match
-    // i.e. password and passwordConfirm
 }

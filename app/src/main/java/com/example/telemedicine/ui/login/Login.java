@@ -33,6 +33,7 @@ public class Login extends AppCompatActivity {
     // Firebase
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
+    FirebaseUser fUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,13 @@ public class Login extends AppCompatActivity {
         // Initialize Firebase instance
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     // Handle all clicks within login TODO
@@ -81,8 +89,7 @@ public class Login extends AppCompatActivity {
                         // If user was found
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
-                            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            System.out.println("User: " + user);
+                            fUser = mAuth.getCurrentUser();
                             // final String userID = user.getUid();
                             // User cur_user = new User(userID, user.getDisplayName(), user.getEmail());
                             // TODO can pass user^ in an intent to MainActivity for context
