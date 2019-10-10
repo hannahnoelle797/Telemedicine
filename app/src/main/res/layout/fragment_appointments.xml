@@ -3,19 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/appt_fragment">
 
     <TextView
-        android:id="@+id/appointment_head"
-        android:layout_width="365dp"
+    android:id="@+id/appointment_head"
+    android:layout_width="365dp"
+    android:layout_height="wrap_content"
+    android:text="Appointments"
+    android:textSize="20pt"
+    android:textAlignment="center"
+    app:layout_constraintBottom_toTopOf="@id/btn_schedule_appt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_schedule_appt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Appointments"
-        android:textSize="20pt"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@id/text_upcoming_appointments"
+        android:text="Schedule Appointment"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_upcoming_appointments"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appointment_head" />
 
     <TextView
         android:id="@+id/text_upcoming_appointments"
@@ -27,7 +39,7 @@
         app:layout_constraintBottom_toTopOf="@id/recycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appointment_head" />
+        app:layout_constraintTop_toBottomOf="@id/btn_schedule_appt" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -61,6 +73,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_previous_appointments" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

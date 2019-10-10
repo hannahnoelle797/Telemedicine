@@ -6,15 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import android.content.Intent;
+
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.telemedicine.R;
 import com.example.telemedicine.ui.utilities.RecyclerItem;
 
@@ -34,13 +36,6 @@ public class AppointmentsFragment extends Fragment {
         appointmentsViewModel =
                 ViewModelProviders.of(this).get(AppointmentsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_appointments, container, false);
-        final TextView textView = root.findViewById(R.id.text_upcoming_appointments);
-        appointmentsViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
 
         recyclerView = (RecyclerView)root.findViewById(R.id.recycler);
         recyclerView2 = (RecyclerView)root.findViewById(R.id.recycler2);
@@ -52,6 +47,14 @@ public class AppointmentsFragment extends Fragment {
         mAdapter2 = new RecyclerItem(apptData2);
         recyclerView.setAdapter(mAdapter);
         recyclerView2.setAdapter(mAdapter2);
+
+        Button btnFragment = root.findViewById(R.id.btn_schedule_appt);
+        btnFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                //getFragmentManager().beginTransaction().add(R.id.appt_details_Fragment, new AppointmentsFragment()).commit();
+            }
+        });
         return root;
     }
 }

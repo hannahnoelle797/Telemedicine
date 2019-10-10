@@ -5,6 +5,7 @@
     <string name="title_chats">Chats</string>
     <string name="title_appointments">Appointments</string>
     <string name="home_welcome">Welcome</string>
+    <string name="settings_title">Settings</string>
     <string name="list_item">Item</string>
     <string name="show_more">Show More Items...</string>
 </resources>

@@ -16,12 +16,11 @@
         android:name="com.example.telemedicine.ui.appointments.AppointmentsFragment"
         android:label="@string/title_appointments"
         tools:layout="@layout/fragment_appointments" />
-
     <fragment
-        android:id="@+id/navigation_reports"
-        android:name="com.example.telemedicine.ui.reports.ReportsFragment"
-        android:label="@string/title_reports"
-        tools:layout="@layout/fragment_reports" />
+        android:id="@+id/navigation_settings"
+        android:name="com.example.telemedicine.ui.settings.SettingsFragment"
+        android:label="@string/settings_title"
+        tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/navigation_chats"
