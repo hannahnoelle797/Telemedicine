@@ -18,6 +18,8 @@ import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
 
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class appointmentScheduling extends AppCompatActivity {
 
@@ -35,12 +37,12 @@ public class appointmentScheduling extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_scheduling);
 
-        Spinner appt_spinner = findViewById(R.id.spinner_appt_type);
+        final Spinner appt_spinner = findViewById(R.id.spinner_appt_type);
         String[] appt_types = new String[]{"Select Appointment Type", "Annual Wellness Visit", "Health Screening", "New Problem Visit", "Problem Follow Up Visit", "Physical"};
         ArrayAdapter<String> appt_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, appt_types);
         appt_spinner.setAdapter(appt_adapter);
 
-        Spinner doc_spinner = findViewById(R.id.spinner_doctor);
+        final Spinner doc_spinner = findViewById(R.id.spinner_doctor);
         String[] doc_names = new String[]{"Select Doctor", "Dr. Hayden Lee", "Dr. Jane Smith", "Dr. Amanda Parker", "Dr. Michael Dean"};
         ArrayAdapter<String> doc_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, doc_names);
         doc_spinner.setAdapter(doc_adapter);
@@ -50,7 +52,8 @@ public class appointmentScheduling extends AppCompatActivity {
         apptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                c = Calendar.getInstance();
+                c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
+
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 int month = c.get(Calendar.MONTH);
                 int year = c.get(Calendar.YEAR);
@@ -58,9 +61,10 @@ public class appointmentScheduling extends AppCompatActivity {
                 dpd = new DatePickerDialog(appointmentScheduling.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int mYear, int mMonth, int mDay) {
-                        apptBtn.setText(mDay + "/" + (mMonth+1) + "/" + mYear);
+                        apptBtn.setText((mMonth+1) + "/" + mDay + "/" + mYear);
                     }
-                }, day, month, year);
+                }, year, month, day);
+                dpd.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 dpd.show();
             }
         });
@@ -93,10 +97,28 @@ public class appointmentScheduling extends AppCompatActivity {
         schedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(appointmentScheduling.this, "Appointment Created", Toast.LENGTH_SHORT).show();
-                Intent intent;
-                intent = new Intent(appointmentScheduling.this, MainActivity.class);
-                startActivity(intent);
+                if(appt_spinner.getSelectedItem().equals("Select Appointment Type"))
+                {
+                    Toast.makeText(appointmentScheduling.this, "Please Select Appointment Type", Toast.LENGTH_SHORT).show();
+                }
+                else if(doc_spinner.getSelectedItem().equals("Select Doctor"))
+                {
+                    Toast.makeText(appointmentScheduling.this, "Please Select Doctor", Toast.LENGTH_SHORT).show();
+                }
+                else if(apptBtn.getText().equals("Select Date"))
+                {
+                    Toast.makeText(appointmentScheduling.this, "Please Select Date", Toast.LENGTH_SHORT).show();
+                }
+                else if(timeBtn.getText().equals("Select Time"))
+                {
+                    Toast.makeText(appointmentScheduling.this, "Please Select Time", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(appointmentScheduling.this, "Appointment Created", Toast.LENGTH_SHORT).show();
+                    Intent intent;
+                    intent = new Intent(appointmentScheduling.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
