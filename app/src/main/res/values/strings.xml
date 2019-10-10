@@ -41,6 +41,8 @@
     <string name="emailConfirmHint">Confirm Email</string>
     <string name="socialNumHint">Social Security Number</string>
     <string name="socialNumConfirmHint">Confirm SSN</string>
+    <string name="empIDHint">Employee ID</string>
+    <string name="empIDConfirmHint">Confirm Employee ID</string>
     <string name="passwordHint">Password</string>
     <string name="passwordConfirmHint">Confirm Password</string>
     <string name="signup_btn">Sign Up</string>

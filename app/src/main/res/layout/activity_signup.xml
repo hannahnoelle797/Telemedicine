@@ -24,13 +24,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/signupTV"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/patientOrDocSPIN"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
             android:layout_marginTop="8dp"
-            android:text="@string/signup_tv"
-            android:textColor="@color/colorText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TitleTV" />
@@ -51,7 +51,7 @@
             android:textColorHint="@color/colorText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signupTV" />
+            app:layout_constraintTop_toBottomOf="@+id/patientOrDocSPIN" />
 
         <EditText
             android:id="@+id/lastNameET"

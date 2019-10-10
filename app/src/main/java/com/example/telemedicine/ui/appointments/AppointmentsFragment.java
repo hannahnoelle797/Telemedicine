@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
+import com.example.telemedicine.ui.scheduling.ApptSchedulingFirebase;
 import com.example.telemedicine.ui.scheduling.appointmentScheduling;
 import com.example.telemedicine.ui.utilities.RecyclerItem;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
@@ -66,7 +67,7 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(getContext(), appointmentScheduling.class);
+                intent = new Intent(getContext(), ApptSchedulingFirebase.class);
                 startActivity(intent);
             }
         });

@@ -1,18 +1,23 @@
 package com.example.telemedicine.models;
 
-public class Users {
+public class User {
 
     // Global Variables
-    String firstName, lastName, email, password;
+    String firstName, lastName, email, password, userID;
     int lastFourSSN;
 
     // Constructor
-    public Users(String firstName, String lastName, String email, String password, int lastFourSSN) {
+    public User(String firebaseUserID, String firstName, String lastName, String email, String password, int lastFourSSN) {
+        this.userID = firebaseUserID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.lastFourSSN = lastFourSSN;
+    }
+
+    public User(String firebaseUserID, String fullName, String email) {
+
     }
 
     // Accessor Methods

@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "1004020342183",
-    "firebase_url": "https://telemedicine8a.firebaseio.com",
-    "project_id": "telemedicine8a",
-    "storage_bucket": "telemedicine8a.appspot.com"
+    "project_number": "795361680050",
+    "firebase_url": "https://telemedicine-capstone.firebaseio.com",
+    "project_id": "telemedicine-capstone",
+    "storage_bucket": "telemedicine-capstone.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1004020342183:android:b830d713b7e1e20bf1ea82",
+        "mobilesdk_app_id": "1:795361680050:android:72703b315348d0d3c847ab",
         "android_client_info": {
           "package_name": "com.example.telemedicine"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1004020342183-i7q9ljlvt1tlls2qs2bsvt8mee9dhji2.apps.googleusercontent.com",
+          "client_id": "795361680050-gsrb6h19q0lq5kvj0415tcpcimrlfeie.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBhwJSZ6WcJMp9TPytkPW5G5DGaEIswT5E"
+          "current_key": "AIzaSyBGIHpSgKnqLJz-4DSJoA-t-hJpbb5vU-8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1004020342183-i7q9ljlvt1tlls2qs2bsvt8mee9dhji2.apps.googleusercontent.com",
+              "client_id": "795361680050-gsrb6h19q0lq5kvj0415tcpcimrlfeie.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
