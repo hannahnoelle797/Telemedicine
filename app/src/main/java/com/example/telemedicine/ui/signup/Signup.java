@@ -7,7 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.telemedicine.R;
@@ -25,6 +29,7 @@ public class Signup extends AppCompatActivity {
 
     // Global Variables
     private EditText firstNameET, lastNameET, emailET, confirmEmailET, ssnET, confirmSSNET, passwordET, confirmPasswordET;
+    private Spinner spinner;
 
     // Firebase auth instance
     private FirebaseAuth mAuth;
@@ -37,7 +42,10 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-
+        spinner = (Spinner) findViewById(R.id.patientOrDocSPIN);
+        String [] patientOrDoctor = new String[] {"Doctor", "Patient"};
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, patientOrDoctor);
+        spinner.setAdapter(spinnerAdapter);
         firstNameET = (EditText) findViewById(R.id.firstNameET);
         lastNameET = (EditText) findViewById(R.id.lastNameET);
         emailET = (EditText)findViewById(R.id.emailET);
@@ -83,6 +91,7 @@ public class Signup extends AppCompatActivity {
 
     // Hash password TODO
     private void createUser(String email, String password) {
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -90,7 +99,12 @@ public class Signup extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign up Successful
                             Log.d(TAG, "createUserWithEmail:success");
-                            onAuthSuccess(task.getResult().getUser());
+                            try {
+                                onAuthSuccess(task.getResult().getUser());
+                            } catch (NullPointerException e){
+                                System.out.println(e);
+                            }
+
                             // UPDATE UI
                         } else {
                             // If signup fails
@@ -105,9 +119,17 @@ public class Signup extends AppCompatActivity {
     protected void onAuthSuccess(FirebaseUser user) {
         // Write data to user object
         //TODO Test
-        System.out.println("UserID: " + user.getUid());
-        addUserLocally(user.getUid(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
+        // TODO remove password cleartext
+
+        if (spinner.getSelectedItem().equals("Patient")) {
+            addUserLocally(user.getUid(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                    passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
+        } else if (spinner.getSelectedItem().equals("Doctor")) {
+            addDocLocally(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                    passwordET.getText().toString().trim(), user.getUid(), getFullName(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim()));
+        } else {
+            System.out.println("Uh oh");
+        }
         // Display text to user to let them know that the account was created successfully
         Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
         // Start new Intent
@@ -121,7 +143,17 @@ public class Signup extends AppCompatActivity {
         mDatabase.child("Users").child(userID).setValue(user);
     }
 
+
+    protected void addDocLocally(String firstName, String lastName, String email, String password, String docID, String docString, int empNum) {
+        Doctor doctor = new Doctor(firstName, lastName, email, password, docID, docString, empNum);
+        mDatabase.child("Doctor").child(docID).setValue(doctor);
+    }
+
     protected boolean checkEntries (String s1, String s2) {
         return (s1 == s2);
+    }
+
+    protected String getFullName(String s1, String s2) {
+        return (s1 + s2);
     }
 }

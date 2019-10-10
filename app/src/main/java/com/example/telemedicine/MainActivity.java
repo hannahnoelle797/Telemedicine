@@ -18,17 +18,15 @@ import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Global variables
+    FirebaseUser user;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-
-        // CHECK IF USER EXISTS
-        // IF -> Homepage
-        // ELSE -> Login
-
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -38,6 +36,21 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (user == null) {
+            // User not logged in
+            startActivity(new Intent(this, Login.class));
+        } else {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            // Already logged in
+        }
     }
 
     @Override

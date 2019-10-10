@@ -89,20 +89,22 @@ public class Login extends AppCompatActivity {
                         // If user was found
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
-                            fUser = mAuth.getCurrentUser();
-                            // final String userID = user.getUid();
-                            // User cur_user = new User(userID, user.getDisplayName(), user.getEmail());
-                            // TODO can pass user^ in an intent to MainActivity for context
-                            Intent intent = new Intent(Login.this, MainActivity.class);
-                            startActivity(intent);
-                            // Update UI(user);
+                            onAuthSuccess(task.getResult().getUser());
                         } else {
                             // If sign-in fails
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Auth failed..", Toast.LENGTH_SHORT).show();
-                            // UpdateUI
                         }
                     }
                 });
+    }
+
+    protected void onAuthSuccess(FirebaseUser user) {
+        // Assign global var to current logged in user
+        fUser = user;
+        // Start new activity
+        Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }
