@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.telemedicine.MainActivity;
@@ -42,6 +43,7 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
     Spinner time_spinner;
 
     ArrayList<String> doctorNames;
+    ArrayList<String> doctorIDs;
 
     Calendar c;
     DatePickerDialog dpd;
@@ -65,6 +67,7 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
 
         mDatabaseDocs = FirebaseDatabase.getInstance().getReference("Doctor");
         doctorNames = new ArrayList<>();
+        doctorIDs = new ArrayList<>();
 
         mDatabaseDocs.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -73,6 +76,7 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
                     Doctor d = child.getValue(Doctor.class);
                     System.out.println(d.getDocString());
                     doctorNames.add(d.getDocString());
+                    doctorIDs.add(d.getDocID());
                 }
                 populateSpinner(doctorNames);
             }
@@ -112,7 +116,7 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference("User");
 
         time_spinner = findViewById(R.id.spinner_time);
-        String[] avail_times = new String[]{"Select Time", "7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM"};
+        String[] avail_times = new String[]{"Select Time", "07:00 AM", "07:30 AM", "08:00 AM", "08:30 AM", "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"};
         ArrayAdapter<String> time_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, avail_times);
         time_spinner.setAdapter(time_adapter);
 
@@ -160,7 +164,15 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
         String id = UUID.randomUUID().toString();
         System.out.println("USER ID HERE!!!!!!!!!!!!!: " + id);
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Appointment test_appt = new Appointment(id, userid, "fjaffdk", 2019, 10, 23, 11, 0, "AM");
+        int idx = doc_spinner.getSelectedItemPosition();
+        String docid = doctorIDs.get(idx);
+        DatePicker dp = dpd.getDatePicker();
+        String time = time_spinner.getSelectedItem().toString();
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int min = Integer.parseInt(time.substring(3, 5));
+        String ampm = time.substring(6);
+        System.out.println(hour + " " + min + " " + ampm);
+        Appointment test_appt = new Appointment(id, userid, docid, dp.getYear(), (dp.getMonth()+1), dp.getDayOfMonth(), hour, min, ampm);
         mDatabaseAppts.child("Appointments").child(id).setValue(test_appt);
     }
 

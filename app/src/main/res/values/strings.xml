@@ -25,7 +25,7 @@
     <string name="appt_prev">Previous</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Telemedince</string>
     <string name="button_signup">Sign up</string>
     <string name="username_placehold">Enter your username</string>
     <string name="password_placehold">Enter your password</string>
