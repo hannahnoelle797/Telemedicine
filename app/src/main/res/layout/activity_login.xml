@@ -21,17 +21,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/usernameET"
+        android:id="@+id/emailET"
         android:layout_width="400dp"
         android:layout_height="40dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/textinputborder"
-        android:hint="@string/username_placehold"
-        android:inputType="text"
+        android:hint="@string/email_placehold"
+        android:inputType="textEmailAddress"
         android:paddingStart="10dp"
-        android:paddingLeft="10dp"
         android:paddingEnd="0dp"
-        android:paddingRight="0dp"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +44,7 @@
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameET"
+        app:layout_constraintTop_toBottomOf="@+id/emailET"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/colorText">
 
@@ -66,51 +64,33 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/lastFourOfSSN"
-        android:layout_width="400dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/textinputborder"
-        android:hint="@string/lastFour_placehold"
-        android:inputType="number"
-        android:maxLength="4"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp"
-        android:paddingEnd="0dp"
-        android:paddingRight="0dp"
-        android:textColor="@color/colorText"
-        android:textColorHint="@color/colorText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
-
     <Button
         android:id="@+id/submitBtn"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/buttonborder"
         android:onClick="onClick"
         android:text="@string/button_login"
         android:textColor="@color/colorBackground"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastFourOfSSN" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
 
     <Button
         android:id="@+id/signupBtn"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="110dp"
         android:background="@drawable/buttonborder_alt"
         android:onClick="onClick"
         android:text="@string/button_signup"
         android:textColor="@color/colorBackground"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

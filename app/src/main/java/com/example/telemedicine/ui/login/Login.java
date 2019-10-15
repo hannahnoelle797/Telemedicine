@@ -27,7 +27,8 @@ public class Login extends AppCompatActivity {
 
     // Global Variables
     User user; // Mock-Up
-    EditText emailET, passwordET, lastFourSSNET;
+    EditText emailET, passwordET;
+    // EditText lastFourSSNET;
     Button loginBtn, signupBtn;
     String TAG = "Login.java";
     // Firebase
@@ -41,9 +42,9 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Get references from the View
-        emailET = (EditText) findViewById(R.id.usernameET);
+        emailET = (EditText) findViewById(R.id.emailET);
         passwordET = (EditText) findViewById(R.id.passwordET);
-        lastFourSSNET = (EditText) findViewById(R.id.lastFourOfSSN);
+        // lastFourSSNET = (EditText) findViewById(R.id.lastFourOfSSN);
         loginBtn = (Button) findViewById(R.id.submitBtn);
         signupBtn = (Button)findViewById(R.id.signupBTN);
         // Initialize Firebase instance
@@ -55,7 +56,7 @@ public class Login extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
+        fUser = FirebaseAuth.getInstance().getCurrentUser(); // TODO
     }
 
     // Handle all clicks within login TODO
@@ -77,8 +78,8 @@ public class Login extends AppCompatActivity {
 
     private void checkLogin() {
         // Get our data from ET fields
-        final String email = emailET.getText().toString();
-        final String password = passwordET.getText().toString();
+        final String email = emailET.getText().toString().trim();
+        final String password = passwordET.getText().toString().trim();
         // Check for empty parameters
         if (email.isEmpty() || password.isEmpty()) return;
         // Sign in with firebase using firebase auth instance
@@ -89,7 +90,7 @@ public class Login extends AppCompatActivity {
                         // If user was found
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
-                            onAuthSuccess(task.getResult().getUser());
+                            onAuthSuccess(task.getResult().getUser()); // TODO - Catch NullPointer
                         } else {
                             // If sign-in fails
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -103,8 +104,8 @@ public class Login extends AppCompatActivity {
         // Assign global var to current logged in user
         fUser = user;
         // Start new activity
-        Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Successful Login.", Toast.LENGTH_LONG).show();
         startActivity(new Intent(this, MainActivity.class));
-        finish();
+        // finish();
     }
 }

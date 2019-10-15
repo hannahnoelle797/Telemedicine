@@ -70,18 +70,25 @@ public class Signup extends AppCompatActivity {
             case R.id.alreadyTV:
                 intent = new Intent(Signup.this, Login.class);
                 startActivity(intent);
-                finish();
                 break;
+                // TODO - fix multiple toasts from stacking
             case R.id.signupBTN:
                 // Check if the fields are empty
                 if (emailET.getText().toString().isEmpty() || passwordET.getText().toString().isEmpty()) return;
-                // Check if confirms match
-                if (!checkEntries(emailET.getText().toString(), confirmEmailET.getText().toString())) {
+                // Check if confirms match - Email
+                if (!emailET.getText().toString().trim().equals(confirmEmailET.getText().toString().trim())){
                     Toast.makeText(Signup.this, "Your emails must match before continuing..", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                // Check if confirms match
-                if (!checkEntries(passwordET.getText().toString(), confirmPasswordET.getText().toString())) {
+                // Check if confirms match - Password
+                if (!passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                     Toast.makeText(Signup.this, "Your passwords must match before continuing..", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Check if confirms match - SSN
+                if (!ssnET.getText().toString().trim().equals(confirmSSNET.getText().toString().trim())) {
+                    Toast.makeText(Signup.this, "Your SSN must match before continuing..", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 // Create Firebase User - using createUserWithEmailandPassword
                 createUser(emailET.getText().toString().trim(), passwordET.getText().toString().trim());
@@ -91,7 +98,6 @@ public class Signup extends AppCompatActivity {
 
     // Hash password TODO
     private void createUser(String email, String password) {
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -102,9 +108,9 @@ public class Signup extends AppCompatActivity {
                             try {
                                 onAuthSuccess(task.getResult().getUser());
                             } catch (NullPointerException e){
+                                // throw(e); TODO
                                 System.out.println(e);
                             }
-
                             // UPDATE UI
                         } else {
                             // If signup fails
@@ -125,8 +131,9 @@ public class Signup extends AppCompatActivity {
             addUserLocally(user.getUid(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
                     passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
         } else if (spinner.getSelectedItem().equals("Doctor")) {
-            addDocLocally(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                    passwordET.getText().toString().trim(), user.getUid(), getFullName(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim()));
+            //addDocLocally(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                    //passwordET.getText().toString().trim(), user.getUid(), getFullName(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim()));
+            System.out.println("Adding a Doctor");
         } else {
             System.out.println("Uh oh");
         }
@@ -134,7 +141,6 @@ public class Signup extends AppCompatActivity {
         Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
         // Start new Intent
         startActivity(new Intent(Signup.this, Login.class));
-        finish();
     }
 
     protected void addUserLocally(String userID, String firstName, String lastName, String email, String password, int last4SSN) {
@@ -143,15 +149,11 @@ public class Signup extends AppCompatActivity {
         mDatabase.child("Users").child(userID).setValue(user);
     }
 
-
+    /*
     protected void addDocLocally(String firstName, String lastName, String email, String password, String docID, String docString, int empNum) {
-        Doctor doctor = new Doctor(firstName, lastName, email, password, docID, docString, empNum);
-        mDatabase.child("Doctor").child(docID).setValue(doctor);
-    }
-
-    protected boolean checkEntries (String s1, String s2) {
-        return (s1 == s2);
-    }
+        //Doctor doctor = new Doctor(firstName, lastName, email, password, docID, docString, empNum);
+        //mDatabase.child("Doctor").child(docID).setValue(doctor);
+    } */
 
     protected String getFullName(String s1, String s2) {
         return (s1 + s2);

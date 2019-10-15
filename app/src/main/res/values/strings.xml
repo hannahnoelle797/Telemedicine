@@ -18,7 +18,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_login">Sign in</string>
     <string name="button_signup">Sign up</string>
-    <string name="username_placehold">Enter your username</string>
+    <string name="email_placehold">Enter your email</string>
     <string name="password_placehold">Enter your password</string>
     <string name="show">Show</string>
     <string name="lastFour_placehold">Enter your last four digits of SSN</string>
