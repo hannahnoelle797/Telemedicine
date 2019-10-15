@@ -8,11 +8,11 @@ import java.util.TimeZone;
 public class Appointment {
 
     //Global Variables
-    private String apptID, userID, doctorID, ampm;
+    private String apptID, userID, doctorID, ampm, type;
     private Calendar apptDate;
     private int apptYear, apptMonth, apptDay, apptHour, apptMin;
 
-    public Appointment(String apptId, String userId, String doctorId, int apptYear, int apptMonth, int apptDay, int apptHour, int apptMin, String ampm)
+    public Appointment(String apptId, String userId, String doctorId, int apptYear, int apptMonth, int apptDay, int apptHour, int apptMin, String ampm, String type)
     {
         this.apptID = apptId;
         this.userID = userId;
@@ -25,6 +25,7 @@ public class Appointment {
         this.ampm = ampm.toUpperCase();
         apptDate = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
         apptDate.set(apptYear, apptMonth, apptDay, apptHour, apptMin);
+        this.type = type;
     }
 
     public void setDate()
@@ -104,4 +105,8 @@ public class Appointment {
     public void setAmpm(String ampm) {
         this.ampm = ampm;
     }
+
+    public String getType() {return type;}
+
+    public void setType(String type) {this.type = type;}
 }

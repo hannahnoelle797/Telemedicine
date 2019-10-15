@@ -160,9 +160,7 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
 
     public void createAppointment()
     {
-        //SAMPLE APPOINTMENT TO BE REMOVED
         String id = UUID.randomUUID().toString();
-        System.out.println("USER ID HERE!!!!!!!!!!!!!: " + id);
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         int idx = doc_spinner.getSelectedItemPosition();
         String docid = doctorIDs.get(idx);
@@ -171,8 +169,8 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
         int hour = Integer.parseInt(time.substring(0, 2));
         int min = Integer.parseInt(time.substring(3, 5));
         String ampm = time.substring(6);
-        System.out.println(hour + " " + min + " " + ampm);
-        Appointment test_appt = new Appointment(id, userid, docid, dp.getYear(), (dp.getMonth()+1), dp.getDayOfMonth(), hour, min, ampm);
+        String type = appt_spinner.getSelectedItem().toString();
+        Appointment test_appt = new Appointment(id, userid, docid, dp.getYear(), (dp.getMonth()+1), dp.getDayOfMonth(), hour, min, ampm, type);
         mDatabaseAppts.child("Appointments").child(id).setValue(test_appt);
     }
 
@@ -196,11 +194,6 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
     {
         //String[] docNames = GetStringArray(doctorNames);
         String[] doc_names = doctorNames.toArray(new String[doctorNames.size()]);
-        System.out.println("\n\n\nPRINTING DOCTOR NAMES\n\n\n");
-        for(int i = 0; i < doc_names.length; i++)
-        {
-            System.out.println(doc_names[i]);
-        }
         //String[] doc_names = new String[]{"Select Doctor", "Dr. Hayden Lee", "Dr. Jane Smith", "Dr. Amanda Parker", "Dr. Michael Dean"};
         ArrayAdapter<String> doc_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, doc_names);
         doc_spinner.setAdapter(doc_adapter);
