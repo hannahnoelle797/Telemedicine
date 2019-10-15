@@ -5,6 +5,16 @@ public class Doctor {
     String firstName, lastName, email, password, docID, docString; //docString is concatenation of "Dr. " + firstName + lastName
     int empNum;
 
+    public Doctor(){
+        firstName = "";
+        lastName = "";
+        email = "";
+        password = "";
+        docID = "";
+        docString = "";
+        empNum = 0;
+    }
+
     public Doctor(String firstName, String lastName, String email, String password, String docID, String docString, int empNum) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -62,21 +62,19 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
 
         doc_spinner = findViewById(R.id.spinner_doctor);
         //TODO: Use Doctor table to populate doctor spinner
-/*
+
         mDatabaseDocs = FirebaseDatabase.getInstance().getReference("Doctor");
         doctorNames = new ArrayList<>();
 
-
-
-
         mDatabaseDocs.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren()) {
-                    Doctor doc = ds.getValue(Doctor.class);
-                    String name = doc.getDocString();
-                    doctorNames.add(name);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Doctor d = child.getValue(Doctor.class);
+                    System.out.println(d.getDocString());
+                    doctorNames.add(d.getDocString());
                 }
+                populateSpinner(doctorNames);
             }
 
             @Override
@@ -84,26 +82,9 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
 
             }
         });
-        mDatabaseDocs.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren()) {
-                    Doctor doc = ds.getValue(Doctor.class);
-                    String name = doc.getDocString();
-                    doctorNames.add(name);
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });*/
 
-        //String[] docNames = GetStringArray(doctorNames);
-        String[] doc_names = new String[]{"Select Doctor", "Dr. Hayden Lee", "Dr. Jane Smith", "Dr. Amanda Parker", "Dr. Michael Dean"};
-        ArrayAdapter<String> doc_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, doc_names);
-        doc_spinner.setAdapter(doc_adapter);
 
         apptBtn = (Button)findViewById(R.id.button_date);
 
@@ -197,5 +178,19 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
         }
 
         return str;
+    }
+
+    public void populateSpinner(ArrayList<String> doctorNames)
+    {
+        //String[] docNames = GetStringArray(doctorNames);
+        String[] doc_names = doctorNames.toArray(new String[doctorNames.size()]);
+        System.out.println("\n\n\nPRINTING DOCTOR NAMES\n\n\n");
+        for(int i = 0; i < doc_names.length; i++)
+        {
+            System.out.println(doc_names[i]);
+        }
+        //String[] doc_names = new String[]{"Select Doctor", "Dr. Hayden Lee", "Dr. Jane Smith", "Dr. Amanda Parker", "Dr. Michael Dean"};
+        ArrayAdapter<String> doc_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, doc_names);
+        doc_spinner.setAdapter(doc_adapter);
     }
 }
