@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.telemedicine.R;
+import com.example.telemedicine.models.Doctor;
 import com.example.telemedicine.models.User;
 import com.example.telemedicine.ui.login.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,7 +45,7 @@ public class Signup extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         spinner = (Spinner) findViewById(R.id.patientOrDocSPIN);
-        String [] patientOrDoctor = new String[] {"Doctor", "Patient"};
+        String [] patientOrDoctor = new String[] {"I am a patient", "I am a doctor"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, patientOrDoctor);
         spinner.setAdapter(spinnerAdapter);
         firstNameET = (EditText) findViewById(R.id.firstNameET);
@@ -58,6 +60,33 @@ public class Signup extends AppCompatActivity {
         // Get firebase instance
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        // Populate spinner
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                switch(position)
+                {
+                    case 0: //PATIENT
+                        ssnET.setHint(getResources().getString(R.string.socialNumHint));
+                        confirmSSNET.setHint(getResources().getString(R.string.socialNumConfirmHint));
+                        break;
+                    case 1: //EMPLOYEE
+                        ssnET.setHint(getResources().getString(R.string.empIDHint));
+                        confirmSSNET.setHint(getResources().getString(R.string.empIDConfirmHint));
+                        break;
+                    default:
+                        System.out.println("Uh oh");
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                ssnET.setHint(getResources().getString(R.string.socialNumHint));
+                confirmSSNET.setHint(getResources().getString(R.string.socialNumConfirmHint));
+            }
+        });
     }
 
     // Button Click for activity_signup.xml
@@ -71,7 +100,7 @@ public class Signup extends AppCompatActivity {
                 intent = new Intent(Signup.this, Login.class);
                 startActivity(intent);
                 break;
-                // TODO - fix multiple toasts from stacking
+            // TODO - fix multiple toasts from stacking
             case R.id.signupBTN:
                 // Check if the fields are empty
                 if (emailET.getText().toString().isEmpty() || passwordET.getText().toString().isEmpty()) return;
@@ -127,13 +156,13 @@ public class Signup extends AppCompatActivity {
         //TODO Test
         // TODO remove password cleartext
 
-        if (spinner.getSelectedItem().equals("Patient")) {
+        if (spinner.getSelectedItem().equals("I am a patient")) {
             addUserLocally(user.getUid(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
                     passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
-        } else if (spinner.getSelectedItem().equals("Doctor")) {
-            //addDocLocally(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                    //passwordET.getText().toString().trim(), user.getUid(), getFullName(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim()));
-            System.out.println("Adding a Doctor");
+        } else if (spinner.getSelectedItem().equals("I am a doctor")) {
+            addDocLocally(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                passwordET.getText().toString().trim(), user.getUid(), getFullName(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim()), Integer.parseInt(ssnET.getText().toString().trim()));
+                //System.out.println("Adding a Doctor");
         } else {
             System.out.println("Uh oh");
         }
@@ -149,13 +178,13 @@ public class Signup extends AppCompatActivity {
         mDatabase.child("Users").child(userID).setValue(user);
     }
 
-    /*
     protected void addDocLocally(String firstName, String lastName, String email, String password, String docID, String docString, int empNum) {
-        //Doctor doctor = new Doctor(firstName, lastName, email, password, docID, docString, empNum);
-        //mDatabase.child("Doctor").child(docID).setValue(doctor);
-    } */
+        System.out.println("Adding a doctor...");
+        Doctor doctor = new Doctor(firstName, lastName, email, password, docID, docString, empNum);
+        mDatabase.child("Doctor").child(docID).setValue(doctor);
+    }
 
     protected String getFullName(String s1, String s2) {
-        return (s1 + s2);
+        return ("Dr. " + s1 + " " + s2);
     }
 }

@@ -5,19 +5,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
-import com.example.telemedicine.ui.sample_pages.sample_appt;
+import com.example.telemedicine.ui.scheduling.ApptSchedulingFirebase;
 import com.example.telemedicine.ui.utilities.RecyclerItem;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 
@@ -31,6 +34,8 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
     private RecyclerView.LayoutManager layoutManager2;
     private String[] apptData = {"Physical - 9/29 @ 10:00am", "Vaccination - 10/4 @ 1:30pm", "Check-Up - 10/19 @ 9:00am"};
     private String[] apptData2 = {"Wellness Check - 5/19 @ 10:30am", "Eye Exam - 3/22 @ 11:00am", "Check-Up - 2/19 @ 9:00am"};
+
+    Button btn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,12 +60,22 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         mAdapter2 = new RecyclerItem(apptData2, this);
         recyclerView.setAdapter(mAdapter);
         recyclerView2.setAdapter(mAdapter2);
+
+        btn = (Button)root.findViewById(R.id.button_new_appt);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
+                intent = new Intent(getContext(), ApptSchedulingFirebase.class);
+                startActivity(intent);
+            }
+        });
+
         return root;
     }
 
     @Override
     public void OnReportClickListener(int position) {
-        Intent intent = new Intent(getContext(), sample_appt.class);
-        startActivity(intent);
+        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
     }
 }

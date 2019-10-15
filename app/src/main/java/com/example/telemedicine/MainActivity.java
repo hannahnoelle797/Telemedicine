@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 mAuth.signOut();
                 System.out.println("Signed out");
                 startActivity(new Intent(MainActivity.this, Login.class));
-                finish();
+                // finish();
                 return true;
             case R.id.action_settings:
                 return true;
