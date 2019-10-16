@@ -58,7 +58,8 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
         setContentView(R.layout.activity_appt_scheduling_firebase);
 
         appt_spinner = findViewById(R.id.spinner_appt_type);
-        String[] appt_types = new String[]{"Select Appointment Type", "Annual Wellness Visit", "Health Screening", "New Problem Visit", "Problem Follow Up Visit", "Physical"};
+        String[] appt_types = new String[]{"Select Appointment Type", "Annual Wellness Visit", "Health Screening", "New Problem Visit",
+                "Problem Follow Up Visit", "Physical", "Blood Work"};
         ArrayAdapter<String> appt_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, appt_types);
         appt_spinner.setAdapter(appt_adapter);
 
