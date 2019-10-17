@@ -29,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Signup extends AppCompatActivity {
 
+    //TODO : Address, FullName (Instead of firstN + lastN), D.O.B, Phone#
+
     // Global Variables
     private EditText firstNameET, lastNameET, emailET, confirmEmailET, ssnET, confirmSSNET, passwordET, confirmPasswordET;
     private Spinner spinner;
@@ -169,7 +171,9 @@ public class Signup extends AppCompatActivity {
         // Display text to user to let them know that the account was created successfully
         Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
         // Start new Intent
+        // TODO - Change to main activity
         startActivity(new Intent(Signup.this, Login.class));
+        finish();
     }
 
     protected void addUserLocally(String userID, String firstName, String lastName, String email, String password, int last4SSN) {

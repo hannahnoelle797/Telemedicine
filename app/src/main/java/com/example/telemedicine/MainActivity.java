@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         if (user == null) {
             // User not logged in
             startActivity(new Intent(this, Login.class));
+            finish();
         } else {
             user = FirebaseAuth.getInstance().getCurrentUser();
             // Already logged in
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 mAuth.signOut();
                 System.out.println("Signed out");
                 startActivity(new Intent(MainActivity.this, Login.class));
-                // finish();
+                finish();
                 return true;
             case R.id.action_settings:
                 return true;

@@ -48,4 +48,5 @@
     <string name="button_appt_date">Select Date</string>
     <string name="button_submit_appt">Schedule Appointment</string>
     <string name="button_new_appt">Schedule A New Appointment</string>
+    <string name="hospitalAddress">677 Church St,\nMarietta, GA 30060</string>
 </resources>

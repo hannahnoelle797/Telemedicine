@@ -69,6 +69,7 @@ public class Login extends AppCompatActivity {
             case R.id.signupBtn:
                 intent = new Intent(Login.this, Signup.class);
                 startActivity(intent);
+                finish();
                 break;
             default:
                 System.out.println("Something went wrong");
@@ -106,6 +107,6 @@ public class Login extends AppCompatActivity {
         // Start new activity
         Toast.makeText(this, "Successful Login.", Toast.LENGTH_LONG).show();
         startActivity(new Intent(this, MainActivity.class));
-        // finish();
+        finish();
     }
 }

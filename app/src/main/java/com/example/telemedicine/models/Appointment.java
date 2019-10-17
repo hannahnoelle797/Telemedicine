@@ -9,10 +9,14 @@ public class Appointment {
 
     //Global Variables
     private String apptID, userID, doctorID, ampm, type;
-    private Calendar apptDate;
     private int apptYear, apptMonth, apptDay, apptHour, apptMin;
 
-    public Appointment(String apptId, String userId, String doctorId, int apptYear, int apptMonth, int apptDay, int apptHour, int apptMin, String ampm, String type) {
+    public Appointment(){
+
+    }
+
+    public Appointment(String apptId, String userId, String doctorId, int apptYear, int apptMonth, int apptDay, int apptHour, int apptMin, String ampm, String type)
+    {
         this.apptID = apptId;
         this.userID = userId;
         this.doctorID = doctorId;
@@ -23,13 +27,6 @@ public class Appointment {
         this.apptMin = apptMin;
         this.ampm = ampm.toUpperCase();
         this.type = type;
-        apptDate = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
-        apptDate.set(apptYear, apptMonth, apptDay, apptHour, apptMin);
-    }
-
-    public void setDate() {
-        apptDate = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
-        apptDate.set(apptYear, apptMonth, apptDay, apptHour, apptMin);
     }
 
     public String getApptID() {
@@ -104,10 +101,28 @@ public class Appointment {
         this.ampm = ampm;
     }
 
-    public String getType() {
-        return type;
+    public String getType() {return type;}
+
+    public void setType(String type) {this.type = type;}
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "apptID='" + apptID + '\'' +
+                ", userID='" + userID + '\'' +
+                ", doctorID='" + doctorID + '\'' +
+                ", ampm='" + ampm + '\'' +
+                ", type='" + type + '\'' +
+                ", apptYear=" + apptYear +
+                ", apptMonth=" + apptMonth +
+                ", apptDay=" + apptDay +
+                ", apptHour=" + apptHour +
+                ", apptMin=" + apptMin +
+                '}';
     }
-    public void setType(String type) {
-        this.type = type;
+
+    public String shortString() {
+        String ss = String.format("%s - %02d/%02d @ %02d:%02d %s", type, apptMonth, apptDay, apptHour, apptMin, ampm);
+        return ss;
     }
 }
