@@ -31,6 +31,7 @@
     <string name="password_placehold">Enter your password</string>
     <string name="show">Show</string>
     <string name="lastFour_placehold">Enter your last four digits of SSN</string>
+    <string name="hospitalAddress">677 Church St,\nMarietta, GA 30060</string>
     <string name="button_login">Login</string>
     <string name="welcome_tv">Welcome to Hoganson Medical</string>
     <string name="signin_tv">Please sign in</string>
