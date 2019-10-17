@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.Settings">
+    <TextView
+        android:id="@+id/settings_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textAlignment="center"
+        android:textSize="20pt"
+        app:layout_constraintBottom_toTopOf="@+id/account_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/account_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_head"
+        app:layout_constraintBottom_toTopOf="@id/privacy_btn"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onClick">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8pt"
+
+            android:gravity="start"
+            android:layout_weight=".65"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="Account"
+            android:textAlignment="textStart"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/right_arrow1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="6dp"
+            android:paddingRight="8pt"
+            android:src="@drawable/ic_right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/privacy_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_btn"
+        app:layout_constraintBottom_toTopOf="@id/security_btn"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8pt"
+
+            android:gravity="start"
+            android:layout_weight=".65"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="Privacy"
+            android:textAlignment="textStart"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/right_arrow2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="8pt"
+            android:paddingTop="6dp"
+            android:src="@drawable/ic_right_arrow" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/security_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/privacy_btn"
+        app:layout_constraintBottom_toTopOf="@id/notifications_btn"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8pt"
+
+            android:gravity="start"
+            android:layout_weight=".65"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="Security"
+            android:textAlignment="textStart"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/right_arrow3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="8pt"
+            android:paddingTop="6dp"
+            android:src="@drawable/ic_right_arrow" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/notifications_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/security_btn"
+        app:layout_constraintBottom_toTopOf="@id/contact_btn"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8pt"
+
+            android:gravity="start"
+            android:layout_weight=".65"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:text="Notifications"
+            android:textAlignment="textStart"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/right_arrow4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="8pt"
+            android:paddingTop="6dp"
+            android:src="@drawable/ic_right_arrow" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/contact_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notifications_btn"
+        app:layout_constraintBottom_toTopOf="@id/help_btn"
+        android:clickable="true"
+        android:focusable="true">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8pt"
+
+            android:gravity="start"
+            android:layout_weight=".65"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:text="Contact"
+            android:textAlignment="textStart"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/right_arrow5"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="8pt"
+            android:paddingTop="6dp"
+            android:src="@drawable/ic_right_arrow" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/help_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_btn"
+        app:layout_constraintBottom_toTopOf="@id/about_btn"
+        android:clickable="true"
+        android:focusable="true">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8pt"
+
+            android:gravity="start"
+            android:layout_weight=".65"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="Help"
+            android:textAlignment="textStart"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/right_arrow6"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="8pt"
+            android:paddingTop="6dp"
+            android:src="@drawable/ic_right_arrow" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/about_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/help_btn"
+        android:clickable="true"
+        android:focusable="true">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8pt"
+            android:gravity="start"
+            android:layout_weight=".65"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:text="About"
+            android:textAlignment="textStart"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/right_arrow7"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="8pt"
+            android:paddingTop="6dp"
+            android:src="@drawable/ic_right_arrow" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
