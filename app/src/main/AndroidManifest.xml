@@ -32,7 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.appointments.AppointmentDetails"></activity>
+        <activity android:name=".ui.appointments.AppointmentDetails"/>
         <activity android:name=".ui.scheduling.ApptSchedulingFirebase" />
         <activity
             android:name=".ui.signup.Signup"

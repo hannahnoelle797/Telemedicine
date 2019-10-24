@@ -12,6 +12,7 @@ import com.example.telemedicine.R;
 public class RecyclerItem extends RecyclerView.Adapter<RecyclerItem.MyViewHolder> {
     private String[] mDataset;
     private OnReportClickListener mReportClickListener;
+    //private static int id;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
@@ -37,6 +38,10 @@ public class RecyclerItem extends RecyclerView.Adapter<RecyclerItem.MyViewHolder
         this.mReportClickListener = onReportClickListener;
     }
 
+    /*public static int getId(){
+        return id;
+    }*/
+
     // Create new views (invoked by the layout manager)
     @Override
     public RecyclerItem.MyViewHolder onCreateViewHolder(ViewGroup parent,
@@ -47,6 +52,7 @@ public class RecyclerItem extends RecyclerView.Adapter<RecyclerItem.MyViewHolder
         MyViewHolder vh = new MyViewHolder(v, mReportClickListener);
         return vh;
     }
+
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {

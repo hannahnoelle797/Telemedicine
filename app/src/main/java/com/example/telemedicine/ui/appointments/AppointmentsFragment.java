@@ -24,6 +24,7 @@ import com.example.telemedicine.models.Appointment;
 import com.example.telemedicine.ui.scheduling.ApptSchedulingFirebase;
 import com.example.telemedicine.ui.scheduling.appointmentScheduling;
 import com.example.telemedicine.ui.utilities.RecyclerItem;
+import com.example.telemedicine.ui.utilities.RecyclerItemClickListener;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,8 +34,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -43,26 +47,22 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
     private AppointmentsViewModel appointmentsViewModel;
 
     private RecyclerView rvUpcoming;
-    private RecyclerView rvPrevious;
 
     private RecyclerView.Adapter adapUpcoming;
-    private RecyclerView.Adapter adapPrevious;
 
     private RecyclerView.LayoutManager lmUpcoming;
-    private RecyclerView.LayoutManager lmPrevious;
 
     private DatabaseReference mDatabaseAppts;
     private DatabaseReference mDatabaseUsers;
 
     private ArrayList<String> upcomingAppt;
-    private ArrayList<String> previousAppt;
+    private ArrayList<Appointment> upcomingApptIDs;
 
     private Calendar n;
 
     private View root;
 
     private String[] apptUpcoming = {"Physical - 9/29 @ 10:00am"};
-    private String[] apptPrevious = {"Wellness Check - 5/19 @ 10:30am"};
 
     private Button btn;
 
@@ -71,7 +71,7 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         appointmentsViewModel =
                 ViewModelProviders.of(this).get(AppointmentsViewModel.class);
         root = inflater.inflate(R.layout.fragment_appointments, container, false);
-        final TextView textView = root.findViewById(R.id.appt_upcoming_header);
+        final TextView textView = root.findViewById(R.id.appointment_head);
         appointmentsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -86,8 +86,8 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         //System.out.println("\n\n\nUSER ID HERE: " + userid + "\n\n\n");
 
         upcomingAppt = new ArrayList<>();
-        previousAppt = new ArrayList<>();
 
+        upcomingApptIDs = new ArrayList<>();
 
         mDatabaseAppts.addValueEventListener(new ValueEventListener() {
             @Override
@@ -100,7 +100,6 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                         Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
 
                         Date today = c.getTime();
-                        System.out.println("CURRENT TIME: " + today.toString());
 
                         n = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
                         n.set(Calendar.YEAR, a.getApptYear());
@@ -110,30 +109,22 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                         n.set(Calendar.MINUTE, a.getApptMin());
 
                         Date apptDate = n.getTime();
-                        System.out.println("APPOINTMENT TIME" + apptDate.toString());
 
-                        if(apptDate.before(today) && previousAppt.size() <= 4) {
-                            String appt = a.shortString();
-                            previousAppt.add(appt);
-                        }
-                        else if(apptDate.after(today) && upcomingAppt.size() <= 4) {
-                            String appt = a.shortString();
-                            upcomingAppt.add(appt);
-                        }
-                        else {
-                            System.out.println("Uh oh");
-                        }
+                        String appt = a.shortString();
+                        upcomingAppt.add(appt);
+                        upcomingApptIDs.add(a);
+
                     }
                 }
-                //TODO: Populate Recylcer View methods here
                 if(upcomingAppt.size() > 0)
                     apptUpcoming = upcomingAppt.toArray(new String[upcomingAppt.size()]);
                 else
                     apptUpcoming[0] = "No Upcoming Appointments";
-                if(previousAppt.size() > 0)
-                    apptPrevious = previousAppt.toArray(new String[previousAppt.size()]);
-                else
-                    apptPrevious[0] = "No Previous Appointments";
+
+                List<String> apptList = Arrays.asList(apptUpcoming);
+                Collections.sort(apptList);
+                Collections.reverse(apptList);
+                apptUpcoming = apptList.toArray(new String[0]);
                 populateRecyclers(root);
             }
 
@@ -142,9 +133,6 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
 
             }
         });
-
-
-
 
         btn = (Button)root.findViewById(R.id.button_new_appt);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -156,25 +144,31 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
             }
         });
 
+        /*rvUpcoming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = rvUpcoming.getChildLayoutPosition(view);
+                Toast.makeText(getContext(), position, Toast.LENGTH_SHORT).show();
+            }
+        });
+*/
         return root;
     }
 
     @Override
     public void OnReportClickListener(int position) {
-        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), AppointmentDetails.class);
+        Appointment a = upcomingApptIDs.get(position);
+        intent.putExtra("EXTRA_SESSION_ID", a.getApptID());
+        startActivity(intent);
     }
 
     public void populateRecyclers(View root)
     {
-        rvUpcoming = (RecyclerView)root.findViewById(R.id.recycler_appt_upcoming);
-        rvPrevious = (RecyclerView)root.findViewById(R.id.recycler_appt_prev);
+        rvUpcoming = (RecyclerView)root.findViewById(R.id.recycler_appt);
         lmUpcoming = new LinearLayoutManager(this.getActivity());
-        lmPrevious = new LinearLayoutManager(this.getActivity());
         rvUpcoming.setLayoutManager(lmUpcoming);
-        rvPrevious.setLayoutManager(lmPrevious);
-        adapUpcoming = new RecyclerItem(apptUpcoming, this);
-        adapPrevious = new RecyclerItem(apptPrevious, this);
+        adapUpcoming = new RecyclerItem(apptUpcoming,this);
         rvUpcoming.setAdapter(adapUpcoming);
-        rvPrevious.setAdapter(adapPrevious);
     }
 }

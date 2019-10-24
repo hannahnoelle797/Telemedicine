@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,6 +20,7 @@ import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.Appointment;
 import com.example.telemedicine.models.Doctor;
+import com.example.telemedicine.models.Location;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -41,9 +46,19 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
     Spinner appt_spinner;
     Spinner doc_spinner;
     Spinner time_spinner;
+    Spinner loc_spinner;
 
     ArrayList<String> doctorNames;
     ArrayList<String> doctorIDs;
+
+    ArrayList<String> locationNames;
+    ArrayList<String> locationIDs;
+
+    ArrayAdapter<String> time_adapter;
+
+    String[] avail_times;
+    String[] all_times = new String[]{"Select Time", "07:00 AM", "07:30 AM", "08:00 AM", "08:30 AM", "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"};
+    ArrayList<String> takenTimes;
 
     Calendar c;
     DatePickerDialog dpd;
@@ -51,17 +66,46 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
     DatabaseReference mDatabaseAppts;
     DatabaseReference mDatabaseUsers;
     DatabaseReference mDatabaseDocs;
+    DatabaseReference mDatabaseLocs;
+
+    Context con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appt_scheduling_firebase);
 
+        con = this;
+
         appt_spinner = findViewById(R.id.spinner_appt_type);
         String[] appt_types = new String[]{"Select Appointment Type", "Annual Wellness Visit", "Health Screening", "New Problem Visit",
                 "Problem Follow Up Visit", "Physical", "Blood Work"};
         ArrayAdapter<String> appt_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, appt_types);
         appt_spinner.setAdapter(appt_adapter);
+
+        loc_spinner = findViewById(R.id.spinner_appt_loc);
+        locationNames = new ArrayList<>();
+        locationIDs = new ArrayList<>();
+
+        mDatabaseLocs = FirebaseDatabase.getInstance().getReference("Locations");
+
+        mDatabaseLocs.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Location l = child.getValue(Location.class);
+                    locationNames.add(l.getName());
+                    locationIDs.add(l.getId());
+                }
+                populateLocSpinner(locationNames);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         doc_spinner = findViewById(R.id.spinner_doctor);
         //TODO: Use Doctor table to populate doctor spinner
@@ -75,11 +119,10 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Doctor d = child.getValue(Doctor.class);
-                    System.out.println(d.getDocString());
                     doctorNames.add(d.getDocString());
                     doctorIDs.add(d.getDocID());
                 }
-                populateSpinner(doctorNames);
+                populateDocSpinner(doctorNames);
             }
 
             @Override
@@ -88,10 +131,47 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
             }
         });
 
+        mDatabaseAppts = FirebaseDatabase.getInstance().getReference();
 
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild("Appointments")) {
+                    mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference("User");
+
+        final ArrayList<Appointment> todaysAppts = new ArrayList<>();
+
+        mDatabaseAppts.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Appointment a = child.getValue(Appointment.class);
+                    todaysAppts.add(a);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         apptBtn = (Button)findViewById(R.id.button_date);
+
+        takenTimes = new ArrayList<>();
+
 
         apptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,16 +192,65 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
                 dpd.show();
             }
         });
+        /*apptBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
 
-        mDatabaseAppts = FirebaseDatabase.getInstance().getReference();
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference("User");
+                int day = c.get(Calendar.DAY_OF_MONTH);
+                int month = c.get(Calendar.MONTH);
+                int year = c.get(Calendar.YEAR);
+
+                for(int i = 0; i < todaysAppts.size(); i++)
+                {
+                    if(todaysAppts.get(i).sameDate(year, month, day))
+                    {
+                        int hour = todaysAppts.get(i).getApptHour();
+                        int min = todaysAppts.get(i).getApptMin();
+                        String ampm = todaysAppts.get(i).getAmpm();
+                        System.out.println("TODAY: " + todaysAppts.get(i).toString());
+                        System.out.println("AVAILABLE: " + String.format("%02d:%02d %s", hour, min, ampm));
+                        String time = String.format("%02d:%02d %s", hour, min, ampm);
+                        takenTimes.add(time);
+                    }
+                }
+                avail_times = getAvailableTimes();
+                updatedData(avail_times);
+
+                dpd = new DatePickerDialog(ApptSchedulingFirebase.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int mYear, int mMonth, int mDay) {
+                        apptBtn.setText((mMonth+1) + "/" + mDay + "/" + mYear);
+                    }
+                }, year, month, day);
+                dpd.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                dpd.show();
+            }
+        });*/
+
 
         time_spinner = findViewById(R.id.spinner_time);
-        String[] avail_times = new String[]{"Select Time", "07:00 AM", "07:30 AM", "08:00 AM", "08:30 AM", "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"};
-        ArrayAdapter<String> time_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, avail_times);
+        avail_times = new String[]{"Select Time", "07:00 AM", "07:30 AM", "08:00 AM", "08:30 AM", "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"};
+        time_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, avail_times);
         time_spinner.setAdapter(time_adapter);
 
         schedBtn = (Button)findViewById(R.id.button_appt_submit);
+    }
+
+    public void updatedData(String[] itemsArrayList) {
+
+        time_adapter.clear();
+
+        if (itemsArrayList != null){
+
+            for (String object : itemsArrayList) {
+
+                time_adapter.insert(object, time_adapter.getCount());
+            }
+        }
+
+        time_adapter.notifyDataSetChanged();
+
     }
 
     public void apptClick(View view)
@@ -154,25 +283,43 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
                 }
                 break;
             default:
-                System.out.println("Cannot make appoint");
+                System.out.println("Cannot make appointment");
                 break;
         }
+    }
+
+    public String[] getAvailableTimes()
+    {
+        ArrayList<String> availableTimes = new ArrayList<>();
+        List<String> allTimes = Arrays.asList(all_times);
+
+        for(int p = 0; p < all_times.length; p++){
+            if(!allTimes.get(p).contains(takenTimes.get(p))){
+                availableTimes.add(allTimes.get(p));
+            }
+        }
+        return availableTimes.toArray(new String[0]);
     }
 
     public void createAppointment()
     {
         String id = UUID.randomUUID().toString();
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatePicker dp = dpd.getDatePicker();
         int idx = doc_spinner.getSelectedItemPosition();
         String docid = doctorIDs.get(idx);
-        DatePicker dp = dpd.getDatePicker();
         String time = time_spinner.getSelectedItem().toString();
+        int locPos = loc_spinner.getSelectedItemPosition();
+        String loc = locationIDs.get(locPos);
         int hour = Integer.parseInt(time.substring(0, 2));
         int min = Integer.parseInt(time.substring(3, 5));
+        String month = String.format("%02d", (dp.getMonth()+1));
+        String day = String.format("%02d", dp.getDayOfMonth());
         String ampm = time.substring(6);
         String type = appt_spinner.getSelectedItem().toString();
-        Appointment test_appt = new Appointment(id, userid, docid, dp.getYear(), (dp.getMonth()+1), dp.getDayOfMonth(), hour, min, ampm, type);
-        mDatabaseAppts.child("Appointments").child(id).setValue(test_appt);
+        String appt_id = Integer.toString(dp.getYear()) + month + day + time.substring(0, 2) + time.substring(3, 5) + ampm;
+        Appointment test_appt = new Appointment(appt_id, userid, docid, dp.getYear(), (dp.getMonth()+1), dp.getDayOfMonth(), hour, min, ampm, type, loc);
+        mDatabaseAppts.child(appt_id).setValue(test_appt);
     }
 
     public String[] GetStringArray(ArrayList<String> arr)
@@ -191,12 +338,19 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
         return str;
     }
 
-    public void populateSpinner(ArrayList<String> doctorNames)
+    public void populateDocSpinner(ArrayList<String> doctorNames)
     {
         //String[] docNames = GetStringArray(doctorNames);
         String[] doc_names = doctorNames.toArray(new String[doctorNames.size()]);
         //String[] doc_names = new String[]{"Select Doctor", "Dr. Hayden Lee", "Dr. Jane Smith", "Dr. Amanda Parker", "Dr. Michael Dean"};
         ArrayAdapter<String> doc_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, doc_names);
         doc_spinner.setAdapter(doc_adapter);
+    }
+
+    public void populateLocSpinner(ArrayList<String> locationNames)
+    {
+        String[] loc_names = locationNames.toArray(new String[locationNames.size()]);
+        ArrayAdapter<String> loc_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, loc_names);
+        loc_spinner.setAdapter(loc_adapter);
     }
 }
