@@ -1,9 +1,6 @@
 package com.example.telemedicine.ui.login;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,23 +8,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
-import com.example.telemedicine.models.Users;
+import com.example.telemedicine.models.User;
 import com.example.telemedicine.ui.signup.Signup;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
 
     // Global Variables
-    Users user; // Mock-Up
-    EditText emailET, passwordET, lastFourSSNET;
+    User user; // Mock-Up
+    EditText emailET, passwordET;
+    // EditText lastFourSSNET;
     Button loginBtn, signupBtn;
     String TAG = "Login.java";
+    // Firebase
+    FirebaseAuth mAuth;
+    DatabaseReference mDatabase;
+    FirebaseUser fUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,48 +42,21 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Get references from the View
-        emailET = (EditText) findViewById(R.id.usernameET);
+        emailET = (EditText) findViewById(R.id.emailET);
         passwordET = (EditText) findViewById(R.id.passwordET);
-        lastFourSSNET = (EditText) findViewById(R.id.lastFourOfSSN);
+        // lastFourSSNET = (EditText) findViewById(R.id.lastFourOfSSN);
         loginBtn = (Button) findViewById(R.id.submitBtn);
         signupBtn = (Button)findViewById(R.id.signupBTN);
+        // Initialize Firebase instance
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
     }
 
-    // Check for valid email/password TODO
-    protected boolean correctFormat(String email, String password) {
-        return true;
-    }
-
-    // Check with database for correct login TODO
-    protected boolean checkLogin(String email, String password, int lastFourSSN) {
-        if (correctFormat(user.getEmail(), user.getPassword())) {
-            String hashedPassword = md5(user.getPassword());
-            if (hashedPassword == user.getPassword()) {
-                // if (userNameET == user.getUserName()){ return true; }
-            }
-        }
-        // Nothing matched
-        return false;
-    }
-
-    // Hash a given string TODO
-    protected String md5(String pass) {
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(pass.getBytes());
-            byte messageDigest [] = digest.digest();
-
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++ ) {
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return ""; // Invalid
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        fUser = FirebaseAuth.getInstance().getCurrentUser(); // TODO
     }
 
     // Handle all clicks within login TODO
@@ -84,12 +64,12 @@ public class Login extends AppCompatActivity {
         Intent intent;
         switch (view.getId()) {
             case R.id.submitBtn:
-                intent = new Intent(Login.this, MainActivity.class);
-                startActivity(intent);
+                this.checkLogin();
                 break;
             case R.id.signupBtn:
                 intent = new Intent(Login.this, Signup.class);
                 startActivity(intent);
+                finish();
                 break;
             default:
                 System.out.println("Something went wrong");
@@ -97,51 +77,36 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    // Forgot Password TODO
-    protected void sendEmail() {
-        // Log that email has started
-        Log.i("Login.java: ", "Sending Email");
+    private void checkLogin() {
+        // Get our data from ET fields
+        final String email = emailET.getText().toString().trim();
+        final String password = passwordET.getText().toString().trim();
+        // Check for empty parameters
+        if (email.isEmpty() || password.isEmpty()) return;
+        // Sign in with firebase using firebase auth instance
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If user was found
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInWithEmail:success");
+                            onAuthSuccess(task.getResult().getUser()); // TODO - Catch NullPointer
+                        } else {
+                            // If sign-in fails
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(Login.this, "Auth failed..", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-        alert.setTitle("Retrieve Password");
-        alert.setMessage("Message");
-
-        // Get input
-        final EditText input = new EditText(this);
-        alert.setView(input);
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-
-                String TO = input.toString();
-                String CC = "david.howard1100@gmail.com";
-
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.setDataAndType(Uri.parse("mailto:"), "text/plain");
-
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-                emailIntent.putExtra(Intent.EXTRA_CC, CC);
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Reset Password");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body Message");
-
-                try {
-                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-                    finish();
-                    Log.i(TAG, "Finished sending email...");
-
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(Login.this, "There is no email client installed", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                Toast.makeText(Login.this, "Canceled Forgot Password", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        alert.show();
+    protected void onAuthSuccess(FirebaseUser user) {
+        // Assign global var to current logged in user
+        fUser = user;
+        // Start new activity
+        Toast.makeText(this, "Successful Login.", Toast.LENGTH_LONG).show();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

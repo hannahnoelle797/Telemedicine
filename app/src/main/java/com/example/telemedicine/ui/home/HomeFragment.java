@@ -2,6 +2,7 @@ package com.example.telemedicine.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ public class HomeFragment extends Fragment {
     private String[] apptData = {"Physical - 9/29 @ 10:00am", "Vaccination - 10/4 @ 1:30pm", "Check-Up - 10/19 @ 9:00am"};
     private String[] chatData = {"Dr. Jane Smith", "Dr. Hayden Lee", "Dr. Michael Dean"};
     private String[] reportData = {"Blood Work 9/10", "Vaccination Summary 9/1", "Physical 8/23"};
+
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
