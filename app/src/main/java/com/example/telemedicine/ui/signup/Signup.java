@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.Doctor;
 import com.example.telemedicine.models.User;
@@ -37,9 +38,10 @@ public class Signup extends AppCompatActivity {
 
     // Firebase auth instance
     private FirebaseAuth mAuth;
+    // Firebase userDB
+    private DatabaseReference userDB, doctorDB;
     // log tag
     private final String TAG = "Signup.java";
-    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,10 @@ public class Signup extends AppCompatActivity {
 
         // Get firebase instance
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        // Establish Database instances
+        userDB = FirebaseDatabase.getInstance().getReference("Users");
+        doctorDB = FirebaseDatabase.getInstance().getReference("Doctor"); // TODO - Change Doctor -> Doctors
 
         // Populate spinner
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -127,7 +132,6 @@ public class Signup extends AppCompatActivity {
         }
     }
 
-    // Hash password TODO
     private void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -136,18 +140,14 @@ public class Signup extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign up Successful
                             Log.d(TAG, "createUserWithEmail:success");
-                            try {
-                                onAuthSuccess(task.getResult().getUser());
-                            } catch (NullPointerException e){
-                                // throw(e); TODO
-                                System.out.println(e);
+                            if (task.getResult().getUser() == null) {
+                                return;
                             }
-                            // UPDATE UI
+                            onAuthSuccess(task.getResult().getUser());
                         } else {
                             // If signup fails
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(Signup.this, "Auth failed..", Toast.LENGTH_SHORT).show();
-                            // UPDATE UI
                         }
                     }
                 });
@@ -155,7 +155,6 @@ public class Signup extends AppCompatActivity {
 
     protected void onAuthSuccess(FirebaseUser user) {
         // Write data to user object
-        //TODO Test
         // TODO remove password cleartext
 
         if (spinner.getSelectedItem().equals("I am a patient")) {
@@ -164,28 +163,32 @@ public class Signup extends AppCompatActivity {
         } else if (spinner.getSelectedItem().equals("I am a doctor")) {
             addDocLocally(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
                 passwordET.getText().toString().trim(), user.getUid(), getFullName(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim()), Integer.parseInt(ssnET.getText().toString().trim()));
-                //System.out.println("Adding a Doctor");
         } else {
             System.out.println("Uh oh");
         }
         // Display text to user to let them know that the account was created successfully
         Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
         // Start new Intent
-        // TODO - Change to main activity
-        startActivity(new Intent(Signup.this, Login.class));
+        startActivity(new Intent(Signup.this, MainActivity.class));
         finish();
     }
 
+    // Add data from the user to the database
     protected void addUserLocally(String userID, String firstName, String lastName, String email, String password, int last4SSN) {
-        // TODO last 4
         User user = new User(userID, firstName, lastName, email, password, last4SSN);
-        mDatabase.child("Users").child(userID).setValue(user);
+        if (mAuth.getCurrentUser() == null) {
+            return;
+        }
+        userDB.child(mAuth.getCurrentUser().getUid()).setValue(user); // TODO
     }
 
+    // Add data from the doctor to the database
     protected void addDocLocally(String firstName, String lastName, String email, String password, String docID, String docString, int empNum) {
-        System.out.println("Adding a doctor...");
         Doctor doctor = new Doctor(firstName, lastName, email, password, docID, docString, empNum);
-        mDatabase.child("Doctor").child(docID).setValue(doctor);
+        if (mAuth.getCurrentUser() == null) {
+            return;
+        }
+        doctorDB.child(mAuth.getCurrentUser().getUid()).setValue(doctor); // TODO
     }
 
     protected String getFullName(String s1, String s2) {

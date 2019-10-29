@@ -16,9 +16,7 @@ public class User {
         this.lastFourSSN = lastFourSSN;
     }
 
-    public User(String firebaseUserID, String fullName, String email) {
-
-    }
+    public User(String firebaseUserID, String fullName, String email) {}
 
     // Accessor Methods
     public String getFirstName() {

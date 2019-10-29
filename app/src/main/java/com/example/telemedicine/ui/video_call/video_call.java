@@ -1,13 +1,11 @@
 package com.example.telemedicine.ui.video_call;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,15 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.telemedicine.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
-import java.util.concurrent.Executor;
-
+import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
@@ -60,8 +55,6 @@ public class video_call extends AppCompatActivity {
     private FirebaseUser mUser;
     private Task<GetTokenResult> mToken;
 
-
-
     /**
      * Event handler registered into RTC engine for RTC callbacks.
      * Note that UI operations needs to be in UI thread because RTC
@@ -74,13 +67,16 @@ public class video_call extends AppCompatActivity {
         }
 
         @Override
-        public void onFirstRemoteVideoDecoded(final int uid, int width, int height, int elapsed) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setupRemoteVideo(uid);
-                }
-            });
+        public void onRemoteVideoStateChanged(final int uid, int state, int reason, int elapsed) {
+
+            if (state == Constants.REMOTE_VIDEO_STATE_STARTING) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setupRemoteVideo(uid);
+                    }
+                });
+            }
         }
 
         @Override
@@ -92,6 +88,16 @@ public class video_call extends AppCompatActivity {
                     onRemoteUserLeft();
                 }
             });
+        }
+
+        @Override
+        // Called when the token expires
+        public void onRequestToken() {
+            Toast.makeText(getApplicationContext(), "Your token has expired", Toast.LENGTH_LONG).show();
+            Log.i("Video_Call_Tele", "The token as expired..");
+            // mRtcEngine.renewToken(token);
+            // https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#af1428905e5778a9ca209f64592b5bf80
+            // Renew token - TODO
         }
     };
 
@@ -133,7 +139,6 @@ public class video_call extends AppCompatActivity {
         initUI();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mToken = mUser.getIdToken(false);
-        // TODO - get token
 
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                 checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
@@ -149,8 +154,6 @@ public class video_call extends AppCompatActivity {
         mCallBtn = findViewById(R.id.btn_call);
         mMuteBtn = findViewById(R.id.btn_mute);
         mSwitchCameraBtn = findViewById(R.id.btn_switch_camera);
-
-        // LOG HERE TODO
     }
 
     private boolean checkSelfPermission(String permission, int requestCode) {
@@ -232,24 +235,25 @@ public class video_call extends AppCompatActivity {
         mLocalView = RtcEngine.CreateRendererView(getBaseContext());
         mLocalView.setZOrderMediaOverlay(true);
         mLocalContainer.addView(mLocalView);
-        // TODO - Change uid -> String
+
         mRtcEngine.setupLocalVideo(new VideoCanvas(mLocalView, VideoCanvas.RENDER_MODE_HIDDEN, 0));
     }
 
     private void joinChannel() {
-        // TODO - Create token per user
-        // Maybe through Firebase
-        // mToken.getResult().getToken()
-        if (mToken.getResult().getToken() == null) return;
-        mRtcEngine.joinChannel(null, "demo", "", 0);
+        // Joins the channel with a demo token from agora console
+        // TODO - Dynamic Token per User
+        mRtcEngine.joinChannel(getString(R.string.agora_sample_token), "demo", "", 0);
     }
 
     @Override
+    // Activity Event called when activity is closed
     protected void onDestroy() {
         super.onDestroy();
+        // IF still in a call
         if (!mCallEnd) {
             leaveChannel();
         }
+        // Calling static method that destroys the RtcEngine instance
         RtcEngine.destroy();
     }
 
