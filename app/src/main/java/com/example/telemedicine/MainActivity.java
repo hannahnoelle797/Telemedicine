@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.telemedicine.ui.login.Login;
+import com.example.telemedicine.ui.video_call.video_call;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -71,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_settings:
+                startActivity(new Intent(MainActivity.this, video_call.class));
+                finish();
                 return true;
-                default:
-
         }
         return false;
     }

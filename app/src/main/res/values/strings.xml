@@ -49,4 +49,5 @@
     <string name="button_submit_appt">Schedule Appointment</string>
     <string name="button_new_appt">Schedule A New Appointment</string>
     <string name="hospitalAddress">677 Church St,\nMarietta, GA 30060</string>
+    <string name="agora_app_id">d22015ca4b6f42999c51afed4df881c4</string>
 </resources>

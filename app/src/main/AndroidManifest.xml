@@ -17,6 +17,16 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Agora PERMISSIONS -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices. -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- End Agora PERMISSIONS -->
 
     <permission
         android:name="com.example.telemedicine.permission.MAPS_RECEIVE"
@@ -32,7 +42,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.appointments.AppointmentDetails"></activity>
+        <activity android:name=".ui.video_call.video_call"></activity>
+        <activity android:name=".ui.appointments.AppointmentDetails" />
         <activity android:name=".ui.scheduling.ApptSchedulingFirebase" />
         <activity
             android:name=".ui.signup.Signup"
