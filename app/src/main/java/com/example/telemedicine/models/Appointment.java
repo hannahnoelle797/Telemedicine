@@ -133,7 +133,7 @@ public class Appointment implements Comparable<Appointment>{
     }
 
     public String shortString() {
-        String ss = String.format("%s - %02d/%02d @ %02d:%02d %s", type, apptMonth, apptDay, apptHour, apptMin, ampm);
+        String ss = String.format("%02d/%02d @ %02d:%02d %s - %s", apptMonth, apptDay, apptHour, apptMin, ampm, type);
         return ss;
     }
 
