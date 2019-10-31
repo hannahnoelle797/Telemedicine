@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,7 +55,7 @@ public class video_call extends AppCompatActivity {
     private ImageView mSwitchCameraBtn;
 
     private FirebaseUser mUser;
-    private Task<GetTokenResult> mToken;
+    //private Task<GetTokenResult> mToken;
 
     /**
      * Event handler registered into RTC engine for RTC callbacks.
@@ -93,7 +95,7 @@ public class video_call extends AppCompatActivity {
         @Override
         // Called when the token expires
         public void onRequestToken() {
-            Toast.makeText(getApplicationContext(), "Your token has expired", Toast.LENGTH_LONG).show();
+            // Toast.makeText(getApplicationContext(), "Your token has expired", Toast.LENGTH_LONG).show();
             Log.i("Video_Call_Tele", "The token as expired..");
             // mRtcEngine.renewToken(token);
             // https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#af1428905e5778a9ca209f64592b5bf80
@@ -102,6 +104,7 @@ public class video_call extends AppCompatActivity {
     };
 
     // TODO: change UID to stringName
+    // Sets up the view for person connecting to local video
     private void setupRemoteVideo(int uid) {
         int count = mRemoteContainer.getChildCount();
         View view = null;
@@ -121,10 +124,12 @@ public class video_call extends AppCompatActivity {
         mRtcEngine.setupRemoteVideo(new VideoCanvas(mRemoteView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
     }
 
+    // Removes remote view once disconnected
     private void onRemoteUserLeft() {
         removeRemoteVideo();
     }
 
+    // Removes the remote video if exists
     private void removeRemoteVideo() {
         if (mRemoteView != null) {
             mRemoteContainer.removeView(mRemoteView);
@@ -138,7 +143,7 @@ public class video_call extends AppCompatActivity {
         setContentView(R.layout.activity_video_call);
         initUI();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mToken = mUser.getIdToken(false);
+        //mToken = mUser.getIdToken(false);
 
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                 checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
@@ -236,6 +241,7 @@ public class video_call extends AppCompatActivity {
         mLocalView.setZOrderMediaOverlay(true);
         mLocalContainer.addView(mLocalView);
 
+        // User id is auto assigned
         mRtcEngine.setupLocalVideo(new VideoCanvas(mLocalView, VideoCanvas.RENDER_MODE_HIDDEN, 0));
     }
 
@@ -243,6 +249,7 @@ public class video_call extends AppCompatActivity {
         // Joins the channel with a demo token from agora console
         // TODO - Dynamic Token per User
         mRtcEngine.joinChannel(getString(R.string.agora_sample_token), "demo", "", 0);
+        // TODO - Drop down choice for channel name determined by available doctors
     }
 
     @Override
@@ -294,6 +301,10 @@ public class video_call extends AppCompatActivity {
         removeLocalVideo();
         removeRemoteVideo();
         leaveChannel();
+        // TODO - Go back to list of available doctors
+        // Maybe online status?
+        startActivity(new Intent(video_call.this, MainActivity.class));
+        finish();
     }
 
     private void removeLocalVideo() {
@@ -303,6 +314,7 @@ public class video_call extends AppCompatActivity {
         mLocalView = null;
     }
 
+    // Make the buttons visibile based on if the view is visible
     private void showButtons(boolean show) {
         int visibility = show ? View.VISIBLE : View.GONE;
         mMuteBtn.setVisibility(visibility);
