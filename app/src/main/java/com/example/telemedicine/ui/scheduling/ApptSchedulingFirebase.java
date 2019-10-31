@@ -53,6 +53,8 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
     String date_today;
     String time_today;
 
+    boolean officeClosed = false;
+
     TextView loc_label;
     TextView doc_label;
     TextView date_label;
@@ -125,105 +127,33 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
             }
         });
 
-        //mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference("User");
-//
-//        final ArrayList<Appointment> todaysAppts = new ArrayList<>();
-//
-//        mDatabaseAppts.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot child : dataSnapshot.getChildren()) {
-//                    Appointment a = child.getValue(Appointment.class);
-//                    todaysAppts.add(a);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-        /*apptBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
-
-                int day = c.get(Calendar.DAY_OF_MONTH);
-                int month = c.get(Calendar.MONTH);
-                int year = c.get(Calendar.YEAR);
-
-                for(int i = 0; i < todaysAppts.size(); i++)
-                {
-                    if(todaysAppts.get(i).sameDate(year, month, day))
-                    {
-                        int hour = todaysAppts.get(i).getApptHour();
-                        int min = todaysAppts.get(i).getApptMin();
-                        String ampm = todaysAppts.get(i).getAmpm();
-                        System.out.println("TODAY: " + todaysAppts.get(i).toString());
-                        System.out.println("AVAILABLE: " + String.format("%02d:%02d %s", hour, min, ampm));
-                        String time = String.format("%02d:%02d %s", hour, min, ampm);
-                        takenTimes.add(time);
-                    }
-                }
-                avail_times = getAvailableTimes();
-                updatedData(avail_times);
-
-                dpd = new DatePickerDialog(ApptSchedulingFirebase.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int mYear, int mMonth, int mDay) {
-                        apptBtn.setText((mMonth+1) + "/" + mDay + "/" + mYear);
-                    }
-                }, year, month, day);
-                dpd.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-                dpd.show();
-            }
-        });*/
-
-
-
-
-
     }
-
-    /*public void updatedData(String[] itemsArrayList) {
-
-        time_adapter.clear();
-
-        if (itemsArrayList != null){
-
-            for (String object : itemsArrayList) {
-
-                time_adapter.insert(object, time_adapter.getCount());
-            }
-        }
-
-        time_adapter.notifyDataSetChanged();
-
-    }*/
 
     public void apptClick(View view)
     {
         switch(view.getId())
         {
             case R.id.button_appt_submit:
-                if(appt_spinner.getSelectedItem().equals("Select Appointment Type"))
+                if(appt_spinner.getSelectedItem().equals(" "))
                 {
                     Toast.makeText(ApptSchedulingFirebase.this, "Please Select Appointment Type", Toast.LENGTH_SHORT).show();
                 }
-                else if(doc_spinner.getSelectedItem().equals("Select Doctor"))
+                else if(doc_spinner.getSelectedItem().equals(" "))
                 {
                     Toast.makeText(ApptSchedulingFirebase.this, "Please Select Doctor", Toast.LENGTH_SHORT).show();
                 }
-                else if(apptBtn.getText().equals("Select Date"))
+                else if(apptBtn.getText().equals(" "))
                 {
                     Toast.makeText(ApptSchedulingFirebase.this, "Please Select Date", Toast.LENGTH_SHORT).show();
                 }
-                else if(time_spinner.getSelectedItem().equals("Select Time"))
+                else if(time_spinner.getSelectedItem().equals(" ") || time_spinner.getSelectedItem().equals("No appointments available on " + apptBtn.getText() + ".") || time_spinner.getSelectedItem().equals("Choose a new date."))
                 {
-                    Toast.makeText(ApptSchedulingFirebase.this, "Please Select Time", Toast.LENGTH_SHORT).show();
+                    if(time_spinner.getSelectedItem().equals("No appointments available on " + apptBtn.getText() + ".") || time_spinner.getSelectedItem().equals("Choose a new date."))
+                        Toast.makeText(ApptSchedulingFirebase.this, "Please Select a New Date", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(ApptSchedulingFirebase.this, "Please Select Valid Time", Toast.LENGTH_SHORT).show();
+
                 }
                 else {
                     createAppointment();
@@ -238,19 +168,6 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
                 break;
         }
     }
-
-    /*public String[] getAvailableTimes()
-    {
-        ArrayList<String> availableTimes = new ArrayList<>();
-        List<String> allTimes = Arrays.asList(all_times);
-
-        for(int p = 0; p < all_times.length; p++){
-            if(!allTimes.get(p).contains(takenTimes.get(p))){
-                availableTimes.add(allTimes.get(p));
-            }
-        }
-        return availableTimes.toArray(new String[0]);
-    }*/
 
     public void createAppointment()
     {
@@ -274,22 +191,6 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
         Appointment test_appt = new Appointment(appt_id, userid, docid, dp.getYear(), (dp.getMonth()+1), dp.getDayOfMonth(), Integer.parseInt(time.substring(0, 2)), min, ampm, type, loc);
         mDatabaseAppts.child(appt_id).setValue(test_appt);
     }
-
-    /*public String[] GetStringArray(ArrayList<String> arr)
-    {
-
-        // declaration and initialise String Array
-        String str[] = new String[arr.size()];
-
-        // ArrayList to Array Conversion
-        for (int j = 0; j < arr.size(); j++) {
-
-            // Assign each value to String array
-            str[j] = arr.get(j);
-        }
-
-        return str;
-    }*/
 
     public void populateDate() {
         apptBtn = (Button)findViewById(R.id.button_date);
@@ -319,6 +220,9 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
                     min = 30;
                 date_today = String.format("%d/%d/%d", (month+1), day, year);
                 time_today = String.format("%02d:%02d %s", c.get(Calendar.HOUR), min, ampm_today);
+                if(c.get(Calendar.HOUR) >= 5) {
+                    officeClosed = true;
+                }
 
                 dpd = new DatePickerDialog(ApptSchedulingFirebase.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -360,40 +264,48 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
 
     public void findAvailableTimes() {
         final ArrayList<String> unavailable_times = new ArrayList<>();
+        unavailable_times.clear();
         final List<String> all_avail_times = Arrays.asList(all_times);
         final ArrayList<String> times = new ArrayList<>();
         times.add(" ");
         mDatabaseAppts.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                unavailable_times.clear();
+                unavailable_times.add(" ");
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Appointment a = child.getValue(Appointment.class);
                     String time_appt = a.getTimeFormat();
-                    System.out.println("APPOINTMENT DATE " + a.getDateFormat() + " SELECTED DATE " + date + " TODAY'S DATE " + date_today + " " + time_today);
 
 
                     if(a.getDateFormat().equalsIgnoreCase(date) && a.getDoctorID().equalsIgnoreCase(doctorIDs.get(doc_spinner.getSelectedItemPosition()))) {
-                        System.out.println("THIS TIME IS UNAVAILABLE " + time_appt + " BECAUSE IT'S ALREADY TAKEN");
                         unavailable_times.add(time_appt);
                     }
-                    else if(date_today != null) {
-                        if(date_today.equalsIgnoreCase(date) && a.getDoctorID().equalsIgnoreCase(doctorIDs.get(doc_spinner.getSelectedItemPosition()))) {
-                            int idx = all_avail_times.indexOf(time_today);
-                            System.out.println("INDEX OF TAKEN TIMES" + idx);
-                            for (int j = 0; j <= idx; j++) {
-                                System.out.println("THIS TIME IS UNAVAILABLE " + all_avail_times.get(j) + " BECAUSE IT ALREADY OCCURRED");
-                                unavailable_times.add(all_avail_times.get(j));
+                    else if(date != null) {
+                        if(date_today.equalsIgnoreCase(date)) {
+                            if(officeClosed){
+                                for(int k = 0; k < all_avail_times.size(); k++)
+                                {
+                                    unavailable_times.add(all_avail_times.get(k));
+                                }
+                            }
+                            else {
+                                int idx = all_avail_times.indexOf(time_today);
+                                for (int j = 0; j <= idx; j++) {
+                                    unavailable_times.add(all_avail_times.get(j));
+                                }
                             }
                         }
                     }
                 }
                 for (String item : all_avail_times) {
-                    if (unavailable_times.contains(item)) {
-                        System.out.println("Time is unavailable");
-                    } else {
-                        System.out.println("ADDING " + item + " TO AVAILABLE TIMES");
+                    if (!(unavailable_times.contains(item))) {
                         times.add(item);
                     }
+                }
+                if(times.size() <= 1) {
+                    times.add("No appointments available on " + apptBtn.getText() + ".");
+                    times.add("Choose a new date.");
                 }
                 avail_times = times.toArray(new String[0]);
                 populateTime();
@@ -442,9 +354,7 @@ public class ApptSchedulingFirebase extends AppCompatActivity {
 
     public void populateDocSpinner(ArrayList<String> doctorNames)
     {
-        //String[] docNames = GetStringArray(doctorNames);
         String[] doc_names = doctorNames.toArray(new String[doctorNames.size()]);
-        //String[] doc_names = new String[]{"Select Doctor", "Dr. Hayden Lee", "Dr. Jane Smith", "Dr. Amanda Parker", "Dr. Michael Dean"};
         ArrayAdapter<String> doc_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, doc_names);
         doc_spinner.setAdapter(doc_adapter);
         doc_spinner.setVisibility(View.VISIBLE);

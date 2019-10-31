@@ -57,7 +57,10 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
     private DatabaseReference mDatabaseUsers;
 
     private ArrayList<String> upcomingAppt;
-    private ArrayList<Appointment> upcomingApptIDs;
+    private ArrayList<String> upcomingApptIDs;
+    private ArrayList<String[]> appointments = new ArrayList<>();
+
+    String[] arr = new String[2];
 
     private Calendar n;
 
@@ -86,9 +89,6 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference("User");
 
-        //final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        //System.out.println("\n\n\nUSER ID HERE: " + userid + "\n\n\n");
-
         upcomingAppt = new ArrayList<>();
 
         upcomingApptIDs = new ArrayList<>();
@@ -115,27 +115,30 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                         Date apptDate = n.getTime();
 
                         String appt = a.shortString();
-                        upcomingAppt.add(appt);
-                        upcomingApptIDs.add(a);
-
-                        /*String appt_id = a.getApptID();
-                        int today_id = Integer.parseInt(todayid);
-                        int apptid = Integer.parseInt(appt_id);
-                        if((apptid-today_id) > 0 && (apptid-today_id) < dif_upcom_appt){
-                            idx_upcom_appt = upcomingAppt.indexOf(appt);
-                        }*/
-
+                        arr = new String[2];
+                        arr[0] = appt;
+                        arr[1] = a.getApptID();
+                        appointments.add(arr);
+                        upcomingApptIDs.add(a.getApptID());
                     }
                 }
+
+                Collections.sort(upcomingApptIDs);
+                Collections.reverse(upcomingApptIDs);
+                for(int i = 0; i < upcomingApptIDs.size(); i++)
+                {
+                    for(int p = 0; p < appointments.size(); p++) {
+                        if (upcomingApptIDs.get(i).equalsIgnoreCase(appointments.get(p)[1])) {
+                            upcomingAppt.add(appointments.get(p)[0]);
+                        }
+                    }
+                }
+
                 if(upcomingAppt.size() > 0)
                     apptUpcoming = upcomingAppt.toArray(new String[upcomingAppt.size()]);
                 else
                     apptUpcoming[0] = "No Upcoming Appointments";
 
-                List<String> apptList = Arrays.asList(apptUpcoming);
-                Collections.sort(apptList);
-                Collections.reverse(apptList);
-                apptUpcoming = apptList.toArray(new String[0]);
                 populateRecyclers(root);
             }
 
@@ -154,23 +157,14 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                 startActivity(intent);
             }
         });
-
-        /*rvUpcoming.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = rvUpcoming.getChildLayoutPosition(view);
-                Toast.makeText(getContext(), position, Toast.LENGTH_SHORT).show();
-            }
-        });
-*/
         return root;
     }
 
     @Override
     public void OnReportClickListener(int position) {
         Intent intent = new Intent(getContext(), AppointmentDetails.class);
-        Appointment a = upcomingApptIDs.get(position);
-        intent.putExtra("EXTRA_SESSION_ID", a.getApptID());
+        String apptID = upcomingApptIDs.get(position);
+        intent.putExtra("EXTRA_SESSION_ID", apptID);
         startActivity(intent);
     }
 
