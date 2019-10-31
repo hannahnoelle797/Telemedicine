@@ -20,6 +20,10 @@ public class User {
 
     }
 
+    public User() {
+
+    }
+
     // Accessor Methods
     public String getFirstName() {
         return this.firstName;
@@ -35,6 +39,10 @@ public class User {
     }
     public int getLastFourSSN() {
         return this.lastFourSSN;
+    }
+
+    public String getUserID() {
+        return userID;
     }
 
     // Mutator Methods

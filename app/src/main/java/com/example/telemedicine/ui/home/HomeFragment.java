@@ -1,11 +1,13 @@
 package com.example.telemedicine.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -16,28 +18,52 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telemedicine.R;
+import com.example.telemedicine.models.Appointment;
+import com.example.telemedicine.models.User;
+import com.example.telemedicine.models.Doctor;
+import com.example.telemedicine.ui.appointments.AppointmentDetails;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 import com.example.telemedicine.ui.utilities.RecyclerItemClickListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private RecyclerView recyclerView_appt, recyclerView_chat, recyclerView_report;
-    private RecyclerView.Adapter mAdapter_appt, mAdapter_chat, mAdapter_report;
-    private RecyclerView.LayoutManager layoutManager_appt, layoutManager_chat, layoutManager_report;
-    private String[] apptData = {"Physical - 9/29 @ 10:00am", "Vaccination - 10/4 @ 1:30pm", "Check-Up - 10/19 @ 9:00am"};
-    private String[] chatData = {"Dr. Jane Smith", "Dr. Hayden Lee", "Dr. Michael Dean"};
-    private String[] reportData = {"Blood Work 9/10", "Vaccination Summary 9/1", "Physical 8/23"};
 
+    DatabaseReference mDatabaseUsers;
+    DatabaseReference mDatabaseDoctors;
+    DatabaseReference mDatabaseAppts;
 
+    String userid;
+    String username = "";
+    String appt_id = "";
 
+    TextView welcome;
+    TextView appointment_date;
+
+    String upcoming_appt;
+
+    View root;
+
+    int dif_upcom_appt = 1000000;
+    int idx_upcom_appt = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.editText);
+        root = inflater.inflate(R.layout.fragment_home, container, false);
+        final TextView textView = root.findViewById(R.id.home_welcome);
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -45,72 +71,121 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        recyclerView_appt = (RecyclerView)root.findViewById(R.id.recycler_appts);
-        layoutManager_appt = new LinearLayoutManager(this.getActivity());
-        recyclerView_appt.setLayoutManager(layoutManager_appt);
-        mAdapter_appt = new RecyclerItemOld(apptData);
-        recyclerView_appt.setAdapter(mAdapter_appt);
+        welcome = (TextView)root.findViewById(R.id.home_welcome);
+        appointment_date = (TextView)root.findViewById(R.id.appt_nextAppt);
 
-        recyclerView_appt.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), recyclerView_appt ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        // do whatever
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference("Users");
+        mDatabaseDoctors = FirebaseDatabase.getInstance().getReference("Doctor");
+        mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
+        userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    User u = child.getValue(User.class);
+                    try {
+                        if (u.getUserID().equalsIgnoreCase(userid)) {
+                            username = u.getFirstName();
+                            updateName(username);
+                        }
+                    }catch(NullPointerException e){
+                        System.out.println("Not a user. Is a doctor");
+                        break;
                     }
+                }
+            }
 
-                    @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabaseDoctors.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    try {
+                        Doctor d = child.getValue(Doctor.class);
+                        if (d.getDocID().equalsIgnoreCase(userid)) {
+                            username = "Dr. " + d.getFirstName();
+                            updateName(username);
+                        }
+                    }catch(DatabaseException e){
+                        System.out.println("Uh oh");
+                        break;
                     }
-                })
-        );
+                }
+            }
 
-        recyclerView_chat = (RecyclerView)root.findViewById(R.id.recycler_chats);
-        layoutManager_chat = new LinearLayoutManager(this.getActivity());
-        recyclerView_chat.setLayoutManager(layoutManager_chat);
-        mAdapter_chat = new RecyclerItemOld(chatData);
-        recyclerView_chat.setAdapter(mAdapter_chat);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        recyclerView_chat.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), recyclerView_chat ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        // do whatever
+            }
+        });
+
+        mDatabaseAppts.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
+                String todayid = String.format("%04d%02d%02d%02d%02d", c.get(Calendar.YEAR), (c.get(Calendar.MONTH)+1), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Appointment a = child.getValue(Appointment.class);
+                    if (a.getUserID().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        System.out.println("APPOINTMENT APPOINTMENT " + a.getApptID() + " TODAY TODAY " + todayid);
+                    appt_id = a.getApptID();
+                    float today_id = Float.parseFloat(todayid);
+                    float apptid = Float.parseFloat(appt_id);
+                    System.out.println("DIFFERENCE " + (apptid - today_id));
+                    if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
+                        System.out.println("UPDATING UPCOMING APPOINTMENT");
+                        upcoming_appt = a.getApptID();
+
                     }
-
-                    @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
+                }
+                else{
+                    upcoming_appt = "No Upcoming Appointments";
                     }
-                })
-        );
+                }
+                updateApptDate(appt_id);
+            }
 
-        recyclerView_report = (RecyclerView)root.findViewById(R.id.recycler_reports);
-        layoutManager_report = new LinearLayoutManager(this.getActivity());
-        recyclerView_report.setLayoutManager(layoutManager_report);
-        mAdapter_report = new RecyclerItemOld(reportData);
-        recyclerView_report.setAdapter(mAdapter_report);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        recyclerView_report.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), recyclerView_report ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        // do whatever
-                    }
+            }
+        });
 
-                    @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
-        );
+        appointment_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AppointmentDetails.class);
+                intent.putExtra("EXTRA_SESSION_ID", upcoming_appt);
+                startActivity(intent);
+            }
+        });
 
         return root;
     }
-/*
-    public void onClick(View view)
-    {
-        switch (view.getId()) {
-            case R.id.recycler_item:
-                Intent intent = new Intent(HomeFragment.this, AppointmentsFragment.class);
-                startActivity(intent);
-                break;
-            default:
-                System.out.println("Default");
+
+    public void updateName(String name){
+        welcome.setText("Welcome back, " + name);
+    }
+
+    public void updateApptDate(String date) {
+        int year = Integer.parseInt(date.substring(0, 4));
+        int month = Integer.parseInt(date.substring(4, 6));
+        int day = Integer.parseInt(date.substring(6, 8));
+        int hour = Integer.parseInt(date.substring(8, 10));
+        int min = Integer.parseInt(date.substring(10));
+        String ampm = "AM";
+        if(hour > 12){
+            hour -= 12;
+            ampm = "PM";
         }
-    }*/
+        String s_date = String.format("%02d/%02d/%04d at %d:%02d %s", month, day, year, hour, min, ampm);
+        appointment_date.setText(s_date);
+    }
+
 }

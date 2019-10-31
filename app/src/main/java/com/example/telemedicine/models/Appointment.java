@@ -154,7 +154,17 @@ public class Appointment implements Comparable<Appointment>{
     }
 
     public String getDateTime(){
-        String r = String.format("%02d/%02d/%04d %02d:%02d %s", apptMonth, apptDay, apptYear, apptHour, apptMin, ampm);
+        String r = String.format("%02d/%02d/%04d %2d:%02d %s", apptMonth, apptDay, apptYear, apptHour, apptMin, ampm);
         return r;
+    }
+
+    public String getTimeFormat(){
+        String t = String.format("%02d:%02d %s", apptHour, apptMin, ampm);
+        return t;
+    }
+
+    public String getDateFormat() {
+        String d = String.format("%d/%d/%d", apptMonth, apptDay, apptYear);
+        return d;
     }
 }

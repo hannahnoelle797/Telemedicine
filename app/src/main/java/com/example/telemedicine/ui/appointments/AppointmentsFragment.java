@@ -1,6 +1,7 @@
 package com.example.telemedicine.ui.appointments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,9 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
 
     private Button btn;
 
+    int dif_upcom_appt = 1100000000;
+    int idx_upcom_appt = 0;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         appointmentsViewModel =
@@ -93,12 +97,12 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
+                String todayid = String.format("%04d%02d%02d%02d%02d", Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE);
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Appointment a = child.getValue(Appointment.class);
                     if(userid.equals(a.getUserID()))
                     {
-                        Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
-
                         Date today = c.getTime();
 
                         n = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
@@ -113,6 +117,13 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                         String appt = a.shortString();
                         upcomingAppt.add(appt);
                         upcomingApptIDs.add(a);
+
+                        /*String appt_id = a.getApptID();
+                        int today_id = Integer.parseInt(todayid);
+                        int apptid = Integer.parseInt(appt_id);
+                        if((apptid-today_id) > 0 && (apptid-today_id) < dif_upcom_appt){
+                            idx_upcom_appt = upcomingAppt.indexOf(appt);
+                        }*/
 
                     }
                 }
@@ -171,4 +182,5 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         adapUpcoming = new RecyclerItem(apptUpcoming,this);
         rvUpcoming.setAdapter(adapUpcoming);
     }
-}
+
+    }

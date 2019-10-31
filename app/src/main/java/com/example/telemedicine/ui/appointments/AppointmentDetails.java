@@ -40,7 +40,6 @@ public class AppointmentDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_details);
         apptID = getIntent().getStringExtra("EXTRA_SESSION_ID");
-        Toast.makeText(this, apptID, Toast.LENGTH_LONG).show();
 
         mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
         mDatabaseLocs = FirebaseDatabase.getInstance().getReference("Locations");

@@ -3,91 +3,138 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
+    tools:context=".ui.home.HomeFragment">
 
     <TextView
-        android:id="@+id/editText"
-        android:layout_width="365dp"
+        android:id="@+id/home_welcome"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/home_welcome"
         android:textAlignment="center"
-        android:textSize="20pt"
-        android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/text_appts"
+        android:textSize="45sp"
+        android:textColor="@color/colorPrimary"
+        android:lines="2"
+        android:maxLines="2"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@id/text_nextAppt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_appts"
-        android:layout_width="365dp"
-        android:layout_height="55dp"
-        android:ems="10"
-        android:text="@string/title_appointments"
-        android:textSize="14pt"
+        android:id="@+id/text_nextAppt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_next_appt"
+        android:textAlignment="center"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_appts"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/appt_nextAppt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_appts"
-        android:layout_width="360dp"
-        android:layout_height="125dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_chats"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_appts"
-        app:layout_constraintVertical_bias="0.226" />
+        app:layout_constraintTop_toBottomOf="@id/home_welcome" />
 
     <TextView
-        android:id="@+id/text_chats"
-        android:layout_width="365dp"
-        android:layout_height="55dp"
-        android:ems="10"
-        android:text="@string/title_chats"
-        android:textSize="14pt"
-        android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_chats"
+        android:id="@+id/appt_nextAppt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_upcom_appt"
+        android:textAlignment="center"
+        android:textColor="@color/colorImportant"
+        android:paddingBottom="30dp"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/text_new_mesg_1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_appts" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_chats"
-        android:layout_width="360dp"
-        android:layout_height="125dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_reports"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_chats"
-        app:layout_constraintVertical_bias="0.226" />
+        app:layout_constraintTop_toBottomOf="@id/text_nextAppt" />
 
     <TextView
-        android:id="@+id/text_reports"
-        android:layout_width="365dp"
-        android:layout_height="55dp"
-        android:ems="10"
-        android:text="@string/title_reports"
-        android:textSize="14pt"
+        android:id="@+id/text_new_mesg_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_new_mesgs_1"
+        android:paddingTop="30dp"
+        android:textAlignment="center"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_reports"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/text_new_mesg_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_chats" />
+        app:layout_constraintTop_toBottomOf="@id/appt_nextAppt"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_reports"
-        android:layout_width="360dp"
-        android:layout_height="125dp"
+    <TextView
+        android:id="@+id/text_new_mesg_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_num_mesgs"
+        android:textAlignment="center"
+        android:textColor="@color/colorImportant"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@id/text_new_mesg_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_new_mesg_1"/>
+
+    <TextView
+        android:id="@+id/text_new_mesg_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_new_mesgs_2"
+        android:paddingBottom="30dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorText"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/text_new_reports_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_new_mesg_2"/>
+
+    <TextView
+        android:id="@+id/text_new_reports_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_new_reports_1"
+        android:paddingTop="30dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorText"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/text_new_reports_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_new_mesg_3" />
+
+    <TextView
+        android:id="@+id/text_new_reports_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_num_reports"
+        android:textAlignment="center"
+        android:textColor="@color/colorImportant"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@id/text_new_mesg_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_new_reports_1" />
+
+    <TextView
+        android:id="@+id/text_new_reports_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_new_reports_2"
+        android:textAlignment="center"
+        android:textColor="@color/colorText"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.424"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_reports"
-        app:layout_constraintVertical_bias="0.226" />
+        app:layout_constraintTop_toBottomOf="@id/text_new_reports_2"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
