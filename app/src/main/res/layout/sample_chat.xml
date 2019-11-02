@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="5dp"
-            android:text="Dr. Jane Smith"
+            android:text="@string/doctor_name"
             android:background="@color/colorText"
             android:textSize="30dp"
             android:textColor="#FFFFFF"

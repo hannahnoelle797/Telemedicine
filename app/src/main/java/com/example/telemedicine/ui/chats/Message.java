@@ -1,4 +1,4 @@
-package com.example.telemedicine.ui.message;
+package com.example.telemedicine.ui.chats;
  import java.util.Date;
 public class Message {
     private String mText;

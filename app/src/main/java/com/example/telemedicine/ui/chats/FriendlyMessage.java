@@ -1,4 +1,4 @@
-package com.example.telemedicine.ui.message;
+package com.example.telemedicine.ui.chats;
 public class FriendlyMessage {
 
     private String id;
