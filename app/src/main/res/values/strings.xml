@@ -50,5 +50,14 @@
     <string name="button_new_appt">Schedule A New Appointment</string>
     <string name="hospitalAddress">677 Church St,\nMarietta, GA 30060</string>
     <string name="agora_app_id">adb40434c3de48e191a8635f053a9e97</string>
-    <string name="agora_sample_token">006adb40434c3de48e191a8635f053a9e97IAAiekI6suEY4NDUfCsIcD13KGteAFeVdtS/EFSTI/pT0KDfQtYAAAAAEAARF0Xbw3K8XQEAAQDBcrxd</string>
+    <string name="agora_sample_token">006adb40434c3de48e191a8635f053a9e97IAAHZTDR+6Zr2Kk60+SXmw2dWNDT3Ogegg10iNytJihNBKDfQtYAAAAAEABqLS7lbTG7XQEAAQBtMbtd</string>
+    <string name="appt_loc_header">Location: </string>
+    <string name="home_next_appt">Your next appointment is: </string>
+    <string name="home_upcom_appt">00/00/0000 @ 00:00 AM</string>
+    <string name="home_new_mesgs_1">You have </string>
+    <string name="home_num_mesgs">2</string>
+    <string name="home_new_mesgs_2"> new chat messages.</string>
+    <string name="home_new_reports_1">You have </string>
+    <string name="home_num_reports">1</string>
+    <string name="home_new_reports_2"> new reports to view.</string>
 </resources>

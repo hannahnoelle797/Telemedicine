@@ -16,13 +16,18 @@ public class User {
         this.lastFourSSN = lastFourSSN;
     }
 
-    public User(String firebaseUserID, String fullName, String email) {}
+    public User(String firebaseUserID, String fullName, String email) {
+
+    }
+
+    public User() {
+
+    }
 
     // Accessor Methods
     public String getFirstName() {
         return this.firstName;
     }
-    public String getUserID() { return this.userID; }
     public String getLastName() {
         return this.lastName;
     }
@@ -34,6 +39,10 @@ public class User {
     }
     public int getLastFourSSN() {
         return this.lastFourSSN;
+    }
+
+    public String getUserID() {
+        return userID;
     }
 
     // Mutator Methods

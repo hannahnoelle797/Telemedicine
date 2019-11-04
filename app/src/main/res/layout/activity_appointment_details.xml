@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Appointment Type"
+        android:textColor="@color/colorText"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,20 +22,22 @@
         android:id="@+id/datetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Appt Date and Time"
+        android:textColor="@color/colorText"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apptType" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/doc_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Dr. What's Their Name"
+        android:textColor="@color/colorText"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="107dp"
         android:layout_marginBottom="30dp"
         android:ems="10"
@@ -60,20 +63,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.082"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/doc_name" />
 
-    <!--<ImageView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="0dp"
-        android:src="@drawable/sample_map"
-        android:contentDescription="Sample Map View"
-        app:layout_constraintBottom_toTopOf="@+id/button_addToCalendar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/apptAddress" />
--->
     <fragment
         android:id="@+id/mapView"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -89,8 +80,8 @@
     <Button
         android:id="@+id/button_addToCalendar"
         android:layout_width="match_parent"
-        android:layout_marginTop="40dp"
         android:layout_height="60dp"
+        android:layout_marginTop="30dp"
         android:background="@color/colorText"
         android:gravity="center"
         android:text="Add To Calendar"
@@ -104,7 +95,7 @@
         android:id="@+id/button_chatToDoctor"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@color/colorText"
         android:gravity="center"
         android:text="Chat Wtih Doctor"
@@ -118,7 +109,7 @@
         android:id="@+id/button_cancelAppointment"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@color/colorImportant"
         android:gravity="center"
         android:text="Cancel Appointment"

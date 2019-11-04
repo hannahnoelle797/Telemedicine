@@ -15,59 +15,21 @@
         android:textSize="20pt"
         android:textColor="@color/colorText"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@id/appt_upcoming_header"
+        app:layout_constraintBottom_toTopOf="@id/recycler_appt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/appt_upcoming_header"
-        android:layout_width="365dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:text="@string/appt_upcoming"
-        android:textColor="@color/colorText"
-        android:textSize="14pt"
-        app:layout_constraintBottom_toTopOf="@id/recycler_appt_upcoming"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appointment_head" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_appt_upcoming"
+        android:id="@+id/recycler_appt"
         android:layout_width="360dp"
-        android:layout_height="125dp"
+        android:layout_height="500dp"
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintVertical_bias="0.226"
-        app:layout_constraintBottom_toTopOf="@id/appt_prev_header"
+        app:layout_constraintBottom_toTopOf="@id/button_new_appt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appt_upcoming_header" />
-
-    <TextView
-        android:id="@+id/appt_prev_header"
-        android:layout_width="365dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:text="@string/appt_prev"
-        android:textSize="14pt"
-        android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@id/recycler_appt_prev"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler_appt_upcoming" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_appt_prev"
-        android:layout_width="360dp"
-        android:layout_height="125dp"
-        app:layout_constraintHorizontal_bias="0.424"
-        app:layout_constraintVertical_bias="0.226"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appt_prev_header" />
+        app:layout_constraintTop_toBottomOf="@+id/appointment_head" />
 
     <Button
         android:id="@+id/button_new_appt"
@@ -78,7 +40,7 @@
         android:textColor="@color/colorBackground"
         android:clickable="true"
         android:text="@string/button_new_appt"
-        app:layout_constraintTop_toBottomOf="@id/recycler_appt_prev"
+        app:layout_constraintTop_toBottomOf="@id/recycler_appt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

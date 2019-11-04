@@ -28,18 +28,17 @@
         android:id="@+id/appt_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="start"
         android:text="@string/label_appt_type"
         android:textAlignment="gravity"
-        android:gravity="start"
-        android:textSize="23sp"
         android:textColor="@color/colorText"
-        app:layout_constraintTop_toBottomOf="@+id/headerScheduleAppt"
+        android:textSize="23sp"
         app:layout_constraintBottom_toTopOf="@+id/spinner_appt_type"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerScheduleAppt">
     </TextView>
 
     <Spinner
@@ -53,6 +52,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appt_type"
+        app:layout_constraintBottom_toTopOf="@id/label_loc">
+    </Spinner>
+
+    <TextView
+        android:id="@+id/label_loc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/appt_loc_header"
+        android:textAlignment="gravity"
+        android:textColor="@color/colorText"
+        android:visibility="invisible"
+        android:textSize="23sp"
+        app:layout_constraintBottom_toTopOf="@id/spinner_appt_loc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_appt_type">
+    </TextView>
+
+    <Spinner
+        android:id="@+id/spinner_appt_loc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:visibility="invisible"
+        android:minHeight="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_loc"
         app:layout_constraintBottom_toTopOf="@id/label_doctor">
     </Spinner>
 
@@ -63,9 +92,10 @@
         android:gravity="start"
         android:text="@string/label_doctor"
         android:textAlignment="gravity"
+        android:visibility="invisible"
         android:textColor="@color/colorText"
         android:textSize="23sp"
-        app:layout_constraintBottom_toTopOf="@id/spinner_appt_type"
+        app:layout_constraintBottom_toTopOf="@id/spinner_appt_loc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spinner_doctor">
@@ -76,6 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
+        android:visibility="invisible"
         android:spinnerMode="dropdown"
         android:minHeight="60dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,6 +123,7 @@
         android:text="@string/label_appt_date"
         android:textAlignment="gravity"
         android:textColor="@color/colorText"
+        android:visibility="invisible"
         android:textSize="23sp"
         app:layout_constraintBottom_toTopOf="@id/button_date"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,6 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/colorChatA"
+        android:visibility="invisible"
         android:text="@string/button_appt_date"
         android:textSize="25sp"
         android:padding="10dp"
@@ -122,6 +155,7 @@
         android:text="@string/label_appt_time"
         android:textAlignment="gravity"
         android:textColor="@color/colorText"
+        android:visibility="invisible"
         android:textSize="23sp"
         app:layout_constraintBottom_toTopOf="@id/spinner_time"
         app:layout_constraintEnd_toEndOf="parent"
@@ -136,6 +170,7 @@
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"
         android:minHeight="60dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appt_time"
@@ -149,6 +184,7 @@
         android:background="@color/colorChatB"
         android:textColor="@color/colorText"
         android:text="@string/button_submit_appt"
+        android:visibility="invisible"
         android:textSize="25sp"
         android:padding="10dp"
         android:onClick="apptClick"

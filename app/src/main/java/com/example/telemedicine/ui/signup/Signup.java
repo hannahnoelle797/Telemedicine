@@ -25,12 +25,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
-import com.google.firebase.database.ValueEventListener;
 
 public class Signup extends AppCompatActivity {
 
@@ -38,14 +34,12 @@ public class Signup extends AppCompatActivity {
 
     // Global Variables
     private EditText firstNameET, lastNameET, emailET, confirmEmailET, ssnET, confirmSSNET, passwordET, confirmPasswordET;
-//    private EditText addressET, dob, phoneNum;
     private Spinner spinner;
 
     // Firebase auth instance
     private FirebaseAuth mAuth;
     // Firebase userDB
-    //private DatabaseReference userDB, doctorDB;
-    private DatabaseReference mDatabase;
+    protected DatabaseReference mDatabase;
     // log tag
     private final String TAG = "Signup.java";
 
@@ -70,9 +64,7 @@ public class Signup extends AppCompatActivity {
         // Get firebase instance
         mAuth = FirebaseAuth.getInstance();
 
-        // Establish Database instances
-//        userDB = FirebaseDatabase.getInstance().getReference("Users");
-//        doctorDB = FirebaseDatabase.getInstance().getReference("Doctor"); // TODO - Change Doctor -> Doctors
+        // Establish Database instance
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Populate spinner
@@ -114,6 +106,7 @@ public class Signup extends AppCompatActivity {
                 intent = new Intent(Signup.this, Login.class);
                 startActivity(intent);
                 break;
+            // TODO - fix multiple toasts from stacking
             case R.id.signupBTN:
                 // Check if the fields are empty
                 if (emailET.getText().toString().isEmpty() || passwordET.getText().toString().isEmpty()) return;
@@ -132,7 +125,7 @@ public class Signup extends AppCompatActivity {
                     Toast.makeText(Signup.this, "Your SSN must match before continuing..", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                // Create Firebase User - using createUserWithEmailAndPassword
+                // Create Firebase User - using createUserWithEmailandPassword
                 createUser(emailET.getText().toString().trim(), passwordET.getText().toString().trim());
                 break;
         }
@@ -160,8 +153,9 @@ public class Signup extends AppCompatActivity {
     }
 
     protected void onAuthSuccess(FirebaseUser user) {
+        // Write data to user object
         // TODO remove password cleartext
-        // Depending on the spinner item selected, save the user/doctor data to the db
+
         if (spinner.getSelectedItem().equals("I am a patient")) {
             addUserLocally(user.getUid(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
                     passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
@@ -180,12 +174,11 @@ public class Signup extends AppCompatActivity {
 
     // Add data from the user to the database
     protected void addUserLocally(String userID, String firstName, String lastName, String email, String password, int last4SSN) {
-        User user = new User(userID, firstName, lastName, email, password, last4SSN);
+        User user = new User(firstName, lastName, email, password, userID, last4SSN);
         if (mAuth.getCurrentUser() == null) {
             return;
         }
         mDatabase.child("Users").child(userID).setValue(user);
-        // userDB.child(userID).setValue(user); // TODO
     }
 
     // Add data from the doctor to the database
@@ -195,7 +188,6 @@ public class Signup extends AppCompatActivity {
             return;
         }
         mDatabase.child("Doctor").child(docID).setValue(doctor);
-        // doctorDB.child(mAuth.getCurrentUser().getUid()).setValue(doctor); // TODO
     }
 
     protected String getFullName(String s1, String s2) {

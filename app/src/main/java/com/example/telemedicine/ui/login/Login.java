@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
+import com.example.telemedicine.models.User;
 import com.example.telemedicine.ui.signup.Signup;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,7 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 public class Login extends AppCompatActivity {
 
     // Global Variables
+    User user; // Mock-Up
     EditText emailET, passwordET;
+    // EditText lastFourSSNET;
     Button loginBtn, signupBtn;
     String TAG = "Login.java";
     // Firebase
@@ -41,6 +44,7 @@ public class Login extends AppCompatActivity {
         // Get references from the View
         emailET = (EditText) findViewById(R.id.emailET);
         passwordET = (EditText) findViewById(R.id.passwordET);
+        // lastFourSSNET = (EditText) findViewById(R.id.lastFourOfSSN);
         loginBtn = (Button) findViewById(R.id.submitBtn);
         signupBtn = (Button)findViewById(R.id.signupBTN);
         // Initialize Firebase instance
@@ -48,14 +52,23 @@ public class Login extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        fUser = FirebaseAuth.getInstance().getCurrentUser(); // TODO
+    }
+
     // Handle all clicks within login TODO
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.submitBtn:
                 this.checkLogin();
                 break;
             case R.id.signupBtn:
-                startActivity(new Intent(Login.this, Signup.class));
+                intent = new Intent(Login.this, Signup.class);
+                startActivity(intent);
                 finish();
                 break;
             default:
@@ -78,13 +91,11 @@ public class Login extends AppCompatActivity {
                         // If user was found
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser mUser = task.getResult().getUser();
-                            if (mUser == null) return;
-                            onAuthSuccess(mUser);
+                            onAuthSuccess(task.getResult().getUser()); // TODO - Catch NullPointer
                         } else {
                             // If sign-in fails
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Auth failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Auth failed..", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -94,9 +105,8 @@ public class Login extends AppCompatActivity {
         // Assign global var to current logged in user
         fUser = user;
         // Start new activity
-        Toast.makeText(this, "Successful Login.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Successful Login.", Toast.LENGTH_LONG).show();
         startActivity(new Intent(this, MainActivity.class));
-        // Done with login so call finish()
         finish();
     }
 }
