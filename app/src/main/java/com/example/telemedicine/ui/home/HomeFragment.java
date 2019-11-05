@@ -77,6 +77,7 @@ public class HomeFragment extends Fragment {
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference("Users");
         mDatabaseDoctors = FirebaseDatabase.getInstance().getReference("Doctor");
         mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
+        // TODO: App crashes if no user logged-in
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -132,6 +133,7 @@ public class HomeFragment extends Fragment {
                 String todayid = String.format("%04d%02d%02d%02d%02d", c.get(Calendar.YEAR), (c.get(Calendar.MONTH)+1), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Appointment a = child.getValue(Appointment.class);
+                    // TODO: App crashes if no user logged-in
                     if (a.getUserID().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())){
                         System.out.println("APPOINTMENT APPOINTMENT " + a.getApptID() + " TODAY TODAY " + todayid);
                         appt_id = a.getApptID();
@@ -148,6 +150,7 @@ public class HomeFragment extends Fragment {
                         upcoming_appt = "No Upcoming Appointments";
                     }
                 }
+                // TODO: StringIndexOutOfBoundsException: length=0; index=4
                 updateApptDate(appt_id);
             }
 
