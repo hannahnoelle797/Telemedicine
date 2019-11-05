@@ -17,4 +17,5 @@
     <dimen name="local_preview_height">117dp</dimen>
 
     <dimen name="remote_back_icon_margin_bottom">90dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
