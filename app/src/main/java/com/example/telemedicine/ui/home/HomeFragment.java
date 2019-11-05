@@ -148,6 +148,7 @@ public class HomeFragment extends Fragment {
                     }
                     else{
                         upcoming_appt = "No Upcoming Appointments";
+                        appt_id = "";
                     }
                 }
                 // TODO: StringIndexOutOfBoundsException: length=0; index=4
@@ -177,18 +178,22 @@ public class HomeFragment extends Fragment {
     }
 
     public void updateApptDate(String date) {
-        int year = Integer.parseInt(date.substring(0, 4));
-        int month = Integer.parseInt(date.substring(4, 6));
-        int day = Integer.parseInt(date.substring(6, 8));
-        int hour = Integer.parseInt(date.substring(8, 10));
-        int min = Integer.parseInt(date.substring(10));
-        String ampm = "AM";
-        if(hour > 12){
-            hour -= 12;
-            ampm = "PM";
+        if (date.length() > 0) {
+            int year = Integer.parseInt(date.substring(0, 4));
+            int month = Integer.parseInt(date.substring(4, 6));
+            int day = Integer.parseInt(date.substring(6, 8));
+            int hour = Integer.parseInt(date.substring(8, 10));
+            int min = Integer.parseInt(date.substring(10));
+            String ampm = "AM";
+            if (hour > 12) {
+                hour -= 12;
+                ampm = "PM";
+            }
+            String s_date = String.format("%02d/%02d/%04d at %d:%02d %s", month, day, year, hour, min, ampm);
+            appointment_date.setText(s_date);
+        } else {
+            appointment_date.setText("No upcoming appointment");
         }
-        String s_date = String.format("%02d/%02d/%04d at %d:%02d %s", month, day, year, hour, min, ampm);
-        appointment_date.setText(s_date);
     }
 
 }

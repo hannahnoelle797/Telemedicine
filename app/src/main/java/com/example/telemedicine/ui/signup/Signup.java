@@ -174,7 +174,7 @@ public class Signup extends AppCompatActivity {
 
     // Add data from the user to the database
     protected void addUserLocally(String userID, String firstName, String lastName, String email, String password, int last4SSN) {
-        User user = new User(firstName, lastName, email, password, userID, last4SSN);
+        User user = new User(userID, firstName, lastName, email, password, last4SSN);
         if (mAuth.getCurrentUser() == null) {
             return;
         }
