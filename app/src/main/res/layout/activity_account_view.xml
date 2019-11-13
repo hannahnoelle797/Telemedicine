@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".ui.account.AccountView">
+
+    <TextView
+        android:id="@+id/account_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/account"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/colorText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/account_name_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_name_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Full Name:"
+        app:layout_constraintTop_toBottomOf="@id/account_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_name_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Full Name Here"
+        android:paddingLeft="50dp"
+        android:paddingBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@id/account_name_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_email_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Email Address:"
+        app:layout_constraintTop_toBottomOf="@id/account_name_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_email_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="email@email.ema"
+        android:paddingLeft="50dp"
+        android:paddingBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@id/account_email_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_address_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Address:"
+        app:layout_constraintTop_toBottomOf="@id/account_email_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_address_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Address"
+        android:ems="10"
+        android:gravity="start"
+        android:lines="2"
+        android:maxLines="2"
+        android:paddingLeft="50dp"
+        android:paddingBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@id/account_address_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_phone_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Phone:"
+        app:layout_constraintTop_toBottomOf="@id/account_address_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_phone_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Phone"
+        android:paddingLeft="50dp"
+        android:paddingBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@id/account_phone_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_sex_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Sex:"
+        app:layout_constraintTop_toBottomOf="@id/account_phone_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:id="@+id/account_sex_container"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/account_sex_header">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:text="Male"
+            android:id="@+id/radioButton"
+            android:enabled="false"
+            android:textColor="@color/colorText"
+            android:layout_gravity="center_horizontal"
+            android:checked="true"
+            android:buttonTint="@color/colorPrimary"
+            android:textSize="25sp" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:text="Female"
+            android:id="@+id/radioButton2"
+            android:enabled="false"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorText"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="25sp"
+            android:buttonTint="@color/colorPrimary"
+            android:layout_weight="0.13" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/account_ssn_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="Social Security Number:"
+        app:layout_constraintTop_toBottomOf="@id/account_sex_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/account_ssn_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="25sp"
+        android:text="***-**-1234"
+        android:paddingLeft="50dp"
+        android:paddingBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@id/account_ssn_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <Button
+        android:id="@+id/account_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="Edit Account Information"
+        android:textColor="@color/colorBackground"
+        android:textSize="24sp"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/account_ssn_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

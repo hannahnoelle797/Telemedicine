@@ -36,7 +36,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.reports.ReportViewer"></activity>
+        <activity android:name=".ui.account.AccountEdit"></activity>
+        <activity android:name=".ui.account.AccountView" />
+        <activity android:name=".ui.utilities.privacy" />
+        <activity
+            android:name=".ui.utilities.settings"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".ui.reports.ReportViewer" />
         <activity android:name=".ui.appointments.AppointmentDetails" />
         <activity android:name=".ui.scheduling.ApptSchedulingFirebase" />
         <activity

@@ -61,4 +61,28 @@
     <string name="home_num_reports">1</string>
     <string name="home_new_reports_2"> new reports to view.</string>
     <string name="title_activity_report_viewer">ReportViewer</string>
+    <string name="signout">Sign Out</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="video_call">Video Call</string>
+    <string name="account">Account</string>
+    <string name="privacy">Privacy and Security</string>
+    <string name="terms">Terms and Conditions</string>
+    <string name="theme">Light Theme</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

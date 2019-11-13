@@ -2,10 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
+    <item android:id="@+id/action_settings"
+        android:title="@string/title_activity_settings"
+        app:showAsAction="never" />
     <item android:id="@+id/action_Video_Call"
-        android:title="Video Call"
+        android:title="@string/video_call"
         app:showAsAction="never" />
     <item android:id="@+id/action_signout"
-        android:title="Signout"
+        android:title="@string/signout"
         app:showAsAction="never" />
 </menu>
