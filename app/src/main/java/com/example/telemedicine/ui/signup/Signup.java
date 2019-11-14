@@ -33,7 +33,8 @@ public class Signup extends AppCompatActivity {
     //TODO : Address, FullName (Instead of firstN + lastN), D.O.B, Phone#
 
     // Global Variables
-    private EditText firstNameET, lastNameET, emailET, confirmEmailET, ssnET, confirmSSNET, passwordET, confirmPasswordET;
+    private EditText fullNameET, emailET, confirmEmailET, ssnET, confirmSSNET, phoneNumET, streetET, passwordET, confirmPasswordET;
+    private Spinner genderSpinner;
     private Spinner spinner;
 
     // Firebase auth instance
@@ -52,10 +53,15 @@ public class Signup extends AppCompatActivity {
         String [] patientOrDoctor = new String[] {"I am a patient", "I am a doctor"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, patientOrDoctor);
         spinner.setAdapter(spinnerAdapter);
-        firstNameET = (EditText) findViewById(R.id.firstNameET);
-        lastNameET = (EditText) findViewById(R.id.lastNameET);
+        fullNameET = (EditText)findViewById(R.id.fullnameET);
+        genderSpinner = (Spinner)findViewById(R.id.genderSpin);
+        String [] genderOptions = new String[] {"Male", "Female", "Other"};
+        ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, genderOptions);
+        genderSpinner.setAdapter(genderSpinnerAdapter);
         emailET = (EditText)findViewById(R.id.emailET);
         confirmEmailET = (EditText) findViewById(R.id.emailConfirmET);
+        phoneNumET = (EditText)findViewById(R.id.phoneNumET);
+        streetET = (EditText)findViewById(R.id.streetAddressET);
         ssnET = (EditText) findViewById(R.id.ssnET);
         confirmSSNET = (EditText) findViewById(R.id.ssnConfirmET);
         passwordET = (EditText)findViewById(R.id.passwordET);
@@ -154,14 +160,14 @@ public class Signup extends AppCompatActivity {
 
     protected void onAuthSuccess(FirebaseUser user) {
         // Write data to user object
-        // TODO remove password cleartext
-
         if (spinner.getSelectedItem().equals("I am a patient")) {
-            addUserLocally(user.getUid(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                    passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
+            addUserLocally(user.getUid(), fullNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                    streetET.getText().toString().trim(), phoneNumET.getText().toString().trim(), genderSpinner.getSelectedItem().toString(),
+                    Integer.parseInt((getLastFour(ssnET.getText().toString().trim()))));
         } else if (spinner.getSelectedItem().equals("I am a doctor")) {
-            addDocLocally(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                passwordET.getText().toString().trim(), user.getUid(), getFullName(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim()), Integer.parseInt(ssnET.getText().toString().trim()));
+            addDocLocally(user.getUid(), fullNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                    streetET.getText().toString().trim(), phoneNumET.getText().toString().trim(), genderSpinner.getSelectedItem().toString().trim(), "Dr. ".concat(fullNameET.toString().trim()),
+                    Integer.parseInt(ssnET.getText().toString().trim()));
         } else {
             System.out.println("Uh oh");
         }
@@ -173,24 +179,29 @@ public class Signup extends AppCompatActivity {
     }
 
     // Add data from the user to the database
-    protected void addUserLocally(String userID, String firstName, String lastName, String email, String password, int last4SSN) {
-        User user = new User(userID, firstName, lastName, email, password, last4SSN);
+    protected void addUserLocally(String userId, String fullName, String email, String streetAddress, String phoneNum, String gender, int last4SSN) {
+        User user = new User(userId, fullName, email, streetAddress, phoneNum, gender, last4SSN);
         if (mAuth.getCurrentUser() == null) {
             return;
         }
-        mDatabase.child("Users").child(userID).setValue(user);
+        mDatabase.child("Users").child(userId).setValue(user);
     }
 
     // Add data from the doctor to the database
-    protected void addDocLocally(String firstName, String lastName, String email, String password, String docID, String docString, int empNum) {
-        Doctor doctor = new Doctor(firstName, lastName, email, password, docID, docString, empNum);
+    protected void addDocLocally(String docId, String fullName, String email, String streetAddress, String phoneNum, String gender, String docString, int empNum) {
+        Doctor doctor = new Doctor(docId, fullName, email, streetAddress, phoneNum, gender, docString, empNum);
         if (mAuth.getCurrentUser() == null) {
             return;
         }
-        mDatabase.child("Doctor").child(docID).setValue(doctor);
+        mDatabase.child("Doctor").child(docId).setValue(doctor);
     }
 
-    protected String getFullName(String s1, String s2) {
-        return ("Dr. " + s1 + " " + s2);
+    protected String getLastFour(String numSeq) {
+        if (numSeq.length() > 4) {
+            return (numSeq.substring(numSeq.length() - 4));
+        } else {
+            // Less than 4 length
+            return numSeq;
+        }
     }
 }

@@ -70,26 +70,12 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_addToCalendar"
+        app:layout_constraintBottom_toTopOf="@+id/button_chatToDoctor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apptAddress"
         tools:context="com.example.telemedicine.ui.utilities.MapsMarkerActivity">
     </fragment>
-
-    <Button
-        android:id="@+id/button_addToCalendar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/colorText"
-        android:gravity="center"
-        android:text="Add To Calendar"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
     <Button
         android:id="@+id/button_chatToDoctor"
@@ -103,7 +89,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_addToCalendar" />
+        app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
     <Button
         android:id="@+id/button_cancelAppointment"
@@ -121,4 +107,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_chatToDoctor"
         app:layout_constraintVertical_bias="0.0" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

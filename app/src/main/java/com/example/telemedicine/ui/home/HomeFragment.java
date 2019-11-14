@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
                     User u = child.getValue(User.class);
                     try {
                         if (u.getUserID().equalsIgnoreCase(userid)) {
-                            username = u.getFirstName();
+                            username = u.getFullName();
                             updateName(username);
                         }
                     }catch(NullPointerException e){
@@ -110,7 +110,7 @@ public class HomeFragment extends Fragment {
                     try {
                         Doctor d = child.getValue(Doctor.class);
                         if (d.getDocID().equalsIgnoreCase(userid)) {
-                            username = "Dr. " + d.getFirstName();
+                            username = "Dr. " + d.getFullName();
                             updateName(username);
                         }
                     }catch(DatabaseException e){
