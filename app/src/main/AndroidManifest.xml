@@ -36,7 +36,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.reports.ReportViewer"></activity>
+        <activity android:name=".ui.video_call.doctor_select"></activity>
+        <activity android:name=".ui.reports.ReportViewer" />
         <activity android:name=".ui.appointments.AppointmentDetails" />
         <activity android:name=".ui.scheduling.ApptSchedulingFirebase" />
         <activity

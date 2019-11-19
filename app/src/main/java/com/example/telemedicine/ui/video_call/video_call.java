@@ -17,10 +17,15 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.telemedicine.R;
+import com.example.telemedicine.ui.video_call.Agora_Tokens.media.DynamicKey5;
+import com.example.telemedicine.ui.video_call.Agora_Tokens.media.RtcTokenBuilder;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+
+import java.util.Date;
+import java.util.Random;
 
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -54,6 +59,13 @@ public class video_call extends AppCompatActivity {
 
     private FirebaseUser mUser;
     private Task<GetTokenResult> mToken;
+
+    private String agora_token;
+    private Bundle extras;
+    private String doctorId;
+    // Agora token expire time
+    static int expirationTimeInSeconds = 3600;
+
 
     /**
      * Event handler registered into RTC engine for RTC callbacks.
@@ -90,16 +102,15 @@ public class video_call extends AppCompatActivity {
             });
         }
 
-        /*
         @Override
         // Called when the token expires
         public void onRequestToken() {
-            // Toast.makeText(getApplicationContext(), "Your token has expired", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Your token has expired", Toast.LENGTH_LONG).show();
             Log.i("Video_Call_Tele", "The token as expired..");
             // mRtcEngine.renewToken(token);
             // https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#af1428905e5778a9ca209f64592b5bf80
             // Renew token - TODO
-        } */
+        }
     };
 
     // TODO: change UID to stringName
@@ -137,9 +148,14 @@ public class video_call extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
+        extras = getIntent().getExtras();
+        if (extras != null) {
+            doctorId = extras.getString("doctorSelect");
+            System.out.println("DocID: " + doctorId);
+        }
         initUI();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mToken = mUser.getIdToken(false);
+        // mToken = mUser.getIdToken(false);
 
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                 checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
@@ -241,9 +257,26 @@ public class video_call extends AppCompatActivity {
     }
 
     private void joinChannel() {
-        // Joins the channel with a demo token from agora console
-        // TODO - Dynamic Token per User
-        mRtcEngine.joinChannel(getString(R.string.agora_sample_token), "demo", "", 0);
+        // Get the User Id for the current user
+        String userId = mUser.getUid();
+        // Assign a channel name using the doctorId and userId
+        // TODO doctorId instead of dr name
+        // TODO connecting dr. -> patient
+        String channelName = (userId.substring(Math.max(0, userId.length() - 10))) + (doctorId.substring(Math.max(0, doctorId.length() - 10)));
+        // Token object
+        RtcTokenBuilder token = new RtcTokenBuilder();
+        // Time stamp used for length of token
+        int timestamp = (int)(System.currentTimeMillis() / 1000 + expirationTimeInSeconds);
+        // User Id set to 0 for auto handling by Agora // TODO
+        int uid = 0;
+        try {
+            // Create a token using Agora Sdk
+            agora_token = token.buildTokenWithUid(getString(R.string.agora_app_id), getString(R.string.agora_app_certificate),
+                    channelName, uid, RtcTokenBuilder.Role.Role_Publisher, timestamp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mRtcEngine.joinChannel(agora_token, channelName, "", uid);
     }
 
     @Override
