@@ -83,4 +83,6 @@ public class User {
     public void setLastFourSSN(int lastFourSSN) {
         this.lastFourSSN = lastFourSSN;
     }
+
+
 }

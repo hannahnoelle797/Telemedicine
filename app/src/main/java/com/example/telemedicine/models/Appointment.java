@@ -8,7 +8,7 @@ import java.util.TimeZone;
 public class Appointment implements Comparable<Appointment>{
 
     //Global Variables
-    private String apptID, userID, doctorID, ampm, type, locationID;
+    private String apptID, userID, doctorID, ampm, type, locationID, dateTime;
     private int apptYear, apptMonth, apptDay, apptHour, apptMin;
 
     public Appointment(){
@@ -29,6 +29,7 @@ public class Appointment implements Comparable<Appointment>{
         this.ampm = ampm.toUpperCase();
         this.type = type;
         locationID = loc;
+        this.dateTime = String.format("%02d/%02d/%04d at %d:%02d %s", apptMonth, apptDay, apptYear, apptHour, apptMin, ampm);
     }
 
     public String getApptID() {
@@ -154,8 +155,7 @@ public class Appointment implements Comparable<Appointment>{
     }
 
     public String getDateTime(){
-        String r = String.format("%02d/%02d/%04d %2d:%02d %s", apptMonth, apptDay, apptYear, apptHour, apptMin, ampm);
-        return r;
+        return dateTime;
     }
 
     public String getTimeFormat(){
@@ -166,5 +166,9 @@ public class Appointment implements Comparable<Appointment>{
     public String getDateFormat() {
         String d = String.format("%d/%d/%d", apptMonth, apptDay, apptYear);
         return d;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 }

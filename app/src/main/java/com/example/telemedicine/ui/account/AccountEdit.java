@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.User;
+import com.example.telemedicine.ui.appointments.AppointmentsFragment;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -13,6 +14,8 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +40,7 @@ public class AccountEdit extends AppCompatActivity {
     DatabaseReference mDatabaseUsers, currentUser;
     String userid;
     User user, newUser;
+    DataSnapshot userOld;
 
     String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+"[a-zA-Z0-9_+&*-]+)*@"+"(?:[a-zA-Z0-9-]+\\.)+[a-z"+"A-Z]{2,7}$";
     Pattern pat = Pattern.compile(emailRegex);
@@ -67,6 +71,7 @@ public class AccountEdit extends AppCompatActivity {
                     try {
                         if (u.getUserID().equalsIgnoreCase(userid)) {
                             user = u;
+                            userOld = child;
                             updateData();
                             break;
                         }
@@ -82,31 +87,63 @@ public class AccountEdit extends AppCompatActivity {
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(view.getContext(), AccountView.class);
                 sendToDatabase();
             }
+        });*/
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(sendToDatabase()) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    Toast.makeText(view.getContext(), "Data Saved.", Toast.LENGTH_LONG).show();
+                                    userOld.getRef().removeValue();
+                                    User userNew = new User(user.getUserID(), name.getText().toString(), email.getText().toString(), address.getText().toString(), phone.getText().toString(), user.getGender(), Integer.parseInt(ssn.getText().toString()));
+                                    mDatabaseUsers.child(user.getUserID()).setValue(userNew);
+                                    Intent intent = new Intent(view.getContext(), AccountView.class);
+                                    startActivity(intent);
+                                    finish();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    Toast.makeText(view.getContext(), "No Changes Made", Toast.LENGTH_LONG).show();
+                                    Intent intentNo = new Intent(view.getContext(), AccountView.class);
+                                    startActivity(intentNo);
+                                    finish();
+                                    break;
+                            }
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Save Changes?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+            }
         });
     }
 
-    public void sendToDatabase(){
+    public boolean sendToDatabase(){
         if(ssn.getText().toString().length() != 4) {
             Toast.makeText(getApplicationContext(), "Invalid Social Security Number", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         else if(!pat.matcher(email.getText().toString()).matches()){
             Toast.makeText(getApplicationContext(), "Invalid Email Address", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         else if(phone.getText().toString().length() != 10) {
             Toast.makeText(getApplicationContext(), "Invalid Phone Number. Please do not enter special characters.", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
-        Toast.makeText(getApplicationContext(),"Writing data to database",Toast.LENGTH_SHORT).show();
-        //TODO: MAKE IT UPDATE THE STUPID DATABASE
-        startActivity(intent);
+        return true;
     }
 
     public void updateData(){

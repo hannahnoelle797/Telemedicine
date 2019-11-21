@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
     TextView welcome;
     TextView appointment_date;
 
-    String upcoming_appt;
+    String upcoming_appt, date;
 
     View root;
 
@@ -141,18 +141,19 @@ public class HomeFragment extends Fragment {
                         float apptid = Float.parseFloat(appt_id);
                         System.out.println("DIFFERENCE " + (apptid - today_id));
                         if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
-                            System.out.println("UPDATING UPCOMING APPOINTMENT");
                             upcoming_appt = a.getApptID();
-
+                            date = a.getDateTime();
+                            System.out.println("APPOINTMENT DATE: " + date);
+                            updateApptDate();
+                            break;
                         }
                     }
                     else{
-                        upcoming_appt = "No Upcoming Appointments";
+                        date = "No Upcoming Appointments";
                         appt_id = "";
+                        updateApptDate();
                     }
                 }
-                // TODO: StringIndexOutOfBoundsException: length=0; index=4
-                updateApptDate(appt_id);
             }
 
             @Override
@@ -164,9 +165,11 @@ public class HomeFragment extends Fragment {
         appointment_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AppointmentDetails.class);
-                intent.putExtra("EXTRA_SESSION_ID", upcoming_appt);
-                startActivity(intent);
+                if(!appointment_date.getText().toString().equalsIgnoreCase("No upcoming appointment")) {
+                    Intent intent = new Intent(getContext(), AppointmentDetails.class);
+                    intent.putExtra("EXTRA_SESSION_ID", upcoming_appt);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -177,9 +180,9 @@ public class HomeFragment extends Fragment {
         welcome.setText("Welcome back, " + name);
     }
 
-    public void updateApptDate(String date) {
-        if (date.length() > 0) {
-            int year = Integer.parseInt(date.substring(0, 4));
+    public void updateApptDate() {
+        //if (date.length() > 0) {
+            /*int year = Integer.parseInt(date.substring(0, 4));
             int month = Integer.parseInt(date.substring(4, 6));
             int day = Integer.parseInt(date.substring(6, 8));
             int hour = Integer.parseInt(date.substring(8, 10));
@@ -190,10 +193,11 @@ public class HomeFragment extends Fragment {
                 ampm = "PM";
             }
             String s_date = String.format("%02d/%02d/%04d at %d:%02d %s", month, day, year, hour, min, ampm);
-            appointment_date.setText(s_date);
-        } else {
-            appointment_date.setText("No upcoming appointment");
-        }
+            appointment_date.setText(s_date);*/
+            appointment_date.setText(date);
+        //} else {
+        //    appointment_date.setText("No upcoming appointment");
+        //}
     }
 
 }

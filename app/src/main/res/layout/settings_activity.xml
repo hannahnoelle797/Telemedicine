@@ -74,6 +74,20 @@
         android:textColor="@color/colorText"
         android:clickable="true"
         app:layout_constraintTop_toBottomOf="@id/settings_about"
+        app:layout_constraintBottom_toTopOf="@id/signout">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/signout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/signout"
+        android:textSize="30sp"
+        android:textColor="@color/colorText"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/settings_terms"
         app:layout_constraintBottom_toTopOf="@id/random_tv">
 
     </TextView>

@@ -84,6 +84,7 @@ public class AccountView extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), AccountEdit.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

@@ -65,6 +65,9 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
 
     private View root;
 
+    Appointment a;
+    String upcoming_appt, date, appt_id;
+
     private String[] apptUpcoming = {"Physical - 9/29 @ 10:00am"};
 
     private Button btn;
@@ -99,7 +102,7 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                 Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
                 String todayid = String.format("%04d%02d%02d%02d%02d", Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE);
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Appointment a = child.getValue(Appointment.class);
+                    a = child.getValue(Appointment.class);
                     if(userid.equals(a.getUserID()))
                     {
                         Date today = c.getTime();
@@ -139,6 +142,8 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                     apptUpcoming[0] = "No Upcoming Appointments";
 
                 populateRecyclers(root);
+
+                
             }
 
             @Override
@@ -174,6 +179,10 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         rvUpcoming.setLayoutManager(lmUpcoming);
         adapUpcoming = new RecyclerItem(apptUpcoming,this);
         rvUpcoming.setAdapter(adapUpcoming);
+    }
+
+    public void changeColor(){
+
     }
 
 }

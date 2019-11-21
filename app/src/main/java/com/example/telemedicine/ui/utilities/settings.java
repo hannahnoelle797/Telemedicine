@@ -7,13 +7,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
 import com.example.telemedicine.ui.account.AccountView;
 import com.example.telemedicine.ui.appointments.AppointmentDetails;
+import com.example.telemedicine.ui.login.Login;
 
 public class settings extends AppCompatActivity {
 
-    TextView account, privacy, about, terms;
+    TextView account, privacy, about, terms, out;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class settings extends AppCompatActivity {
         privacy = (TextView)findViewById(R.id.settings_privacy);
         about = (TextView)findViewById(R.id.settings_about);
         terms = (TextView)findViewById(R.id.settings_terms);
+        out = (TextView)findViewById(R.id.signout);
 
         account.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +60,14 @@ public class settings extends AppCompatActivity {
                 Intent intent = new Intent(view.getContext(), privacy.class);
                 intent.putExtra("EXTRA_SESSION_ID", "TermsAndConditions.pdf");
                 startActivity(intent);
+            }
+        });
+
+        out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), Login.class));
+                finish();
             }
         });
 
