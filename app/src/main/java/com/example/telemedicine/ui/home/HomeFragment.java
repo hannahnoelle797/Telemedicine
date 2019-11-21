@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
 
     View root;
 
-    int dif_upcom_appt = 1000000;
+    float dif_upcom_appt = 1000000;
     int idx_upcom_appt = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -140,7 +140,9 @@ public class HomeFragment extends Fragment {
                         float today_id = Float.parseFloat(todayid);
                         float apptid = Float.parseFloat(appt_id);
                         System.out.println("DIFFERENCE " + (apptid - today_id));
+                        System.out.print("Difference: " + (apptid-today_id) + " Current difference " + dif_upcom_appt);
                         if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
+                            dif_upcom_appt = apptid - today_id;
                             upcoming_appt = a.getApptID();
                             date = a.getDateTime();
                             System.out.println("APPOINTMENT DATE: " + date);

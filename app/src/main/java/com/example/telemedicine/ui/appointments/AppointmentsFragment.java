@@ -68,11 +68,14 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
     Appointment a;
     String upcoming_appt, date, appt_id;
 
+    TextView nextAppt;
+    String nextApptID;
+
     private String[] apptUpcoming = {"Physical - 9/29 @ 10:00am"};
 
     private Button btn;
 
-    int dif_upcom_appt = 1100000000;
+    float dif_upcom_appt = 1100000000;
     int idx_upcom_appt = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -91,6 +94,17 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference("User");
 
+        nextAppt = (TextView)root.findViewById(R.id.upcoming_appt);
+
+        nextAppt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AppointmentDetails.class);
+                intent.putExtra("EXTRA_SESSION_ID", nextApptID);
+                startActivity(intent);
+            }
+        });
+
         upcomingAppt = new ArrayList<>();
 
         upcomingApptIDs = new ArrayList<>();
@@ -100,7 +114,7 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
-                String todayid = String.format("%04d%02d%02d%02d%02d", Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE);
+                String todayid = String.format("%04d%02d%02d%02d%02d", c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     a = child.getValue(Appointment.class);
                     if(userid.equals(a.getUserID()))
@@ -122,6 +136,20 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                         arr[1] = a.getApptID();
                         appointments.add(arr);
                         upcomingApptIDs.add(a.getApptID());
+
+                        System.out.println("APPOINTMENT APPOINTMENT " + a.getApptID() + " TODAY TODAY " + todayid);
+                        appt_id = a.getApptID();
+                        float today_id = Float.parseFloat(todayid);
+                        float apptid = Float.parseFloat(appt_id);
+                        System.out.println("DIFFERENCE " + (apptid - today_id));
+                        if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
+                            dif_upcom_appt = apptid - today_id;
+                            upcoming_appt = a.getApptID();
+                            date = a.getDateTime();
+                            nextApptID = a.getApptID();
+                            System.out.println("APPOINTMENT DATE: " + date);
+                            updateApptDate();
+                        }
                     }
                 }
 
@@ -142,8 +170,6 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                     apptUpcoming[0] = "No Upcoming Appointments";
 
                 populateRecyclers(root);
-
-                
             }
 
             @Override
@@ -181,8 +207,9 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         rvUpcoming.setAdapter(adapUpcoming);
     }
 
-    public void changeColor(){
-
+    public void updateApptDate(){
+        System.out.println("DATE DATE DATE DATE: " + date);
+        nextAppt.setText("Next Appointment: " + date);
     }
 
 }
