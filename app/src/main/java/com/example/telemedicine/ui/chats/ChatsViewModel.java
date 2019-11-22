@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class ChatsViewModel extends ViewModel {
-
     private MutableLiveData<String> mText;
 
     public ChatsViewModel() {

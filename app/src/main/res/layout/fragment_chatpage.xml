@@ -5,42 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".ui.appointments.AppointmentsFragment">
+    >
 
     <TextView
-        android:id="@+id/appointment_head"
-        android:layout_width="365dp"
+        android:id="@+id/chat_heading"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_appointments"
-        android:textSize="20pt"
+        android:text="Chat with your Doctor(s)"
+        android:textSize="16pt"
         android:textColor="@color/colorText"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@id/recycler_appt"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/recycler_chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_appt"
+        android:id="@+id/recycler_chat"
         android:layout_width="360dp"
         android:layout_height="500dp"
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintVertical_bias="0.226"
-        app:layout_constraintBottom_toTopOf="@id/button_new_appt"
+        app:layout_constraintBottom_toTopOf="@id/button_new_chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appointment_head" />
+        app:layout_constraintTop_toBottomOf="@+id/chat_heading" />
 
     <Button
-        android:id="@+id/button_new_appt"
+        android:id="@+id/button_new_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:background="@color/colorImportant"
+        android:background="@color/colorText"
         android:textColor="@color/colorBackground"
         android:clickable="true"
-        android:text="@string/button_new_appt"
-        app:layout_constraintTop_toBottomOf="@id/recycler_appt"
+        android:text="Create New Chat"
+        app:layout_constraintTop_toBottomOf="@id/recycler_chat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

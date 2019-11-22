@@ -1,6 +1,7 @@
 package com.example.telemedicine.ui.appointments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
-import com.example.telemedicine.ui.sample_pages.sample_appt;
 import com.example.telemedicine.models.Appointment;
 import com.example.telemedicine.ui.scheduling.ApptSchedulingFirebase;
 import com.example.telemedicine.ui.utilities.RecyclerItem;
+import com.example.telemedicine.ui.utilities.RecyclerItemClickListener;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,8 +34,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -43,35 +47,37 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
     private AppointmentsViewModel appointmentsViewModel;
 
     private RecyclerView rvUpcoming;
-    private RecyclerView rvPrevious;
 
     private RecyclerView.Adapter adapUpcoming;
-    private RecyclerView.Adapter adapPrevious;
 
     private RecyclerView.LayoutManager lmUpcoming;
-    private RecyclerView.LayoutManager lmPrevious;
 
     private DatabaseReference mDatabaseAppts;
     private DatabaseReference mDatabaseUsers;
 
     private ArrayList<String> upcomingAppt;
-    private ArrayList<String> previousAppt;
+    private ArrayList<String> upcomingApptIDs;
+    private ArrayList<String[]> appointments = new ArrayList<>();
+
+    String[] arr = new String[2];
 
     private Calendar n;
 
     private View root;
 
     private String[] apptUpcoming = {"Physical - 9/29 @ 10:00am"};
-    private String[] apptPrevious = {"Wellness Check - 5/19 @ 10:30am"};
 
     private Button btn;
+
+    int dif_upcom_appt = 1100000000;
+    int idx_upcom_appt = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         appointmentsViewModel =
                 ViewModelProviders.of(this).get(AppointmentsViewModel.class);
         root = inflater.inflate(R.layout.fragment_appointments, container, false);
-        final TextView textView = root.findViewById(R.id.appt_upcoming_header);
+        final TextView textView = root.findViewById(R.id.appointment_head);
         appointmentsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -82,25 +88,21 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
         mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference("User");
 
-        //final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        //System.out.println("\n\n\nUSER ID HERE: " + userid + "\n\n\n");
-
         upcomingAppt = new ArrayList<>();
-        previousAppt = new ArrayList<>();
 
+        upcomingApptIDs = new ArrayList<>();
 
         mDatabaseAppts.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
+                String todayid = String.format("%04d%02d%02d%02d%02d", Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE);
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Appointment a = child.getValue(Appointment.class);
                     if(userid.equals(a.getUserID()))
                     {
-                        Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
-
                         Date today = c.getTime();
-                        System.out.println("CURRENT TIME: " + today.toString());
 
                         n = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
                         n.set(Calendar.YEAR, a.getApptYear());
@@ -110,30 +112,32 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                         n.set(Calendar.MINUTE, a.getApptMin());
 
                         Date apptDate = n.getTime();
-                        System.out.println("APPOINTMENT TIME" + apptDate.toString());
 
-                        if(apptDate.before(today) && previousAppt.size() <= 4) {
-                            String appt = a.shortString();
-                            previousAppt.add(appt);
-                        }
-                        else if(apptDate.after(today) && upcomingAppt.size() <= 4) {
-                            String appt = a.shortString();
-                            upcomingAppt.add(appt);
-                        }
-                        else {
-                            System.out.println("Uh oh");
+                        String appt = a.shortString();
+                        arr = new String[2];
+                        arr[0] = appt;
+                        arr[1] = a.getApptID();
+                        appointments.add(arr);
+                        upcomingApptIDs.add(a.getApptID());
+                    }
+                }
+
+                Collections.sort(upcomingApptIDs);
+                Collections.reverse(upcomingApptIDs);
+                for(int i = 0; i < upcomingApptIDs.size(); i++)
+                {
+                    for(int p = 0; p < appointments.size(); p++) {
+                        if (upcomingApptIDs.get(i).equalsIgnoreCase(appointments.get(p)[1])) {
+                            upcomingAppt.add(appointments.get(p)[0]);
                         }
                     }
                 }
-                //TODO: Populate Recylcer View methods here
+
                 if(upcomingAppt.size() > 0)
                     apptUpcoming = upcomingAppt.toArray(new String[upcomingAppt.size()]);
                 else
                     apptUpcoming[0] = "No Upcoming Appointments";
-                if(previousAppt.size() > 0)
-                    apptPrevious = previousAppt.toArray(new String[previousAppt.size()]);
-                else
-                    apptPrevious[0] = "No Previous Appointments";
+
                 populateRecyclers(root);
             }
 
@@ -142,9 +146,6 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
 
             }
         });
-
-
-
 
         btn = (Button)root.findViewById(R.id.button_new_appt);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -155,29 +156,24 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                 startActivity(intent);
             }
         });
-
         return root;
     }
 
     @Override
     public void OnReportClickListener(int position) {
-        Intent intent = new Intent(getContext(), sample_appt.class);
+        Intent intent = new Intent(getContext(), AppointmentDetails.class);
+        String apptID = upcomingApptIDs.get(position);
+        intent.putExtra("EXTRA_SESSION_ID", apptID);
         startActivity(intent);
-        startActivity(new Intent(getContext(), AppointmentDetails.class));
-        // Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
     }
 
     public void populateRecyclers(View root)
     {
-        rvUpcoming = (RecyclerView)root.findViewById(R.id.recycler_appt_upcoming);
-        rvPrevious = (RecyclerView)root.findViewById(R.id.recycler_appt_prev);
+        rvUpcoming = (RecyclerView)root.findViewById(R.id.recycler_appt);
         lmUpcoming = new LinearLayoutManager(this.getActivity());
-        lmPrevious = new LinearLayoutManager(this.getActivity());
         rvUpcoming.setLayoutManager(lmUpcoming);
-        rvPrevious.setLayoutManager(lmPrevious);
-        adapUpcoming = new RecyclerItem(apptUpcoming, this);
-        adapPrevious = new RecyclerItem(apptPrevious, this);
+        adapUpcoming = new RecyclerItem(apptUpcoming,this);
         rvUpcoming.setAdapter(adapUpcoming);
-        rvPrevious.setAdapter(adapPrevious);
     }
+
 }

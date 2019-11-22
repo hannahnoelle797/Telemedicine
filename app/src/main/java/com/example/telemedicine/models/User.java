@@ -1,11 +1,13 @@
 package com.example.telemedicine.models;
 
+import java.util.ArrayList;
+
 public class User {
 
     // Global Variables
     String firstName, lastName, email, password, userID;
     int lastFourSSN;
-
+    ArrayList<Chat> chats;
     // Constructor
     public User(String firebaseUserID, String firstName, String lastName, String email, String password, int lastFourSSN) {
         this.userID = firebaseUserID;

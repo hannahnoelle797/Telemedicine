@@ -32,7 +32,7 @@
             android:name=".ui.sample_pages.sample_appt" >
         </activity>
         <activity
-            android:name=".ui.chats.Chats"
+            android:name=".ui.chats.ChatCreation"
             android:label="@string/app_name">
         </activity>
     </application>
