@@ -140,6 +140,7 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                         System.out.println("APPOINTMENT APPOINTMENT " + a.getApptID() + " TODAY TODAY " + todayid);
                         appt_id = a.getApptID();
                         float today_id = Float.parseFloat(todayid);
+                        today_id += 1000000;
                         float apptid = Float.parseFloat(appt_id);
                         System.out.println("DIFFERENCE " + (apptid - today_id));
                         if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
