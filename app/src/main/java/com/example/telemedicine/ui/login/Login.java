@@ -23,10 +23,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * @author - David Howard
+ */
 public class Login extends AppCompatActivity {
 
     // Global Variables
-    User user; // Mock-Up
+    // User user; // Mock-Up
     EditText emailET, passwordET;
     // EditText lastFourSSNET;
     Button loginBtn, signupBtn;
@@ -52,14 +55,17 @@ public class Login extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        fUser = FirebaseAuth.getInstance().getCurrentUser(); // TODO
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        fUser = FirebaseAuth.getInstance().getCurrentUser(); // TODO
+//    }
 
-    // Handle all clicks within login TODO
+    /**
+     * Handles the clicks from 'activity_login.xml'
+     * @param view - The current view
+     */
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -77,6 +83,9 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called to check with firebase auth if the user is valid
+     */
     private void checkLogin() {
         // Get our data from ET fields
         final String email = emailET.getText().toString().trim();
@@ -101,6 +110,10 @@ public class Login extends AppCompatActivity {
                 });
     }
 
+    /**
+     * If the user is auth successfully this method is called to start the next activity
+     * @param user - The current signed in user after auth
+     */
     protected void onAuthSuccess(FirebaseUser user) {
         // Assign global var to current logged in user
         fUser = user;

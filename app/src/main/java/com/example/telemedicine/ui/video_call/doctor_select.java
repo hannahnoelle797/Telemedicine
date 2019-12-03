@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -21,6 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * @author - David Howard
+ */
 public class doctor_select extends AppCompatActivity {
 
     // Globals
@@ -37,12 +41,14 @@ public class doctor_select extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_select);
 
+        // Get references to the Firebase xml items
         doctorGroup = (RadioGroup)findViewById(R.id.doctorSelectionRG);
         btn1 = (RadioButton)findViewById(R.id.doctorOneRB);
         btn2 = (RadioButton)findViewById(R.id.doctorTwoRB);
         btn3 = (RadioButton)findViewById(R.id.doctorThreeRB);
         submitBtn = (Button)findViewById(R.id.doctorSelectBtn);
         doctorList = new ArrayList<>();
+        // Init docId to 0
         docId = "0";
 
         // Populate the layout with db doctors
@@ -80,7 +86,9 @@ public class doctor_select extends AppCompatActivity {
                     RadioButton selectedRb = (RadioButton)findViewById(selectedRbId);
                     String doctorString = selectedRb.getText().toString();
                     intent = new Intent(doctor_select.this, video_call.class);
-                    intent.putExtra("doctorSelect", getDocId(doctorString));
+                    // Assign doctor id to video_call statically
+                    getDocId(doctorString);
+                    // Start video call class
                     startActivity(intent);
                     finish();
                 }
@@ -88,16 +96,20 @@ public class doctor_select extends AppCompatActivity {
         });
     }
 
-    // TODO - Currently sends default value of 0
-    protected String getDocId(final String docName) {
+    /**
+     * Called to get the correct doctor id from the db
+     * @param docName - The selected doctor (String)
+     */
+    protected void getDocId(final String docName) {
         mDatabaseDocs.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Doctor docs = child.getValue(Doctor.class);
+                    assert docs != null;
                     if (docName.equals(docs.getDocString())) {
-                        // TODO
                         docId = docs.getDocID();
+                        video_call.accessDocId(docId);
                     }
                 }
             }
@@ -107,6 +119,5 @@ public class doctor_select extends AppCompatActivity {
 
             }
         });
-        return docId;
     }
 }

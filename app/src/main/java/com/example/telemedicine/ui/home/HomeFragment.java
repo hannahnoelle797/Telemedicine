@@ -22,9 +22,11 @@ import com.example.telemedicine.models.Appointment;
 import com.example.telemedicine.models.User;
 import com.example.telemedicine.models.Doctor;
 import com.example.telemedicine.ui.appointments.AppointmentDetails;
+import com.example.telemedicine.ui.login.Login;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 import com.example.telemedicine.ui.utilities.RecyclerItemClickListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -78,7 +80,12 @@ public class HomeFragment extends Fragment {
         mDatabaseDoctors = FirebaseDatabase.getInstance().getReference("Doctor");
         mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
         // TODO: App crashes if no user logged-in
-        userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (fUser == null) {
+            startActivity(new Intent(getContext(), Login.class));
+            getActivity().getFragmentManager().popBackStack();
+        }
+        userid = fUser.getUid();
 
         mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

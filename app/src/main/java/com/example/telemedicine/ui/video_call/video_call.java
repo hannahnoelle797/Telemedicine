@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,16 +17,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.telemedicine.BuildConfig;
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
-import com.example.telemedicine.ui.video_call.Agora_Tokens.media.DynamicKey5;
 import com.example.telemedicine.ui.video_call.Agora_Tokens.media.RtcTokenBuilder;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
-
-import java.util.Date;
-import java.util.Random;
 
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -33,6 +30,10 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+/**
+ * @author - David Howard
+ * Boilerplate from - https://github.com/AgoraIO/Basic-Video-Call.git
+ */
 public class video_call extends AppCompatActivity {
 
     private static final int PERMISSION_REQ_ID = 22;
@@ -58,11 +59,10 @@ public class video_call extends AppCompatActivity {
     private ImageView mSwitchCameraBtn;
 
     private FirebaseUser mUser;
-    private Task<GetTokenResult> mToken;
+    // private Task<GetTokenResult> mToken;
 
     private String agora_token;
-    private Bundle extras;
-    private String doctorId;
+    private static String doctorId;
     // Agora token expire time
     static int expirationTimeInSeconds = 3600;
 
@@ -91,6 +91,11 @@ public class video_call extends AppCompatActivity {
             }
         }
 
+        /**
+         * Called once the user is offline
+         * @param uid - The Agora uid (Auto Generated)
+         * @param reason - The int reason why the user is offline
+         */
         @Override
         public void onUserOffline(int uid, int reason) {
             runOnUiThread(new Runnable() {
@@ -102,8 +107,10 @@ public class video_call extends AppCompatActivity {
             });
         }
 
+        /**
+         * Once the token expires this method is called and we need to create a new one
+         */
         @Override
-        // Called when the token expires
         public void onRequestToken() {
             Toast.makeText(getApplicationContext(), "Your token has expired", Toast.LENGTH_LONG).show();
             Log.i("Video_Call_Tele", "The token as expired..");
@@ -113,7 +120,10 @@ public class video_call extends AppCompatActivity {
         }
     };
 
-    // TODO: change UID to stringName
+    /**
+     * Called to setup the remote video for the view
+     * @param uid - The agora uid (Auto generated)
+     */
     private void setupRemoteVideo(int uid) {
         int count = mRemoteContainer.getChildCount();
         View view = null;
@@ -133,10 +143,16 @@ public class video_call extends AppCompatActivity {
         mRtcEngine.setupRemoteVideo(new VideoCanvas(mRemoteView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
     }
 
+    /**
+     * Called when the remote user leaves the room
+     */
     private void onRemoteUserLeft() {
         removeRemoteVideo();
     }
 
+    /**
+     * Called when the remote video should be deleted
+     */
     private void removeRemoteVideo() {
         if (mRemoteView != null) {
             mRemoteContainer.removeView(mRemoteView);
@@ -144,18 +160,26 @@ public class video_call extends AppCompatActivity {
         mRemoteView = null;
     }
 
+    /**
+     * Called once the activity is created (start)
+     * @param savedInstanceState - The saved instance provided by the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
-        extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
         if (extras != null) {
             doctorId = extras.getString("doctorSelect");
             System.out.println("DocID: " + doctorId);
         }
         initUI();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        // mToken = mUser.getIdToken(false);
+        // If valid Firebase auth token
+        /*
+        if (mUser != null) {
+            // Create an agora token when ready TODO
+        } */
 
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                 checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
@@ -164,6 +188,9 @@ public class video_call extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called to init the UI for Firebase
+     */
     private void initUI() {
         mLocalContainer = findViewById(R.id.local_video_view_container);
         mRemoteContainer = findViewById(R.id.remote_video_view_container);
@@ -173,6 +200,12 @@ public class video_call extends AppCompatActivity {
         mSwitchCameraBtn = findViewById(R.id.btn_switch_camera);
     }
 
+    /**
+     *
+     * @param permission - The current permission to be checked
+     * @param requestCode - The agora request code used to check for permissions
+     * @return - Returns boolean that the permissions were accepted or not
+     */
     private boolean checkSelfPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -183,6 +216,12 @@ public class video_call extends AppCompatActivity {
     }
 
 
+    /**
+     *
+     * @param requestCode - Given agora request code
+     * @param permissions - All active permissions needed for voice calling
+     * @param grantResults - The permissions that were granted by the user (run-time event)
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -203,6 +242,10 @@ public class video_call extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called to display a long toast
+     * @param msg - The display message for the toast
+     */
     private void showLongToast(final String msg) {
         this.runOnUiThread(new Runnable() {
             @Override
@@ -212,6 +255,9 @@ public class video_call extends AppCompatActivity {
         });
     }
 
+    /**
+     * Called to throw everything together (Ingine, localConfig/Video) and join the channel
+     */
     private void initEngineAndJoinChannel() {
         // Join and start call
         initializeEngine();
@@ -220,6 +266,9 @@ public class video_call extends AppCompatActivity {
         joinChannel();
     }
 
+    /**
+     * Create our agora rtc engine instance
+     */
     private void initializeEngine() {
         try {
             mRtcEngine = RtcEngine.create(getBaseContext(), getString(R.string.agora_app_id), mRtcEventHandler);
@@ -229,6 +278,9 @@ public class video_call extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sets up the local video config
+     */
     private void setupVideoConfig() {
         // In simple use cases, we only need to enable video capturing
         // and rendering once at the initialization step.
@@ -244,6 +296,9 @@ public class video_call extends AppCompatActivity {
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT));
     }
 
+    /**
+     * Sets up the local video attributes
+     */
     private void setupLocalVideo() {
 
         // Enable the video module.
@@ -256,18 +311,29 @@ public class video_call extends AppCompatActivity {
         mRtcEngine.setupLocalVideo(new VideoCanvas(mLocalView, VideoCanvas.RENDER_MODE_HIDDEN, 0));
     }
 
+    /**
+     * Called when a user joins the voice channel
+     * We need to have a valid token for firebase and agora
+     */
     private void joinChannel() {
         // Get the User Id for the current user
-        String userId = mUser.getUid();
+        final String userId = mUser.getUid();
         // Assign a channel name using the doctorId and userId
-        // TODO doctorId instead of dr name
-        // TODO connecting dr. -> patient
-        String channelName = (userId.substring(Math.max(0, userId.length() - 10))) + (doctorId.substring(Math.max(0, doctorId.length() - 10)));
+        if (doctorId.length() < 10) {
+            System.out.println("DocID: " + doctorId);
+            System.out.println("UserID: " + userId);
+            return;
+        }
+        // if (doc)
+            // patientId + docId
+        // if (user)
+            // userId + docId
+        final String channelName = (userId.substring(Math.max(0, userId.length() - 10))) + (doctorId.substring(Math.max(0, doctorId.length() - 10)));
         // Token object
         RtcTokenBuilder token = new RtcTokenBuilder();
         // Time stamp used for length of token
         int timestamp = (int)(System.currentTimeMillis() / 1000 + expirationTimeInSeconds);
-        // User Id set to 0 for auto handling by Agora // TODO
+        // User Id set to 0 for auto handling by Agora
         int uid = 0;
         try {
             // Create a token using Agora Sdk
@@ -276,11 +342,15 @@ public class video_call extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // Join the channel with the given token and channel name
         mRtcEngine.joinChannel(agora_token, channelName, "", uid);
     }
 
+    /**
+     * Calls the method once the activity is destroyed.
+     * We should destroy our Agora engine instance
+     */
     @Override
-    // Activity Event called when activity is closed
     protected void onDestroy() {
         super.onDestroy();
         // IF still in a call
@@ -291,21 +361,42 @@ public class video_call extends AppCompatActivity {
         RtcEngine.destroy();
     }
 
+    /**
+     * Leaves the current channel conn.
+     */
     private void leaveChannel() {
+        // Leave the current channel
         mRtcEngine.leaveChannel();
     }
 
+    /**
+     * When the local audio is muted, we should adjust the buttons and audio stream
+     * @param view - The current view of the video call
+     */
     public void onLocalAudioMuteClicked(View view) {
+        // Change the value of muted
         mMuted = !mMuted;
+        // Update the agora engine with the mute
         mRtcEngine.muteLocalAudioStream(mMuted);
+        // Get the correct mute button
         int res = mMuted ? R.drawable.btn_mute : R.drawable.btn_unmute;
+        // Apply the correct img
         mMuteBtn.setImageResource(res);
     }
 
+    /**
+     * Called to switch the camera from front/back
+     * @param view - The current view of the video call
+     */
     public void onSwitchCameraClicked(View view) {
+        // Switch the camera
         mRtcEngine.switchCamera();
     }
 
+    /**
+     * When the connect button is selected this method sets/hides the button images
+     * @param view - The current view of the video call
+     */
     public void onCallClicked(View view) {
         if (mCallEnd) {
             startCall();
@@ -319,17 +410,32 @@ public class video_call extends AppCompatActivity {
         showButtons(!mCallEnd);
     }
 
+    /**
+     * Called to start the call but only if a firebase auth token exists
+     */
     private void startCall() {
+        // If firebase isn't auth don't call
+        if (mUser == null) return;
         setupLocalVideo();
         joinChannel();
     }
 
+    /**
+     * Called to 'hang up' the connection and remove all assets required
+     */
     private void endCall() {
         removeLocalVideo();
         removeRemoteVideo();
         leaveChannel();
+        // go back to home screen after selected end call
+        startActivity(new Intent(this, MainActivity.class));
+        // Prevent back button back into the call
+        finish();
     }
 
+    /**
+     * Called to remove the local video from the call conn.
+     */
     private void removeLocalVideo() {
         if (mLocalView != null) {
             mLocalContainer.removeView(mLocalView);
@@ -337,9 +443,21 @@ public class video_call extends AppCompatActivity {
         mLocalView = null;
     }
 
+    /**
+     * Called to either show/hide buttons
+     * @param show - The boolean status of the call connection
+     */
     private void showButtons(boolean show) {
         int visibility = show ? View.VISIBLE : View.GONE;
         mMuteBtn.setVisibility(visibility);
         mSwitchCameraBtn.setVisibility(visibility);
+    }
+
+    /**
+     * Called to give the video call class it's token from this class
+     * @param docId - The accessed doctor id from the db
+     */
+    protected static void accessDocId(String docId) {
+        doctorId = docId;
     }
 }

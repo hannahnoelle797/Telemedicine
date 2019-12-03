@@ -28,6 +28,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * @author - David Howard
+ */
 public class Signup extends AppCompatActivity {
 
     //TODO : Address, FullName (Instead of firstN + lastN), D.O.B, Phone#
@@ -49,6 +52,7 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        // Get references and populate spinners
         spinner = (Spinner) findViewById(R.id.patientOrDocSPIN);
         String [] patientOrDoctor = new String[] {"I am a patient", "I am a doctor"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, patientOrDoctor);
@@ -93,6 +97,10 @@ public class Signup extends AppCompatActivity {
                 }
             }
 
+            /**
+             * If nothing is selected in the spinner we call this
+             * @param parentView - The TopLevel View (parent)
+             */
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 ssnET.setHint(getResources().getString(R.string.socialNumHint));
@@ -101,7 +109,10 @@ public class Signup extends AppCompatActivity {
         });
     }
 
-    // Button Click for activity_signup.xml
+    /**
+     * Handles the button clicks from 'activity_signup.xml'
+     * @param view - The current view
+     */
     public void onClick(View view) {
         // Create intent to switch between views
         Intent intent;
@@ -137,6 +148,11 @@ public class Signup extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when we need to create a user with firebase auth
+     * @param email - The selected email from the edittext field
+     * @param password - The selected password from the edittext field
+     */
     private void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -158,6 +174,10 @@ public class Signup extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Called when the firebase auth was successful and passes our current fUser
+     * @param user - The current signed-in user after creating
+     */
     protected void onAuthSuccess(FirebaseUser user) {
         // Write data to user object
         if (spinner.getSelectedItem().equals("I am a patient")) {
@@ -178,7 +198,16 @@ public class Signup extends AppCompatActivity {
         finish();
     }
 
-    // Add data from the user to the database
+    /**
+     * Called when the user is auth'd, add User to db table
+     * @param userId - The Firebase given userId
+     * @param fullName - The firstName + lastName
+     * @param email - The current Email
+     * @param streetAddress - The current street address
+     * @param phoneNum - The current phoneNumber
+     * @param gender - The current gender
+     * @param last4SSN - Last 4 of SSN
+     */
     protected void addUserLocally(String userId, String fullName, String email, String streetAddress, String phoneNum, String gender, int last4SSN) {
         User user = new User(userId, fullName, email, streetAddress, phoneNum, gender, last4SSN);
         if (mAuth.getCurrentUser() == null) {
@@ -187,7 +216,17 @@ public class Signup extends AppCompatActivity {
         mDatabase.child("Users").child(userId).setValue(user);
     }
 
-    // Add data from the doctor to the database
+    /**
+     * Called when the doctor is auth'd, add Doctor to the db table
+     * @param docId - Firebase given userid
+     * @param fullName - firstName + lastName
+     * @param email - The current Email
+     * @param streetAddress - The current street address
+     * @param phoneNum - The current phoneNumber
+     * @param gender - The current gender
+     * @param docString - 'Dr' + fullName
+     * @param empNum - The work given id of doc
+     */
     protected void addDocLocally(String docId, String fullName, String email, String streetAddress, String phoneNum, String gender, String docString, int empNum) {
         Doctor doctor = new Doctor(docId, fullName, email, streetAddress, phoneNum, gender, docString, empNum);
         if (mAuth.getCurrentUser() == null) {
@@ -196,6 +235,11 @@ public class Signup extends AppCompatActivity {
         mDatabase.child("Doctor").child(docId).setValue(doctor);
     }
 
+    /**
+     * Get the last 4 char of a string
+     * @param numSeq - String given
+     * @return - Returns the last 4 char of string
+     */
     protected String getLastFour(String numSeq) {
         if (numSeq.length() > 4) {
             return (numSeq.substring(numSeq.length() - 4));
