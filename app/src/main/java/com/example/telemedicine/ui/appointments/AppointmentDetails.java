@@ -187,7 +187,6 @@ public class AppointmentDetails extends AppCompatActivity {
                 String[] coor = loc.getLatlong().split(",");
                 double latitude = Double.parseDouble(coor[0]);
                 double longitude = Double.parseDouble(coor[1]);
-                System.out.println("LATITUDE AND LONGITUDE " + coor[0] + " " + coor[1] + " LATITUDE AND LONGITUDE");
                 LatLng hospital = new LatLng(latitude, longitude);
                 googleMap.addMarker(new MarkerOptions().position(hospital).title(loc.getName()));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hospital, 15));

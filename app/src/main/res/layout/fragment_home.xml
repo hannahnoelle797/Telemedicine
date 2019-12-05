@@ -14,7 +14,7 @@
         android:text="@string/home_welcome"
         android:textAlignment="center"
         android:textSize="45sp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorText"
         android:lines="2"
         android:maxLines="2"
         android:paddingBottom="5dp"
@@ -46,95 +46,28 @@
         android:textColor="@color/colorImportant"
         android:paddingBottom="30dp"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/text_new_mesg_1"
+        app:layout_constraintBottom_toTopOf="@id/grid_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_nextAppt" />
 
-    <TextView
-        android:id="@+id/text_new_mesg_1"
+    <GridView
+        android:id="@+id/grid_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_new_mesgs_1"
-        android:paddingTop="30dp"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/text_new_mesg_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appt_nextAppt"/>
-
-    <TextView
-        android:id="@+id/text_new_mesg_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_num_mesgs"
-        android:textAlignment="center"
-        android:textColor="@color/colorImportant"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@id/text_new_mesg_3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_new_mesg_1"/>
-
-    <TextView
-        android:id="@+id/text_new_mesg_3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_new_mesgs_2"
-        android:paddingBottom="30dp"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/text_new_reports_1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_new_mesg_2"/>
-
-    <TextView
-        android:id="@+id/text_new_reports_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_new_reports_1"
-        android:paddingTop="30dp"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/text_new_reports_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_new_mesg_3" />
-
-    <TextView
-        android:id="@+id/text_new_reports_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_num_reports"
-        android:textAlignment="center"
-        android:textColor="@color/colorImportant"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@id/text_new_mesg_3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_new_reports_1" />
-
-    <TextView
-        android:id="@+id/text_new_reports_3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_new_reports_2"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="30sp"
+        android:layout_height="300dp"
+        android:numColumns="2"
+        android:columnWidth="90dp"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
+        android:gravity="center"
+        android:stretchMode="columnWidth"
+        app:layout_constraintTop_toBottomOf="@id/appt_nextAppt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_new_reports_2"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent">
+
+    </GridView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

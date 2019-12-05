@@ -137,18 +137,15 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
                         appointments.add(arr);
                         upcomingApptIDs.add(a.getApptID());
 
-                        System.out.println("APPOINTMENT APPOINTMENT " + a.getApptID() + " TODAY TODAY " + todayid);
                         appt_id = a.getApptID();
                         float today_id = Float.parseFloat(todayid);
                         today_id += 1000000;
                         float apptid = Float.parseFloat(appt_id);
-                        System.out.println("DIFFERENCE " + (apptid - today_id));
                         if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
                             dif_upcom_appt = apptid - today_id;
                             upcoming_appt = a.getApptID();
                             date = a.getDateTime();
                             nextApptID = a.getApptID();
-                            System.out.println("APPOINTMENT DATE: " + date);
                             updateApptDate();
                         }
                     }
@@ -209,7 +206,6 @@ public class AppointmentsFragment extends Fragment implements RecyclerItem.OnRep
     }
 
     public void updateApptDate(){
-        System.out.println("DATE DATE DATE DATE: " + date);
         nextAppt.setText("Next Appointment: " + date);
     }
 

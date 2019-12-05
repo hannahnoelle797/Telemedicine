@@ -85,4 +85,5 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="flaticon">Designed by https://www.flaticon.com/authors/smashicons from www.flaticon.com</string>
 </resources>

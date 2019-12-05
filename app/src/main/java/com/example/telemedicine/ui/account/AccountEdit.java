@@ -76,7 +76,7 @@ public class AccountEdit extends AppCompatActivity {
                             break;
                         }
                     }catch(NullPointerException e){
-                        System.out.println("User ID is null");
+
                     }
                 }
             }

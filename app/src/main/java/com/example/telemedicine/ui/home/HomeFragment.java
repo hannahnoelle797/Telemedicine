@@ -6,22 +6,30 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.Appointment;
 import com.example.telemedicine.models.User;
 import com.example.telemedicine.models.Doctor;
 import com.example.telemedicine.ui.appointments.AppointmentDetails;
+import com.example.telemedicine.ui.appointments.AppointmentsFragment;
+import com.example.telemedicine.ui.chats.ChatsFragment;
+import com.example.telemedicine.ui.reports.ReportsFragment;
+import com.example.telemedicine.ui.utilities.settings;
 import com.example.telemedicine.ui.utilities.RecyclerItemOld;
 import com.example.telemedicine.ui.utilities.RecyclerItemClickListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +41,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -58,6 +67,10 @@ public class HomeFragment extends Fragment {
     float dif_upcom_appt = 1000000;
     int idx_upcom_appt = 0;
 
+    List<String> list;
+    int[] imageId = {R.drawable.homecalendar, R.drawable.homefile, R.drawable.homesmartphone, R.drawable.homesettings};
+    String[] web = {"Appointments", "Reports", "Chats", "Settings"};
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -68,6 +81,43 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
+            }
+        });
+
+        ImageAdapter adapter = new ImageAdapter(getContext(), web, imageId);
+        GridView grid = (GridView)root.findViewById(R.id.grid_view);
+        grid.setAdapter(adapter);
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getContext(), "Int: " + i, Toast.LENGTH_SHORT).show();
+                switch (i){
+                    case 0:
+                        Fragment apptFrag = new AppointmentsFragment();
+                        FragmentTransaction apptTrans = getFragmentManager().beginTransaction();
+                        apptTrans.replace(R.id.nav_host_fragment, apptFrag);
+                        apptTrans.addToBackStack(null);
+                        apptTrans.commit();
+                        break;
+                    case 1:
+                        Fragment reportFrag = new ReportsFragment();
+                        FragmentTransaction reportTrans = getFragmentManager().beginTransaction();
+                        reportTrans.replace(R.id.nav_host_fragment, reportFrag);
+                        reportTrans.addToBackStack(null);
+                        reportTrans.commit();
+                        break;
+                    case 2:
+                        Fragment chatFrag = new ChatsFragment();
+                        FragmentTransaction chatTrans = getFragmentManager().beginTransaction();
+                        chatTrans.replace(R.id.nav_host_fragment, chatFrag);
+                        chatTrans.addToBackStack(null);
+                        chatTrans.commit();
+                        break;
+                    case 3:
+                        Intent intent4 = new Intent(getContext(), settings.class);
+                        startActivity(intent4);
+                        break;
+                }
             }
         });
 
@@ -91,7 +141,6 @@ public class HomeFragment extends Fragment {
                             updateName(username);
                         }
                     }catch(NullPointerException e){
-                        System.out.println("Not a user. Is a doctor");
                         break;
                     }
                 }
@@ -135,17 +184,13 @@ public class HomeFragment extends Fragment {
                     Appointment a = child.getValue(Appointment.class);
                     // TODO: App crashes if no user logged-in
                     if (a.getUserID().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                        System.out.println("APPOINTMENT APPOINTMENT " + a.getApptID() + " TODAY TODAY " + todayid);
                         appt_id = a.getApptID();
                         float today_id = Float.parseFloat(todayid);
                         float apptid = Float.parseFloat(appt_id);
-                        System.out.println("DIFFERENCE " + (apptid - today_id));
-                        System.out.print("Difference: " + (apptid-today_id) + " Current difference " + dif_upcom_appt);
                         if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
                             dif_upcom_appt = apptid - today_id;
                             upcoming_appt = a.getApptID();
                             date = a.getDateTime();
-                            System.out.println("APPOINTMENT DATE: " + date);
                             updateApptDate();
                             break;
                         }
