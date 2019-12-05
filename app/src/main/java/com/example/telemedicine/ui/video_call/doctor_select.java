@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.Doctor;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,9 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-/**
- * @author - David Howard
- */
 public class doctor_select extends AppCompatActivity {
 
     // Globals
@@ -33,7 +31,10 @@ public class doctor_select extends AppCompatActivity {
     RadioGroup doctorGroup;
     RadioButton btn1, btn2, btn3;
     Button submitBtn;
-    String docId;
+    DatabaseReference mDatabase;
+    FirebaseAuth mAuth;
+    Intent intent;
+    boolean isDoc = false;
 
 
     @Override
@@ -48,8 +49,31 @@ public class doctor_select extends AppCompatActivity {
         btn3 = (RadioButton)findViewById(R.id.doctorThreeRB);
         submitBtn = (Button)findViewById(R.id.doctorSelectBtn);
         doctorList = new ArrayList<>();
-        // Init docId to 0
-        docId = "0";
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabaseDocs = mDatabase.child("Doctor");
+        mAuth = FirebaseAuth.getInstance();
+
+        intent = new Intent(doctor_select.this, video_call.class);
+
+        isDoctor(mAuth.getUid(), new MyCallback() {
+            @Override
+            public void onBoolCallback(Boolean value) {
+                isDoc = value;
+                if (isDoc) {
+                    System.out.println("True");
+                    intent.putExtra("isDoc", isDoc);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    System.out.println("False");
+                }
+            }
+
+            @Override
+            public void Callback(String value) {
+
+            }
+        });
 
         // Populate the layout with db doctors
         mDatabaseDocs = FirebaseDatabase.getInstance().getReference("Doctor");
@@ -81,14 +105,10 @@ public class doctor_select extends AppCompatActivity {
                 if (doctorGroup.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(getApplicationContext(), "Please select a doctor...", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent;
                     int selectedRbId = doctorGroup.getCheckedRadioButtonId();
                     RadioButton selectedRb = (RadioButton)findViewById(selectedRbId);
                     String doctorString = selectedRb.getText().toString();
-                    intent = new Intent(doctor_select.this, video_call.class);
-                    // Assign doctor id to video_call statically
-                    getDocId(doctorString);
-                    // Start video call class
+                    intent.putExtra("docString", doctorString);
                     startActivity(intent);
                     finish();
                 }
@@ -96,20 +116,15 @@ public class doctor_select extends AppCompatActivity {
         });
     }
 
-    /**
-     * Called to get the correct doctor id from the db
-     * @param docName - The selected doctor (String)
-     */
-    protected void getDocId(final String docName) {
-        mDatabaseDocs.addListenerForSingleValueEvent(new ValueEventListener() {
+    protected void isDoctor (final String userId, final MyCallback callback) {
+        mDatabase.child("Doctor").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Doctor docs = child.getValue(Doctor.class);
                     assert docs != null;
-                    if (docName.equals(docs.getDocString())) {
-                        docId = docs.getDocID();
-                        video_call.accessDocId(docId);
+                    if (userId.equals(docs.getDocID())) {
+                        callback.onBoolCallback(userId.equals(docs.getDocID()));
                     }
                 }
             }

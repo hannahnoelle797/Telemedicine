@@ -17,12 +17,19 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.telemedicine.BuildConfig;
 import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
+import com.example.telemedicine.models.Doctor;
 import com.example.telemedicine.ui.video_call.Agora_Tokens.media.RtcTokenBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -59,13 +66,17 @@ public class video_call extends AppCompatActivity {
     private ImageView mSwitchCameraBtn;
 
     private FirebaseUser mUser;
+    // Used to get firebase current auth token
     // private Task<GetTokenResult> mToken;
 
     private String agora_token;
     private static String doctorId;
+    private String channelName;
     // Agora token expire time
     static int expirationTimeInSeconds = 3600;
 
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     /**
      * Event handler registered into RTC engine for RTC callbacks.
@@ -169,17 +180,39 @@ public class video_call extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            doctorId = extras.getString("doctorSelect");
-            System.out.println("DocID: " + doctorId);
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        if (extras == null) {
+            doctorId = null;
+        } else {
+            if (extras.getBoolean("isDoc")) {
+                channelName = (Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).substring(Math.max(0, mAuth.getCurrentUser().getUid().length() - 10));
+                Toast.makeText(getBaseContext(), "This is a doctor: " + channelName, Toast.LENGTH_LONG).show();
+            } else {
+                String doctorString = extras.getString("docString");
+                setDocId(doctorString, new MyCallback() {
+                    @Override
+                    public void onBoolCallback(Boolean value) {
+
+                    }
+
+                    @Override
+                    public void Callback(String value) {
+                        doctorId = value;
+                    }
+                });
+
+                if (doctorId == null || doctorId.length() <= 0) {
+                    System.out.println("UH OH DAVID HOWARD");
+                } else {
+                    channelName = (doctorId.substring(Math.max(0, doctorId.length() - 10)));
+                    Toast.makeText(getBaseContext(), "This is a patient: " + channelName, Toast.LENGTH_LONG).show();
+                    System.out.println("DocID: " + doctorId);
+                }
+            }
         }
         initUI();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        // If valid Firebase auth token
-        /*
-        if (mUser != null) {
-            // Create an agora token when ready TODO
-        } */
 
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                 checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
@@ -214,7 +247,6 @@ public class video_call extends AppCompatActivity {
         }
         return true;
     }
-
 
     /**
      *
@@ -318,23 +350,17 @@ public class video_call extends AppCompatActivity {
     private void joinChannel() {
         // Get the User Id for the current user
         final String userId = mUser.getUid();
-        // Assign a channel name using the doctorId and userId
-        if (doctorId.length() < 10) {
-            System.out.println("DocID: " + doctorId);
-            System.out.println("UserID: " + userId);
-            return;
-        }
-        // if (doc)
-            // patientId + docId
-        // if (user)
-            // userId + docId
-        final String channelName = (userId.substring(Math.max(0, userId.length() - 10))) + (doctorId.substring(Math.max(0, doctorId.length() - 10)));
+        // User Id set to 0 for auto handling by Agora
+        int uid = 0;
         // Token object
         RtcTokenBuilder token = new RtcTokenBuilder();
         // Time stamp used for length of token
         int timestamp = (int)(System.currentTimeMillis() / 1000 + expirationTimeInSeconds);
-        // User Id set to 0 for auto handling by Agora
-        int uid = 0;
+
+        String uId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
+        addCallToDb(uId); // Add current user to db for active calls
+
         try {
             // Create a token using Agora Sdk
             agora_token = token.buildTokenWithUid(getString(R.string.agora_app_id), getString(R.string.agora_app_certificate),
@@ -427,6 +453,7 @@ public class video_call extends AppCompatActivity {
         removeLocalVideo();
         removeRemoteVideo();
         leaveChannel();
+        removeCallFromDb(mUser.getUid());
         // go back to home screen after selected end call
         startActivity(new Intent(this, MainActivity.class));
         // Prevent back button back into the call
@@ -454,10 +481,35 @@ public class video_call extends AppCompatActivity {
     }
 
     /**
-     * Called to give the video call class it's token from this class
-     * @param docId - The accessed doctor id from the db
+     * Called to get the correct doctor id from the db
+     * @param docName - The selected doctor (String)
      */
-    protected static void accessDocId(String docId) {
-        doctorId = docId;
+    protected void setDocId(final String docName, final MyCallback myCallback) {
+        // Populate the layout with db doctors
+        DatabaseReference mDocDatabase = FirebaseDatabase.getInstance().getReference("Doctor");
+        mDocDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Doctor docs = child.getValue(Doctor.class);
+                    assert docs != null;
+                    if (docName.equals(docs.getDocString())) {
+                        doctorId = docs.getDocID();
+                        myCallback.Callback(doctorId);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+
+    protected void addCallToDb(String userId) {
+        mDatabase.child("Active Calls").child(userId).setValue("In call");
+    }
+
+    protected void removeCallFromDb(String userId) {
+        mDatabase.child("Active Calls").child(userId).removeValue();
     }
 }

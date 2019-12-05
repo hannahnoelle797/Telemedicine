@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
                     try {
                         Doctor d = child.getValue(Doctor.class);
                         if (d.getDocID().equalsIgnoreCase(userid)) {
-                            username = "Dr. " + d.getFullName();
+                            username = d.getDocString();
                             updateName(username);
                         }
                     }catch(DatabaseException e){
