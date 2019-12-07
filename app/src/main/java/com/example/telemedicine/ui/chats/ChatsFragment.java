@@ -2,6 +2,7 @@ package com.example.telemedicine.ui.chats;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.telemedicine.models.Doctor;
+import com.example.telemedicine.ui.messaging.MessageActivity;
 import com.example.telemedicine.ui.utilities.RecyclerItemBtn;
 import com.example.telemedicine.ui.utilities.RecyclerItemClickListener;
 import com.example.telemedicine.ui.utilities.RecyclerItemOldBtn;
@@ -42,11 +46,16 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
     //this user id will be the patientId.
     private ArrayList<String> chatListIds;
     private ArrayList<String> doctorIds;
+    private ArrayList<String> patientIds;
     private ArrayList<String> doctorNames;
+    private ArrayList<String> patientNames;
     private String[] chatList;
-
+    private int buttonCheck;
     private View root;
     private Button btn;
+    private String userId;
+    private boolean isDoctor;
+    private Intent intent;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         chatsViewModel =
@@ -54,58 +63,235 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
 
         root = inflater.inflate(R.layout.fragment_chatpage, container, false);
         final TextView textView = root.findViewById(R.id.chat_heading);
-        dbChats = FirebaseDatabase.getInstance().getReference("Chats");
+        dbChats = FirebaseDatabase.getInstance().getReference("Chat");
         dbUser = FirebaseDatabase.getInstance().getReference("Users");
         dbDoctor = FirebaseDatabase.getInstance().getReference("Doctor");
         //get the list of chats the user has.
         doctorIds = new ArrayList<>();
         chatListIds = new ArrayList<>();
+        patientIds = new ArrayList<>();
         doctorNames = new ArrayList<>();
+        patientNames = new ArrayList<>();
         chatList = new String[1];
-
-        dbChats.addValueEventListener(new ValueEventListener() {
+        buttonCheck = 0;
+        isDoctor = false;
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        dbDoctor.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                for(DataSnapshot child : dataSnapshot.getChildren()){
-                    Chat c = child.getValue(Chat.class);
-                    if(userId.equals(c.getPatientId()) && c.isStatus()){
-                        chatListIds.add(c.getChatId());
-                        doctorIds.add(c.getDoctorId());
-                        doctorNames.add(c.getDoctorName());
-                    }
+                for(DataSnapshot child: dataSnapshot.getChildren()){
+                    Doctor d = child.getValue(Doctor.class);
+                    if(d.getDocID().equalsIgnoreCase(userId)) isDoctor = true;
                 }
-                if(doctorNames.size()> 0){
-                    chatList = doctorNames.toArray(new String[doctorNames.size()]);
+                if(isDoctor){
+                    dbChats.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot child : dataSnapshot.getChildren()){
+                                Chat c = child.getValue(Chat.class);
+                                if(userId.equalsIgnoreCase(c.getDoctorId())){
+                                    chatListIds.add(c.getChatId());
+                                    patientIds.add(c.getPatientId());
+                                    patientNames.add(c.getPatientName());
+                                }
+                            }
+                            if(patientNames.size()>0){
+                                chatList = patientNames.toArray(new String[patientNames.size()]);
+                            }else{
+                                chatList[0] = "No Chats yet.";
+                            }
+                            populateRecyclers(root);
+                            btn = (Button)root.findViewById(R.id.button_new_chat);
+                            buttonCheck = 0;
+                            dbUser.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot child : dataSnapshot.getChildren()){
+                                        buttonCheck++;
+                                    }
+                                    System.out.println("PatientNames.Size:  " + patientNames.size());
+                                    if(buttonCheck==patientNames.size()){
+                                        btn.setBackgroundColor(getResources().getColor(R.color.unClickBtn));
+                                        btn.setClickable(false);
+                                    }else{
+                                        btn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Intent i;
+                                                i = new Intent(getContext(), ChatCreation.class);
+                                                startActivity(i);
+                                            }
+                                        });
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }else{
-                    chatList[0] = "No Chats yet.";
+                    dbChats.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot child : dataSnapshot.getChildren()){
+                                Chat c = child.getValue(Chat.class);
+                                if(userId.equals(c.getPatientId()) && c.isStatus()){
+                                    chatListIds.add(c.getChatId());
+                                    doctorIds.add(c.getDoctorId());
+                                    doctorNames.add(c.getDoctorName());
+                                }
+                            }
+                            if(doctorNames.size()> 0){
+                                chatList = doctorNames.toArray(new String[doctorNames.size()]);
+                            }else{
+                                chatList[0] = "No Chats yet.";
+                            }
+                            populateRecyclers(root);
+                            btn = (Button)root.findViewById(R.id.button_new_chat);
+                            buttonCheck = 0;
+                            dbDoctor.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot child : dataSnapshot.getChildren()){
+                                        Doctor d = child.getValue(Doctor.class);
+                                        buttonCheck++;
+                                    }
+                                    if(buttonCheck==doctorNames.size()){
+                                        btn.setBackgroundColor(getResources().getColor(R.color.unClickBtn));
+                                        btn.setClickable(false);
+                                    }else {
+                                        btn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent i;
+                                                i = new Intent(getContext(), ChatCreation.class);
+                                                startActivity(i);
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+
+                    });
+
+
                 }
-                populateRecyclers(root);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });
 
-        });
-        btn = (Button)root.findViewById(R.id.button_new_chat);
-        btn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent i;
-                i = new Intent(getContext(), ChatCreation.class);
-                startActivity(i);
-            }
-        });
         return root;
     }
     @Override
     public void OnReportClickListener(int pos){
-       Intent intent = new Intent(getContext(), MessageActivity.class);
-       String chatId = chatListIds.get(pos);
-       intent.putExtra("EXTRA_SESSION_ID", chatId);
-       startActivity(intent);
+       intent = new Intent(getContext(), MessageActivity.class);
+       isDoctor = false;
+       final int position = pos;
+//       final String chatId = chatListIds.get(pos);
+//       System.out.println("ChatId in Chat Fragment: " + chatId);
+//       intent.putExtra("EXTRASESSIONID", chatId);
+//       startActivity(intent);
+       dbDoctor.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               for(DataSnapshot child : dataSnapshot.getChildren()){
+                   Doctor d = child.getValue(Doctor.class);
+                   if(userId.equalsIgnoreCase(d.getDocID())){
+                       isDoctor = true;
+                   }
+               }
+               System.out.println("ISDoctor:  " + isDoctor);
+               if(isDoctor){
+                   dbChats.addValueEventListener(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                           ArrayList<String> chatListIds = new ArrayList<>();
+                           String name = "";
+                           long x = dataSnapshot.getChildrenCount();
+                           for(DataSnapshot child : dataSnapshot.getChildren()){
+                               x--;
+                               Chat c = child.getValue(Chat.class);
+                               if(userId.equalsIgnoreCase(c.getDoctorId())){
+                                   chatListIds.add(c.getChatId());
+                                   name = c.getDoctorName();
+                               }
+                               if(x==0){
+                                   final String chatId = chatListIds.get(position);
+                                   intent.putExtra("chatid", chatId);
+                                   intent.putExtra("name", name);
+                                   startActivity(intent);
+                               }
+                           }
 
+                       }
+
+                       @Override
+                       public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                       }
+                   });
+               }else{
+
+                   dbChats.addValueEventListener(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                           ArrayList<String> chatListIds = new ArrayList<>();
+                           String name = "";
+                           long x = dataSnapshot.getChildrenCount();
+                           for(DataSnapshot child : dataSnapshot.getChildren()){
+                               x--;
+                               Chat c = child.getValue(Chat.class);
+                               if(userId.equalsIgnoreCase(c.getPatientId())){
+                                   chatListIds.add(c.getChatId());
+                                   name = c.getPatientName();
+                               }
+                               if(x==0){
+                                   final String chatId = chatListIds.get(position);
+                                   intent.putExtra("chatid", chatId);
+                                   intent.putExtra("name", name);
+                                   startActivity(intent);
+                               }
+                           }
+
+                       }
+
+                       @Override
+                       public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                       }
+                   });
+
+               }
+
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
     }
 
     public void populateRecyclers(View root){

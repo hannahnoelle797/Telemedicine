@@ -2,43 +2,37 @@ package com.example.telemedicine.models;
 
 public class Doctor {
 
-    String firstName, lastName, email, password, docID, docString; //docString is concatenation of "Dr. " + firstName + lastName
+    String fullName, email, street, phoneNum, gender, docID, docString; //docString is concatenation of "Dr. " + firstName + lastName
     int empNum;
 
     public Doctor(){
-        firstName = "";
-        lastName = "";
-        email = "";
-        password = "";
         docID = "";
+        fullName = "";
+        email = "";
+        street = "";
+        phoneNum = "";
+        gender = "";
         docString = "";
         empNum = 0;
     }
 
-    public Doctor(String firstName, String lastName, String email, String password, String docID, String docString, int empNum) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
+    public Doctor(String docID, String fullName, String email, String streetAddress, String phoneNum, String gender, String docString, int empNum) {
         this.docID = docID;
+        this.fullName = fullName;
+        this.email = email;
+        this.street = streetAddress;
+        this.phoneNum = phoneNum;
+        this.gender = gender;
         this.docString = docString;
         this.empNum = empNum;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -49,12 +43,28 @@ public class Doctor {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getStreet() {
+        return street;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getDocID() {

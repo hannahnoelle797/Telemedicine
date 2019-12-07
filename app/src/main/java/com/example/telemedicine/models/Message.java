@@ -4,7 +4,7 @@ package com.example.telemedicine.models;
 public class Message {
     //creates a message table that connects to the chat table.
     //the message table holds the message content, read and delete status', and date sent.
-    private String messageId, chatId, senderId, recipientId, messageContent;
+    private String messageId, chatId, senderName,senderId, recipientId, messageContent;
     private boolean readStatus, mStatus;
     private Date dateSent;
 
@@ -12,12 +12,13 @@ public class Message {
         this.readStatus = false;
         this.mStatus = true;
     }
-    public Message(String messageID, String chatId, String senderId, String recipientId, String messageContent, Date dateSent){
+    public Message(String messageID, String chatId, String senderId, String senderName, String recipientId, String messageContent, Date dateSent){
         this.messageContent = messageContent;
         this.messageId = messageID;
         this.dateSent = dateSent;
         this.chatId = chatId;
         this.senderId = senderId;
+        this.senderName = senderName;
         this.recipientId = recipientId;
         this.readStatus = false;
         this.mStatus = true;
@@ -44,23 +45,29 @@ public class Message {
     }
     public void setMessageId(String id) { this.messageId = id; }
 
-    public String getMessage() {
+    public String getMessageContent() {
         return messageContent;
     }
-    public void setMessage(String message) {this.messageContent = message;}
+    public void setMessageContent(String message) {this.messageContent = message;}
 
-    public String getSenderId() {
-        return senderId;
+    public String getSenderName() {
+        return senderName;
     }
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
-
+    public String getSenderId(){
+        return this.senderId;
+    }
+    public void setSenderId(String senderId) {this.senderId = senderId;}
     public String getRecipientId() {
-        return recipientId;
+        return this.recipientId;
     }
 
     public void setRecipientId(String recipientId) {
         this.recipientId = recipientId;
+    }
+    public String getChatId(){
+        return this.chatId;
     }
 }

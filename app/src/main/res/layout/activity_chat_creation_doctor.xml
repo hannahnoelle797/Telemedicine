@@ -10,36 +10,36 @@
         android:id="@+id/chat_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chat with your Doctor(s)"
+        android:text="Chat with your Patient(s)"
         android:textSize="16pt"
         android:textColor="@color/colorText"
         android:textAlignment="center"
         android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@id/doctor_text"
+        app:layout_constraintBottom_toTopOf="@id/patient_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/doctor_text"
+        android:id="@+id/patient_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:text="Select a Doctor"
+        android:text="Select a Patient"
         android:textAlignment="gravity"
         android:gravity="start"
         android:textSize="23sp"
         android:textColor="@color/colorText"
         app:layout_constraintTop_toBottomOf="@+id/chat_heading"
-        app:layout_constraintBottom_toTopOf="@+id/doctor_spinner"
+        app:layout_constraintBottom_toTopOf="@+id/patient_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
     </TextView>
 
     <Spinner
-        android:id="@+id/doctor_spinner"
+        android:id="@+id/patient_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -48,7 +48,7 @@
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/doctor_text"
+        app:layout_constraintTop_toBottomOf="@+id/patient_text"
         app:layout_constraintBottom_toTopOf="@id/button_new_chat">
     </Spinner>
 
@@ -62,7 +62,7 @@
         android:clickable="true"
         android:text="Create New Chat"
         android:onClick="btnClicked"
-        app:layout_constraintTop_toBottomOf="@id/doctor_spinner"
+        app:layout_constraintTop_toBottomOf="@id/patient_spinner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

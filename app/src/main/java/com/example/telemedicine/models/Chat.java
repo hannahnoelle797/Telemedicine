@@ -1,16 +1,20 @@
 package com.example.telemedicine.models;
 import java.util.ArrayList;
-public class Chat {
+public class  Chat {
     //ChatID used for categorizing the messages by conversation.
 
-    private String chatId, doctorId, doctorName, patientId;
+    private String chatId, doctorId, doctorName, patientId, patientName;
     //status allows the user to delete chats from their device but does not delete from DB.
     private boolean status;
-    public Chat(String chatID, String doctorId, String doctorName, String patientId) {
+    public Chat(){
+        this.status = true;
+    }
+    public Chat(String chatID, String doctorId, String doctorName, String patientId, String patientName) {
         this.chatId = chatID;
         this.doctorId = doctorId;
         this.doctorName = doctorName;
         this.patientId = patientId;
+        this.patientName = patientName;
         this.status = true;
     }
     //add messages to the chat.
@@ -41,7 +45,7 @@ public class Chat {
     public String getPatientId() {
         return patientId;
     }
-
+    public String getPatientName() { return patientName;}
     public void setPatientId(String p) {
         this.patientId = p;
     }

@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.R;
 import com.example.telemedicine.models.Doctor;
 import com.example.telemedicine.models.User;
@@ -27,33 +28,44 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Signup extends AppCompatActivity {
+/**
+ * @author - David Howard
+ */
+public class  Signup extends AppCompatActivity {
 
     //TODO : Address, FullName (Instead of firstN + lastN), D.O.B, Phone#
 
     // Global Variables
-    private EditText firstNameET, lastNameET, emailET, confirmEmailET, ssnET, confirmSSNET, passwordET, confirmPasswordET;
+    private EditText fullNameET, emailET, confirmEmailET, ssnET, confirmSSNET, phoneNumET, streetET, passwordET, confirmPasswordET;
+    private Spinner genderSpinner;
     private Spinner spinner;
 
     // Firebase auth instance
     private FirebaseAuth mAuth;
+    // Firebase userDB
+    protected DatabaseReference mDatabase;
     // log tag
     private final String TAG = "Signup.java";
-    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        // Get references and populate spinners
         spinner = (Spinner) findViewById(R.id.patientOrDocSPIN);
         String [] patientOrDoctor = new String[] {"I am a patient", "I am a doctor"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, patientOrDoctor);
         spinner.setAdapter(spinnerAdapter);
-        firstNameET = (EditText) findViewById(R.id.firstNameET);
-        lastNameET = (EditText) findViewById(R.id.lastNameET);
+        fullNameET = (EditText)findViewById(R.id.fullnameET);
+        genderSpinner = (Spinner)findViewById(R.id.genderSpin);
+        String [] genderOptions = new String[] {"Male", "Female", "Other"};
+        ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, genderOptions);
+        genderSpinner.setAdapter(genderSpinnerAdapter);
         emailET = (EditText)findViewById(R.id.emailET);
         confirmEmailET = (EditText) findViewById(R.id.emailConfirmET);
+        phoneNumET = (EditText)findViewById(R.id.phoneNumET);
+        streetET = (EditText)findViewById(R.id.streetAddressET);
         ssnET = (EditText) findViewById(R.id.ssnET);
         confirmSSNET = (EditText) findViewById(R.id.ssnConfirmET);
         passwordET = (EditText)findViewById(R.id.passwordET);
@@ -61,6 +73,8 @@ public class Signup extends AppCompatActivity {
 
         // Get firebase instance
         mAuth = FirebaseAuth.getInstance();
+
+        // Establish Database instance
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Populate spinner
@@ -83,6 +97,10 @@ public class Signup extends AppCompatActivity {
                 }
             }
 
+            /**
+             * If nothing is selected in the spinner we call this
+             * @param parentView - The TopLevel View (parent)
+             */
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 ssnET.setHint(getResources().getString(R.string.socialNumHint));
@@ -91,7 +109,10 @@ public class Signup extends AppCompatActivity {
         });
     }
 
-    // Button Click for activity_signup.xml
+    /**
+     * Handles the button clicks from 'activity_signup.xml'
+     * @param view - The current view
+     */
     public void onClick(View view) {
         // Create intent to switch between views
         Intent intent;
@@ -127,7 +148,11 @@ public class Signup extends AppCompatActivity {
         }
     }
 
-    // Hash password TODO
+    /**
+     * Called when we need to create a user with firebase auth
+     * @param email - The selected email from the edittext field
+     * @param password - The selected password from the edittext field
+     */
     private void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -136,59 +161,91 @@ public class Signup extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign up Successful
                             Log.d(TAG, "createUserWithEmail:success");
-                            try {
-                                onAuthSuccess(task.getResult().getUser());
-                            } catch (NullPointerException e){
-                                // throw(e); TODO
-                                System.out.println(e);
+                            if (task.getResult().getUser() == null) {
+                                return;
                             }
-                            // UPDATE UI
+                            onAuthSuccess(task.getResult().getUser());
                         } else {
                             // If signup fails
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(Signup.this, "Auth failed..", Toast.LENGTH_SHORT).show();
-                            // UPDATE UI
                         }
                     }
                 });
     }
 
+    /**
+     * Called when the firebase auth was successful and passes our current fUser
+     * @param user - The current signed-in user after creating
+     */
     protected void onAuthSuccess(FirebaseUser user) {
         // Write data to user object
-        //TODO Test
-        // TODO remove password cleartext
-
         if (spinner.getSelectedItem().equals("I am a patient")) {
-            addUserLocally(user.getUid(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                    passwordET.getText().toString().trim(), Integer.parseInt(ssnET.getText().toString().trim()));
+            addUserLocally(user.getUid(), fullNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                    streetET.getText().toString().trim(), phoneNumET.getText().toString().trim(), genderSpinner.getSelectedItem().toString(),
+                    Integer.parseInt((getLastFour(ssnET.getText().toString().trim()))));
         } else if (spinner.getSelectedItem().equals("I am a doctor")) {
-            addDocLocally(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                passwordET.getText().toString().trim(), user.getUid(), getFullName(firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim()), Integer.parseInt(ssnET.getText().toString().trim()));
-                //System.out.println("Adding a Doctor");
+            addDocLocally(user.getUid(), fullNameET.getText().toString().trim(), emailET.getText().toString().trim(),
+                    streetET.getText().toString().trim(), phoneNumET.getText().toString().trim(), genderSpinner.getSelectedItem().toString().trim(), "Dr. ".concat(fullNameET.toString().trim()),
+                    Integer.parseInt(ssnET.getText().toString().trim()));
         } else {
             System.out.println("Uh oh");
         }
         // Display text to user to let them know that the account was created successfully
         Toast.makeText(this, "Account Created.", Toast.LENGTH_LONG).show();
         // Start new Intent
-        // TODO - Change to main activity
-        startActivity(new Intent(Signup.this, Login.class));
+        startActivity(new Intent(Signup.this, MainActivity.class));
         finish();
     }
 
-    protected void addUserLocally(String userID, String firstName, String lastName, String email, String password, int last4SSN) {
-        // TODO last 4
-        User user = new User(userID, firstName, lastName, email, password, last4SSN);
-        mDatabase.child("Users").child(userID).setValue(user);
+    /**
+     * Called when the user is auth'd, add User to db table
+     * @param userId - The Firebase given userId
+     * @param fullName - The firstName + lastName
+     * @param email - The current Email
+     * @param streetAddress - The current street address
+     * @param phoneNum - The current phoneNumber
+     * @param gender - The current gender
+     * @param last4SSN - Last 4 of SSN
+     */
+    protected void addUserLocally(String userId, String fullName, String email, String streetAddress, String phoneNum, String gender, int last4SSN) {
+        User user = new User(userId, fullName, email, streetAddress, phoneNum, gender, last4SSN);
+        if (mAuth.getCurrentUser() == null) {
+            return;
+        }
+        mDatabase.child("Users").child(userId).setValue(user);
     }
 
-    protected void addDocLocally(String firstName, String lastName, String email, String password, String docID, String docString, int empNum) {
-        System.out.println("Adding a doctor...");
-        Doctor doctor = new Doctor(firstName, lastName, email, password, docID, docString, empNum);
-        mDatabase.child("Doctor").child(docID).setValue(doctor);
+    /**
+     * Called when the doctor is auth'd, add Doctor to the db table
+     * @param docId - Firebase given userid
+     * @param fullName - firstName + lastName
+     * @param email - The current Email
+     * @param streetAddress - The current street address
+     * @param phoneNum - The current phoneNumber
+     * @param gender - The current gender
+     * @param docString - 'Dr' + fullName
+     * @param empNum - The work given id of doc
+     */
+    protected void addDocLocally(String docId, String fullName, String email, String streetAddress, String phoneNum, String gender, String docString, int empNum) {
+        Doctor doctor = new Doctor(docId, fullName, email, streetAddress, phoneNum, gender, docString, empNum);
+        if (mAuth.getCurrentUser() == null) {
+            return;
+        }
+        mDatabase.child("Doctor").child(docId).setValue(doctor);
     }
 
-    protected String getFullName(String s1, String s2) {
-        return ("Dr. " + s1 + " " + s2);
+    /**
+     * Get the last 4 char of a string
+     * @param numSeq - String given
+     * @return - Returns the last 4 char of string
+     */
+    protected String getLastFour(String numSeq) {
+        if (numSeq.length() > 4) {
+            return (numSeq.substring(numSeq.length() - 4));
+        } else {
+            // Less than 4 length
+            return numSeq;
+        }
     }
 }

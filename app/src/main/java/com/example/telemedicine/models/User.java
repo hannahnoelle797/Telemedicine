@@ -1,55 +1,86 @@
 package com.example.telemedicine.models;
 
-import java.util.ArrayList;
-
 public class User {
 
     // Global Variables
-    String firstName, lastName, email, password, userID;
+    String fullName, email, password, userID, address, phoneNum, gender;
     int lastFourSSN;
-    ArrayList<Chat> chats;
+
     // Constructor
-    public User(String firebaseUserID, String firstName, String lastName, String email, String password, int lastFourSSN) {
+    public User(String firebaseUserID, String fullName, String email, String streetAddress, String phoneNum, String gender, int lastFourSSN) {
         this.userID = firebaseUserID;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.fullName = fullName;
         this.email = email;
-        this.password = password;
+        this.address = streetAddress;
+        this.phoneNum = phoneNum;
+        this.gender = gender;
         this.lastFourSSN = lastFourSSN;
     }
 
-    public User(String firebaseUserID, String fullName, String email) { }
+    // Default Constructor
+    public User() {}
 
-    // Accessor Methods
-    public String getUserID() {
-        return this.userID;
+    public String getFullName() {
+        return fullName;
     }
-    public String getFirstName() {
-        return this.firstName;
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
-    public String getLastName() {
-        return this.lastName;
-    }
+
     public String getEmail() {
-        return this.email;
-    }
-    public String getPassword() {
-        return this.password;
-    }
-    public int getLastFourSSN() {
-        return this.lastFourSSN;
+        return email;
     }
 
-    // Mutator Methods
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
-    public void setLastFourSSN(int lastFourSSN) { this.lastFourSSN = lastFourSSN; }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public int getLastFourSSN() {
+        return lastFourSSN;
+    }
+
+    public void setLastFourSSN(int lastFourSSN) {
+        this.lastFourSSN = lastFourSSN;
+    }
 }
