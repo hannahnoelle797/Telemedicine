@@ -58,21 +58,24 @@ public class ReportsFragment extends Fragment implements RecyclerItem.OnReportCl
 
         reportNames = new String[1];
         reportNames[0] = "No Reports Found.";
-        reportsList = new ArrayList<>();
         databaseReports = FirebaseDatabase.getInstance().getReference("Reports");
-        String id = UUID.randomUUID().toString();
+        //String id = UUID.randomUUID().toString();
         //String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        //databaseReports.child(id).setValue(new Report(id, "2ditset", "hospital_medical_report", "https://firebasestorage.googleapis.com/v0/b/telemedicine-capstone.appspot.com/o/Hospital_Medical_Report.pdf?alt=media&token=2cc77b00-3bd0-4f8a-9516-2752bae649e3"));
+        //databaseReports.child(id).setValue(new Report(id, userid, "patient medical history report", "https://firebasestorage.googleapis.com/v0/b/telemedicine-capstone.appspot.com/o/Patient_Medical_History_Report.pdf?alt=media&token=5065b457-9237-4f39-bd27-61a633aee236", "false"));
+        //databaseReports.child(id).setValue(new Report(id, userid, "med report", "https://firebasestorage.googleapis.com/v0/b/telemedicine-capstone.appspot.com/o/med_report.pdf?alt=media&token=7bd98c77-e8df-430d-b665-594761b0aeb4", "false"));
+        //databaseReports.child(id).setValue(new Report(id, userid, "hospital medical report", "https://firebasestorage.googleapis.com/v0/b/telemedicine-capstone.appspot.com/o/Hospital_Medical_Report.pdf?alt=media&token=2cc77b00-3bd0-4f8a-9516-2752bae649e3", "false"));
+        //"patient medical history report"
+        //"med report"
         databaseReports.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                reportsList = new ArrayList<>();
                 for(DataSnapshot reportSnapshot: dataSnapshot.getChildren())
                 {
                     Report report = reportSnapshot.getValue(Report.class);
-                    //if(report.getUserID().equals("ditset")) { //get reports with matching user id
+                    if(report.getUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) { //get reports with matching user id
                         reportsList.add(report);
-                    //}
+                    }
                 }
 
                 reportNames = new String[reportsList.size()];
@@ -80,6 +83,10 @@ public class ReportsFragment extends Fragment implements RecyclerItem.OnReportCl
                 if(reportsList.size() > 0) {
                     for (int i = 0; i < reportNames.length; i++) {
                         reportNames[i] = reportsList.get(i).getReportName();
+                        if(reportsList.get(i).getRead().equals("false"))
+                        {
+                            reportNames[i] += "*";
+                        }
                     }
                 }
                 populateRecycler(root);
@@ -106,6 +113,11 @@ public class ReportsFragment extends Fragment implements RecyclerItem.OnReportCl
     @Override
     public void OnReportClickListener(int position) {
         Intent intent = new Intent(getContext(), ReportViewer.class);
+        //mark as read
+        if(reportsList.get(position).getRead().equals("false"))
+        {
+            databaseReports.child(reportsList.get(position).getReportID()).child("read").setValue("true");
+        }
         //send url as extra
         intent.putExtra("reportURL" ,reportsList.get(position).getUrl());
         startActivity(intent);

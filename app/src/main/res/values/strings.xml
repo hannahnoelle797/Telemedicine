@@ -50,4 +50,5 @@
     <string name="button_new_appt">Schedule A New Appointment</string>
     <string name="hospitalAddress">677 Church St,\nMarietta, GA 30060</string>
     <string name="title_activity_report_viewer">ReportViewer</string>
+    <string name="report_unread_label">* = unread</string>
 </resources>
