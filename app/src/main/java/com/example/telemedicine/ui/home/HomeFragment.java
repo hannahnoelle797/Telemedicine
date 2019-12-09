@@ -40,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class HomeFragment extends Fragment {
@@ -124,104 +125,103 @@ public class HomeFragment extends Fragment {
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference("Users");
         mDatabaseDoctors = FirebaseDatabase.getInstance().getReference("Doctor");
         mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
-        // TODO: App crashes if no user logged-in
+
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         if (fUser == null) {
             startActivity(new Intent(getContext(), Login.class));
-            getActivity().getFragmentManager().popBackStack();
-        }
-        assert fUser != null;
-        userid = fUser.getUid();
+            Objects.requireNonNull(getActivity()).getFragmentManager().popBackStack();
+        } else {
+            userid = fUser.getUid();
 
-        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    User u = child.getValue(User.class);
-                    try {
-                        if (u.getUserID().equalsIgnoreCase(userid)) {
-                            username = u.getFullName();
-                            updateName(username);
-                        }
-                    }catch(NullPointerException e){
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        mDatabaseDoctors.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    try {
-                        Doctor d = child.getValue(Doctor.class);
-                        if (d.getDocID().equalsIgnoreCase(userid)) {
-                            username = "Dr. " + d.getFullName();
-                            updateName(username);
-                        }
-                    }catch(DatabaseException e){
-                        System.out.println("Uh oh");
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        mDatabaseAppts.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
-                String todayid = String.format("%04d%02d%02d%02d%02d", c.get(Calendar.YEAR), (c.get(Calendar.MONTH)+1), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Appointment a = child.getValue(Appointment.class);
-                    // TODO: App crashes if no user logged-in
-                    if (a.getUserID().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                        appt_id = a.getApptID();
-                        float today_id = Float.parseFloat(todayid);
-                        float apptid = Float.parseFloat(appt_id);
-                        if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
-                            dif_upcom_appt = apptid - today_id;
-                            upcoming_appt = a.getApptID();
-                            date = a.getDateTime();
-                            updateApptDate();
+            mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        User u = child.getValue(User.class);
+                        try {
+                            if (u.getUserID().equalsIgnoreCase(userid)) {
+                                username = u.getFullName();
+                                updateName(username);
+                            }
+                        } catch (NullPointerException e) {
                             break;
                         }
                     }
-                    else{
-                        date = "No Upcoming Appointments";
-                        appt_id = "";
-                        updateApptDate();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            mDatabaseDoctors.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        try {
+                            Doctor d = child.getValue(Doctor.class);
+                            if (d.getDocID().equalsIgnoreCase(userid)) {
+                                username = "Dr. " + d.getFullName();
+                                updateName(username);
+                            }
+                        } catch (DatabaseException e) {
+                            System.out.println("Uh oh");
+                            break;
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-
-        appointment_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!appointment_date.getText().toString().equalsIgnoreCase("No upcoming appointment")) {
-                    Intent intent = new Intent(getContext(), AppointmentDetails.class);
-                    intent.putExtra("EXTRA_SESSION_ID", upcoming_appt);
-                    startActivity(intent);
                 }
-            }
-        });
+            });
+
+            mDatabaseAppts.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Calendar c = Calendar.getInstance((TimeZone.getTimeZone("GMT-4")), Locale.US);
+                    String todayid = String.format("%04d%02d%02d%02d%02d", c.get(Calendar.YEAR), (c.get(Calendar.MONTH) + 1), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Appointment a = child.getValue(Appointment.class);
+                        // TODO: App crashes if no user logged-in
+                        if (a.getUserID().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            appt_id = a.getApptID();
+                            float today_id = Float.parseFloat(todayid);
+                            float apptid = Float.parseFloat(appt_id);
+                            if ((apptid - today_id) > 0 && (apptid - today_id) < dif_upcom_appt) {
+                                dif_upcom_appt = apptid - today_id;
+                                upcoming_appt = a.getApptID();
+                                date = a.getDateTime();
+                                updateApptDate();
+                                break;
+                            }
+                        } else {
+                            date = "No Upcoming Appointments";
+                            appt_id = "";
+                            updateApptDate();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            appointment_date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!appointment_date.getText().toString().equalsIgnoreCase("No upcoming appointment")) {
+                        Intent intent = new Intent(getContext(), AppointmentDetails.class);
+                        intent.putExtra("EXTRA_SESSION_ID", upcoming_appt);
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
 
         return root;
     }
