@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_Video_Call:
-                startActivity(new Intent(MainActivity.this, doctor_select.class));
+                startActivity(new Intent(MainActivity.this, video_call.class));
                 // finish();
                 return true;
         }

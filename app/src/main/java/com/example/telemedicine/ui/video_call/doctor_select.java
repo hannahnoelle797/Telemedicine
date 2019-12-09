@@ -34,7 +34,6 @@ public class doctor_select extends AppCompatActivity {
     DatabaseReference mDatabase;
     FirebaseAuth mAuth;
     Intent intent;
-    boolean isDoc = false;
 
 
     @Override
@@ -54,26 +53,6 @@ public class doctor_select extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         intent = new Intent(doctor_select.this, video_call.class);
-
-        isDoctor(mAuth.getUid(), new MyCallback() {
-            @Override
-            public void onBoolCallback(Boolean value) {
-                isDoc = value;
-                if (isDoc) {
-                    System.out.println("True");
-                    intent.putExtra("isDoc", isDoc);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    System.out.println("False");
-                }
-            }
-
-            @Override
-            public void Callback(String value) {
-
-            }
-        });
 
         // Populate the layout with db doctors
         mDatabaseDocs = FirebaseDatabase.getInstance().getReference("Doctor");
@@ -112,26 +91,6 @@ public class doctor_select extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-            }
-        });
-    }
-
-    protected void isDoctor (final String userId, final MyCallback callback) {
-        mDatabase.child("Doctor").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Doctor docs = child.getValue(Doctor.class);
-                    assert docs != null;
-                    if (userId.equals(docs.getDocID())) {
-                        callback.onBoolCallback(userId.equals(docs.getDocID()));
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }

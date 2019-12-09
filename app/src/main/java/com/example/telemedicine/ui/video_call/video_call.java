@@ -70,7 +70,8 @@ public class video_call extends AppCompatActivity {
     // private Task<GetTokenResult> mToken;
 
     private String agora_token;
-    private static String doctorId;
+    private String doctorId;
+    private String doctorString;
     private String channelName;
     // Agora token expire time
     static int expirationTimeInSeconds = 3600;
@@ -179,46 +180,52 @@ public class video_call extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
-        Bundle extras = getIntent().getExtras();
         mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        if (extras == null) {
-            doctorId = null;
-        } else {
-            if (extras.getBoolean("isDoc")) {
-                channelName = (Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).substring(Math.max(0, mAuth.getCurrentUser().getUid().length() - 10));
-                Toast.makeText(getBaseContext(), "This is a doctor: " + channelName, Toast.LENGTH_LONG).show();
-            } else {
-                String doctorString = extras.getString("docString");
-                setDocId(doctorString, new MyCallback() {
-                    @Override
-                    public void onBoolCallback(Boolean value) {
+        initUI();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final Bundle extras = getIntent().getExtras();
+        isDoc(new IsDocCallback() {
+            @Override
+            public void onCallback(boolean value) {
+                if (value) {
+                    channelName = (Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).substring(Math.max(0, mAuth.getCurrentUser().getUid().length() - 10));
+                    Toast.makeText(getBaseContext(), "This is a doctor: " + channelName, Toast.LENGTH_LONG).show();
+                    if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
+                            checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
+                            checkSelfPermission(REQUESTED_PERMISSIONS[2], PERMISSION_REQ_ID)) {
+                        initEngineAndJoinChannel();
                     }
-
-                    @Override
-                    public void Callback(String value) {
-                        doctorId = value;
-                    }
-                });
-
-                if (doctorId == null || doctorId.length() <= 0) {
-                    System.out.println("UH OH DAVID HOWARD");
                 } else {
-                    channelName = (doctorId.substring(Math.max(0, doctorId.length() - 10)));
-                    Toast.makeText(getBaseContext(), "This is a patient: " + channelName, Toast.LENGTH_LONG).show();
-                    System.out.println("DocID: " + doctorId);
+                    if (extras == null) {
+                        System.out.println("Empty extras..");
+                        initializeEngine();
+                        startActivity(new Intent(video_call.this, doctor_select.class));
+                        finish();
+                    } else {
+                        doctorString = extras.getString("docString");
+                        setDocId(doctorString, new GetDocId() {
+                            @Override
+                            public void onCallback(String value) {
+                                doctorId = value;
+                                channelName = (doctorId.substring(Math.max(0, doctorId.length() - 10)));
+                                Toast.makeText(getBaseContext(), "This is a patient: " + channelName, Toast.LENGTH_LONG).show();
+                                if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
+                                        checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
+                                        checkSelfPermission(REQUESTED_PERMISSIONS[2], PERMISSION_REQ_ID)) {
+                                    initEngineAndJoinChannel();
+                                }
+                            }
+                        });
+                    }
                 }
             }
-        }
-        initUI();
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
-                checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
-                checkSelfPermission(REQUESTED_PERMISSIONS[2], PERMISSION_REQ_ID)) {
-            initEngineAndJoinChannel();
-        }
+        });
     }
 
     /**
@@ -483,8 +490,9 @@ public class video_call extends AppCompatActivity {
     /**
      * Called to get the correct doctor id from the db
      * @param docName - The selected doctor (String)
-     */
-    protected void setDocId(final String docName, final MyCallback myCallback) {
+     * */
+
+    protected void setDocId(final String docName, final GetDocId mCallBack) {
         // Populate the layout with db doctors
         DatabaseReference mDocDatabase = FirebaseDatabase.getInstance().getReference("Doctor");
         mDocDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -495,9 +503,9 @@ public class video_call extends AppCompatActivity {
                     assert docs != null;
                     if (docName.equals(docs.getDocString())) {
                         doctorId = docs.getDocID();
-                        myCallback.Callback(doctorId);
                     }
                 }
+                mCallBack.onCallback(doctorId);
             }
 
             @Override
@@ -511,5 +519,27 @@ public class video_call extends AppCompatActivity {
 
     protected void removeCallFromDb(String userId) {
         mDatabase.child("Active Calls").child(userId).removeValue();
+    }
+
+    protected void isDoc(final IsDocCallback mCallback) {
+        final boolean[] isDocValue = new boolean[1];
+        mDatabase.child("Doctor").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    Doctor doc = child.getValue(Doctor.class);
+                    assert doc != null;
+                    if (mUser.getUid().equals(doc.getDocID())) {
+                        isDocValue[0] = true;
+                    }
+                }
+                mCallback.onCallback(isDocValue[0]);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                throw databaseError.toException();
+            }
+        });
     }
 }
