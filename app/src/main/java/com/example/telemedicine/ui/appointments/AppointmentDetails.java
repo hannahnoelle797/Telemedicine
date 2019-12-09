@@ -3,7 +3,12 @@ package com.example.telemedicine.ui.appointments;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +38,10 @@ public class AppointmentDetails extends AppCompatActivity {
     Location loc;
     Doctor doc;
 
+    Button cancel;
+
     DatabaseReference mDatabaseAppts, mDatabaseLocs, mDatabaseDocs;
+    DataSnapshot appointment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,7 @@ public class AppointmentDetails extends AppCompatActivity {
                     Appointment a = child.getValue(Appointment.class);
                     if(a.getApptID().equalsIgnoreCase(apptID)){
                         appt = new Appointment(a.getApptID(), a.getUserID(), a.getDoctorID(), a.getApptYear(), a.getApptMonth(), a.getApptDay(), a.getApptHour(), a.getApptMin(), a.getAmpm(), a.getType(), a.getLocationID());
+                        appointment = child;
                         getData();
                     }
                 }
@@ -61,6 +70,35 @@ public class AppointmentDetails extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        cancel = (Button)findViewById(R.id.button_cancelAppointment);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                Toast.makeText(view.getContext(), "Appointment Cancelled.", Toast.LENGTH_LONG).show();
+                                appointment.getRef().removeValue();
+                                Intent intent = new Intent(view.getContext(), AppointmentsFragment.class);
+                                startActivity(intent);
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                Toast.makeText(view.getContext(), "No Changes Made", Toast.LENGTH_LONG).show();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Are you sure you want to cancel your appointment?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
             }
         });
     }
@@ -149,7 +187,6 @@ public class AppointmentDetails extends AppCompatActivity {
                 String[] coor = loc.getLatlong().split(",");
                 double latitude = Double.parseDouble(coor[0]);
                 double longitude = Double.parseDouble(coor[1]);
-                System.out.println("LATITUDE AND LONGITUDE " + coor[0] + " " + coor[1] + " LATITUDE AND LONGITUDE");
                 LatLng hospital = new LatLng(latitude, longitude);
                 googleMap.addMarker(new MarkerOptions().position(hospital).title(loc.getName()));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hospital, 15));

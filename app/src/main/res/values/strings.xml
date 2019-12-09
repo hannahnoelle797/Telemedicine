@@ -61,4 +61,28 @@
     <string name="title_activity_report_viewer">ReportViewer</string>
     <string name="agora_app_id">adb40434c3de48e191a8635f053a9e97</string>
     <string name="agora_app_certificate">cc4088f8297d4605885e71ab18c976fd</string>
+    <string name="account">Account</string>
+    <string name="privacy">Privacy and Security</string>
+    <string name="terms">Terms and Conditions</string>
+    <string name="theme">Light Theme</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="signout">Sign Out</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="report_unread_label">* = unread</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="flaticon">Designed by https://www.flaticon.com/authors/smashicons from www.flaticon.com</string>
 </resources>

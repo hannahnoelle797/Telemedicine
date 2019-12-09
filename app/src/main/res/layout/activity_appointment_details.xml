@@ -70,7 +70,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_addToCalendar"
+        app:layout_constraintBottom_toTopOf="@+id/button_chatToDoctor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apptAddress"
@@ -78,32 +78,18 @@
     </fragment>
 
     <Button
-        android:id="@+id/button_addToCalendar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/colorText"
-        android:gravity="center"
-        android:text="Add To Calendar"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView" />
-
-    <Button
         android:id="@+id/button_chatToDoctor"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
-        android:background="@color/colorText"
+        android:background="@color/colorButtons"
         android:gravity="center"
         android:text="Chat Wtih Doctor"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorBackground"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_addToCalendar" />
+        app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
     <Button
         android:id="@+id/button_cancelAppointment"
@@ -113,7 +99,7 @@
         android:background="@color/colorImportant"
         android:gravity="center"
         android:text="Cancel Appointment"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorBackground"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,4 +107,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_chatToDoctor"
         app:layout_constraintVertical_bias="0.0" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

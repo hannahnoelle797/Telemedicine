@@ -15,21 +15,53 @@
         android:textSize="20pt"
         android:textColor="@color/colorText"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@id/recycler_appt"
+        app:layout_constraintBottom_toTopOf="@id/upcoming_appt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/upcoming_appt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="13pt"
+        android:maxLines="2"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="15dp"
+        android:gravity="center"
+        android:text="Next Appointment: "
+        app:layout_constraintTop_toBottomOf="@id/appointment_head"
+        app:layout_constraintBottom_toTopOf="@id/all_appthead"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/all_appthead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Appointments"
+        android:textColor="@color/colorText"
+        android:textSize="10pt"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintTop_toBottomOf="@id/upcoming_appt"
+        app:layout_constraintBottom_toTopOf="@id/recycler_appt">
+
+    </TextView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_appt"
         android:layout_width="360dp"
-        android:layout_height="500dp"
+        android:layout_height="460dp"
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintVertical_bias="0.226"
         app:layout_constraintBottom_toTopOf="@id/button_new_appt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appointment_head" />
+        app:layout_constraintTop_toBottomOf="@+id/all_appthead" />
 
     <Button
         android:id="@+id/button_new_appt"

@@ -1,0 +1,106 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.utilities.settings"
+    android:background="@color/colorBackground">
+
+    <TextView
+        android:id="@+id/settings_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/title_activity_settings"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@id/settings_account"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/settings_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/account"
+        android:textSize="30sp"
+        android:textColor="@color/colorText"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/settings_header"
+        app:layout_constraintBottom_toTopOf="@id/settings_privacy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/settings_privacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/privacy"
+        android:textSize="30sp"
+        android:textColor="@color/colorText"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/settings_account"
+        app:layout_constraintBottom_toTopOf="@id/settings_about"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/settings_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/about"
+        android:textColor="@color/colorText"
+        android:textSize="30sp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@id/settings_terms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_privacy" />
+
+    <TextView
+        android:id="@+id/settings_terms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/terms"
+        android:textSize="30sp"
+        android:textColor="@color/colorText"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/settings_about"
+        app:layout_constraintBottom_toTopOf="@id/signout">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/signout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/signout"
+        android:textSize="30sp"
+        android:textColor="@color/colorText"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/settings_terms"
+        app:layout_constraintBottom_toTopOf="@id/random_tv">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/random_tv"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:clickable="false"
+        app:layout_constraintTop_toBottomOf="@id/settings_terms"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
