@@ -3,14 +3,11 @@ package com.example.telemedicine.ui.video_call;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -32,6 +29,7 @@ public class doctor_select extends AppCompatActivity {
     DatabaseReference mDatabaseDocs;
     private ArrayList<String> doctorList;
     RadioGroup doctorGroup;
+    RadioButton btn1, btn2, btn3;
     Button submitBtn;
     DatabaseReference mDatabase;
     FirebaseAuth mAuth;
@@ -45,6 +43,9 @@ public class doctor_select extends AppCompatActivity {
 
         // Get references to the Firebase xml items
         doctorGroup = (RadioGroup)findViewById(R.id.doctorSelectionRG);
+        btn1 = (RadioButton)findViewById(R.id.doctorOneRB);
+        btn2 = (RadioButton)findViewById(R.id.doctorTwoRB);
+        btn3 = (RadioButton)findViewById(R.id.doctorThreeRB);
         submitBtn = (Button)findViewById(R.id.doctorSelectBtn);
         doctorList = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -63,7 +64,6 @@ public class doctor_select extends AppCompatActivity {
                     assert docs != null;
                     doctorList.add(docs.getDocString());
                 }
-                addRadioButtons(doctorList.size());
                 for (int i = 0; i < doctorGroup.getChildCount(); i++) {
                     if (doctorList.size() > 0) {
                         ((RadioButton)doctorGroup.getChildAt(i)).setText(doctorList.get(i));
@@ -93,20 +93,5 @@ public class doctor_select extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    protected void addRadioButtons(int number) {
-        for (int row = 0; row < 1; row++) {
-            doctorGroup = new RadioGroup(this);
-            doctorGroup.setOrientation(LinearLayout.VERTICAL);
-
-            for (int i = 1; i<= number; i++) {
-                RadioButton rb = new RadioButton(this);
-                rb.setId(View.generateViewId());
-                rb.setText("Radio " + rb.getId());
-                doctorGroup.addView(rb);
-            }
-            ((ViewGroup)findViewById(R.id.doctorSelectionRG)).addView(doctorGroup);
-        }
     }
 }
