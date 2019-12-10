@@ -43,6 +43,7 @@ public class MessagesActivity extends AppCompatActivity {
     String userId;
     String name;
     boolean isDoctor = false;
+    boolean status = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +74,10 @@ public class MessagesActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for(DataSnapshot child:dataSnapshot.getChildren()){
                                 Chat m = child.getValue(Chat.class);
-                                if(m.getChatId().equals(chatId)){
+                                if(m.getChatId().equals(chatId)&& m.isStatus()){
                                     //username.setText(m.getPatientName());
                                     patientId = m.getPatientId();
+
                                 }
                             }
                             readMessage();
@@ -106,11 +108,10 @@ public class MessagesActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for(DataSnapshot child:dataSnapshot.getChildren()){
                                 Chat m = child.getValue(Chat.class);
-                                if(m.getChatId().equals(chatId)){
-                                    System.out.println("Chat ID: " + chatId);
-                                    System.out.println("Doctor Name: " + m.getDoctorName());
+                                if(m.getChatId().equals(chatId) && m.isStatus()){
                                     //username cannot be set here username.setText(m.getDoctorName());
                                     doctorId = m.getDoctorId();
+
                                 }
                             }
                             readMessage();
@@ -163,21 +164,37 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void readMessage(){
         mchat=new ArrayList<>();
-        dbMessage=FirebaseDatabase.getInstance().getReference("Message");
-        dbMessage.addValueEventListener(new ValueEventListener() {
+        dbChat.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mchat.clear();
-                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                    Message chat=snapshot.getValue(Message.class);
-                    if(chat.getChatId().equals(chatId)){
-                        mchat.add(chat);
-                        System.out.println(chat.getMessageContent());
+                for(DataSnapshot child :dataSnapshot.getChildren()){
+                    Chat c = child.getValue(Chat.class);
+                    if(chatId.equalsIgnoreCase(c.getChatId()) && !c.isStatus()){
+                        status =false;
                     }
                 }
-                messageAdapter=new MessageAdapter(MessagesActivity.this, mchat);
-                lv.setAdapter(messageAdapter);
+                dbMessage=FirebaseDatabase.getInstance().getReference("Message");
+                dbMessage.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        mchat.clear();
+                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                            Message chat=snapshot.getValue(Message.class);
+                            if(chat.getChatId().equals(chatId) && status){
+                                mchat.add(chat);
+                            }
+                        }
 
+                        messageAdapter=new MessageAdapter(MessagesActivity.this, mchat);
+                        lv.setAdapter(messageAdapter);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -185,5 +202,6 @@ public class MessagesActivity extends AppCompatActivity {
 
             }
         });
+
     }
 }

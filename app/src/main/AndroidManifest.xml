@@ -36,7 +36,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.messaging.MessagesActivity"></activity>
+        <activity android:name=".ui.chats.DeleteChats"></activity>
+        <activity android:name=".ui.messaging.MessagesActivity" />
         <activity android:name=".ui.chats.ChatCreation" />
         <activity android:name=".ui.utilities.privacy" />
         <activity android:name=".ui.utilities.settings" />

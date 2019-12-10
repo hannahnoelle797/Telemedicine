@@ -195,7 +195,7 @@ public class video_call extends AppCompatActivity {
             public void onCallback(boolean value) {
                 if (value) {
                     channelName = (Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).substring(Math.max(0, mAuth.getCurrentUser().getUid().length() - 10));
-                    Toast.makeText(getBaseContext(), "This is a doctor: " + channelName, Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getBaseContext(), "This is a doctor: " + channelName, Toast.LENGTH_LONG).show();
                     if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                             checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
                             checkSelfPermission(REQUESTED_PERMISSIONS[2], PERMISSION_REQ_ID)) {
@@ -214,7 +214,7 @@ public class video_call extends AppCompatActivity {
                             public void onCallback(String value) {
                                 doctorId = value;
                                 channelName = (doctorId.substring(Math.max(0, doctorId.length() - 10)));
-                                Toast.makeText(getBaseContext(), "This is a patient: " + channelName, Toast.LENGTH_LONG).show();
+                                // Toast.makeText(getBaseContext(), "This is a patient: " + channelName, Toast.LENGTH_LONG).show();
                                 if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                                         checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
                                         checkSelfPermission(REQUESTED_PERMISSIONS[2], PERMISSION_REQ_ID)) {
