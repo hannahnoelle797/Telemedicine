@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.Sampler;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -75,6 +78,7 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
         chatList = new String[1];
         buttonCheck = 0;
         isDoctor = false;
+        setHasOptionsMenu(true);
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dbDoctor.addValueEventListener(new ValueEventListener() {
             @Override
@@ -84,12 +88,16 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
                     if(d.getDocID().equalsIgnoreCase(userId)) isDoctor = true;
                 }
                 if(isDoctor){
+                    textView.setText("Chat with your patient(s)");
                     dbChats.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            chatListIds.clear();
+                            patientNames.clear();
+                            patientIds.clear();
                             for(DataSnapshot child : dataSnapshot.getChildren()){
                                 Chat c = child.getValue(Chat.class);
-                                if(userId.equalsIgnoreCase(c.getDoctorId())){
+                                if(userId.equalsIgnoreCase(c.getDoctorId())&&c.isStatus()){
                                     chatListIds.add(c.getChatId());
                                     patientIds.add(c.getPatientId());
                                     patientNames.add(c.getPatientName());
@@ -141,6 +149,9 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
                     dbChats.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            chatListIds.clear();
+                            doctorIds.clear();
+                            doctorNames.clear();
                             for(DataSnapshot child : dataSnapshot.getChildren()){
                                 Chat c = child.getValue(Chat.class);
                                 if(userId.equals(c.getPatientId()) && c.isStatus()){
@@ -222,7 +233,6 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
                        isDoctor = true;
                    }
                }
-               System.out.println("ISDoctor:  " + isDoctor);
                if(isDoctor){
                    dbChats.addValueEventListener(new ValueEventListener() {
                        @Override
@@ -233,7 +243,7 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
                            for(DataSnapshot child : dataSnapshot.getChildren()){
                                x--;
                                Chat c = child.getValue(Chat.class);
-                               if(userId.equalsIgnoreCase(c.getDoctorId())){
+                               if(userId.equalsIgnoreCase(c.getDoctorId()) && c.isStatus()){
                                    chatListIds.add(c.getChatId());
                                    name = c.getDoctorName();
                                }
@@ -263,7 +273,7 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
                            for(DataSnapshot child : dataSnapshot.getChildren()){
                                x--;
                                Chat c = child.getValue(Chat.class);
-                               if(userId.equalsIgnoreCase(c.getPatientId())){
+                               if(userId.equalsIgnoreCase(c.getPatientId()) && c.isStatus()){
                                    chatListIds.add(c.getChatId());
                                    name = c.getPatientName();
                                }
@@ -296,9 +306,22 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
 
     public void populateRecyclers(View root){
         rvChats = (RecyclerView)root.findViewById(R.id.recycler_chat);
+
         lmChats = new LinearLayoutManager(this.getActivity());
         rvChats.setLayoutManager(lmChats);
         adaptChats = new RecyclerItemBtn(chatList, this);
         rvChats.setAdapter(adaptChats);
+    }
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        inflater.inflate(R.menu.delete_chat_menu, menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int itemId = item.getItemId();
+        if(itemId == R.id.item1){
+            intent = new Intent(getContext(), DeleteChats.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -39,6 +39,10 @@
             android:label="Telemedicine">
 
         </activity>
+        <activity android:name=".ui.chats.DeleteChats"
+            android:label="Telemedicine">
+
+        </activity>
     </application>
 
 </manifest>

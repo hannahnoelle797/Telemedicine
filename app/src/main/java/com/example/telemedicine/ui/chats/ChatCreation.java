@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.UUID;
+
 
 public class ChatCreation extends AppCompatActivity {
     private Spinner doctorSpinner;
@@ -130,7 +130,7 @@ public class ChatCreation extends AppCompatActivity {
                         for(DataSnapshot child : dataSnapshot.getChildren()){
                             Chat c = child.getValue(Chat.class);
                             for(int i=0; i<patientIds.size(); i++){
-                                if(c.getPatientId().equals(patientIds.get(i))){
+                                if(c.getPatientId().equals(patientIds.get(i))&&c.isStatus()){
                                     patientIds.remove(i);
                                     patientNames.remove(i);
                                 }
@@ -173,7 +173,7 @@ public class ChatCreation extends AppCompatActivity {
                         for(DataSnapshot child : dataSnapshot.getChildren()){
                             Chat c = child.getValue(Chat.class);
                             for(int i=0; i<doctorIds.size(); i++){
-                                if(c.getDoctorId().equals(doctorIds.get(i))){
+                                if(c.getDoctorId().equals(doctorIds.get(i))&&c.isStatus()){
                                     doctorIds.remove(i);
                                     doctorNames.remove(i);
                                 }
@@ -313,6 +313,7 @@ public class ChatCreation extends AppCompatActivity {
             hashMap.put("doctorName", userName);
             hashMap.put("patientId", patientIds.get(index));
             hashMap.put("patientName", patientNames.get(index));
+            hashMap.put("status", true);
             String chatId = reference.child("Chat").push().getKey();
             hashMap.put("chatId", chatId);
             reference.child("Chat").child(chatId).setValue(hashMap);
@@ -322,6 +323,7 @@ public class ChatCreation extends AppCompatActivity {
             hashMap.put("doctorName", doctorNames.get(index));
             hashMap.put("patientId", userId);
             hashMap.put("patientName", userName);
+            hashMap.put("status", true);
             String chatId = reference.child("Chat").push().getKey();
             hashMap.put("chatId", chatId);
             reference.child("Chat").child(chatId).setValue(hashMap);

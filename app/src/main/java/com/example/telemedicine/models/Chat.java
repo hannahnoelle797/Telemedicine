@@ -46,6 +46,9 @@ public class  Chat {
         return patientId;
     }
     public String getPatientName() { return patientName;}
+    public void setPatientName(String p){
+        this.patientName = p;
+    }
     public void setPatientId(String p) {
         this.patientId = p;
     }
