@@ -84,7 +84,7 @@
         android:layout_marginTop="20dp"
         android:background="@color/colorButtons"
         android:gravity="center"
-        android:text="Chat Wtih Doctor"
+        android:text="Chat With Doctor"
         android:textColor="@color/colorBackground"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -72,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, Login.class));
                 finish();
                 return true;
-            case R.id.action_Video_Call:
-                startActivity(new Intent(MainActivity.this, video_call.class));
-                // finish();
-                return true;
+//            case R.id.action_Video_Call:
+//                startActivity(new Intent(MainActivity.this, video_call.class));
+//                // finish();
+//                return true;
         }
         return false;
     }

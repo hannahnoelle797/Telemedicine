@@ -6,5 +6,7 @@
     <item android:id="@+id/item1"
         android:title="Delete Chats"
         app:showAsAction="never"/>
-
+    <item android:id="@+id/action_Video_Call"
+        android:title="Video Call"
+        app:showAsAction="never" />
 </menu>

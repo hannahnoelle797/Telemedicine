@@ -223,7 +223,7 @@
         android:id="@+id/account_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:text="Edit Account Information"
         android:textColor="@color/colorBackground"
         android:textSize="24sp"

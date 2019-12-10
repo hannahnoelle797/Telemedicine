@@ -125,13 +125,13 @@ public class HomeFragment extends Fragment {
         mDatabaseDoctors = FirebaseDatabase.getInstance().getReference("Doctor");
         mDatabaseAppts = FirebaseDatabase.getInstance().getReference("Appointments");
         // TODO: App crashes if no user logged-in
-        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (fUser == null) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser fUser = mAuth.getCurrentUser();
+        if (fUser == null || mAuth.getCurrentUser() == null) {
             startActivity(new Intent(getContext(), Login.class));
             getActivity().getFragmentManager().popBackStack();
         }
-        assert fUser != null;
-        userid = fUser.getUid();
+        userid = mAuth.getUid();
 
         mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -166,7 +166,7 @@ public class HomeFragment extends Fragment {
                             updateName(username);
                         }
                     }catch(DatabaseException e){
-                        System.out.println("Uh oh");
+                        System.out.println("Firebase database exception error");
                         break;
                     }
                 }

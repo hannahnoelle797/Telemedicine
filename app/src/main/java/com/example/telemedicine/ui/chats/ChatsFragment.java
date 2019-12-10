@@ -17,11 +17,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.telemedicine.MainActivity;
 import com.example.telemedicine.models.Doctor;
 import com.example.telemedicine.ui.messaging.MessagesActivity;
 import com.example.telemedicine.ui.utilities.RecyclerItemBtn;
 
 import com.example.telemedicine.R;
+import com.example.telemedicine.ui.video_call.video_call;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -315,6 +317,8 @@ public class ChatsFragment extends Fragment implements RecyclerItemBtn.OnReportC
         if(itemId == R.id.item1){
             intent = new Intent(getContext(), DeleteChats.class);
             startActivity(intent);
+        } if (itemId == R.id.action_Video_Call) {
+            startActivity(new Intent(getContext(), video_call.class));
         }
         return super.onOptionsItemSelected(item);
     }

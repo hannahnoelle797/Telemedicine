@@ -15,7 +15,7 @@
     <string name="appt_prev">Previous</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Telemedicine</string>
     <string name="button_signup">Sign up</string>
     <string name="email_placehold">Enter your email</string>
     <string name="username_placehold">Enter your username</string>
@@ -23,7 +23,7 @@
     <string name="show">Show</string>
     <string name="lastFour_placehold">Enter your last four digits of SSN</string>
     <string name="button_login">Login</string>
-    <string name="welcome_tv">Welcome to Hoganson Medical</string>
+    <string name="welcome_tv">Welcome to \nGeneral Hospital</string>
     <string name="signin_tv">Please sign in</string>
     <string name="signup_tv">Please sign up</string>
     <string name="firstNameHint">First Name</string>

@@ -42,7 +42,6 @@ public class ChatCreation extends AppCompatActivity {
     private String userId;
     private String userName;
     private boolean isDoctor=false;
-    Context con;
 
     @Override
     protected void onCreate(Bundle saveInstanceState) {
@@ -129,10 +128,13 @@ public class ChatCreation extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for(DataSnapshot child : dataSnapshot.getChildren()){
                             Chat c = child.getValue(Chat.class);
-                            for(int i=0; i<patientIds.size(); i++){
-                                if(c.getPatientId().equals(patientIds.get(i))&&c.isStatus()){
+                            int i = 0;
+                            while(i<patientIds.size()) {
+                                if ((c.getPatientId().equals(patientIds.get(i))&& c.getDoctorId().equalsIgnoreCase(userId)) && c.isStatus()) {
                                     patientIds.remove(i);
                                     patientNames.remove(i);
+                                } else {
+                                    i++;
                                 }
                             }
                         }
@@ -170,12 +172,17 @@ public class ChatCreation extends AppCompatActivity {
                 dbChat.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                         for(DataSnapshot child : dataSnapshot.getChildren()){
                             Chat c = child.getValue(Chat.class);
-                            for(int i=0; i<doctorIds.size(); i++){
-                                if(c.getDoctorId().equals(doctorIds.get(i))&&c.isStatus()){
+                            int i = 0;
+                            while(i<doctorIds.size()) {
+                                if ((c.getDoctorId().equals(doctorIds.get(i)) && c.getPatientId().equalsIgnoreCase(userId)) && c.isStatus()) {
                                     doctorIds.remove(i);
                                     doctorNames.remove(i);
+                                } else {
+                                    i++;
+
                                 }
                             }
                         }

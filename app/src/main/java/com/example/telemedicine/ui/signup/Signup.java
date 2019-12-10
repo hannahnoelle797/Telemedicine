@@ -186,7 +186,7 @@ public class Signup extends AppCompatActivity {
                     Integer.parseInt((getLastFour(ssnET.getText().toString().trim()))));
         } else if (spinner.getSelectedItem().equals("I am a doctor")) {
             addDocLocally(user.getUid(), fullNameET.getText().toString().trim(), emailET.getText().toString().trim(),
-                    streetET.getText().toString().trim(), phoneNumET.getText().toString().trim(), genderSpinner.getSelectedItem().toString().trim(), "Dr. ".concat(fullNameET.toString().trim()),
+                    streetET.getText().toString().trim(), phoneNumET.getText().toString().trim(), genderSpinner.getSelectedItem().toString().trim(), "Dr. ".concat(fullNameET.getText().toString().trim()),
                     Integer.parseInt(ssnET.getText().toString().trim()));
         } else {
             System.out.println("Uh oh");
